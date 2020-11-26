@@ -20,8 +20,8 @@ public:
 	Mesh(glm::vec3 pos) : m_Position(pos) {}
 	~Mesh() {}
 
-	void AddCube(glm::vec3 position, glm::vec4 color, float size = 1.0f);
-	void AddCube(float p1, float p2, float p3, glm::vec4 color, float size = 1.0f);
+	void AddCube(glm::vec3 position, glm::vec4 color, float size = 1.0f, unsigned char flags = 0);
+	void AddCube(float p1, float p2, float p3, glm::vec4 color, float size = 1.0f, unsigned char flags = 0);
 
 	// Todo: Move to Mesh.cpp
 	void SetPosition(glm::vec3 pos)

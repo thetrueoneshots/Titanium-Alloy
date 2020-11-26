@@ -5,6 +5,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 Renderer::Renderer(int WindowWidth, int WindowHeight)
+	: m_ChunkShader(nullptr)
 {
 	m_ProjectionMatrix = glm::perspective(
 		glm::radians(FIELD_OF_VIEW), // The vertical Field of View, in radians: the amount of "zoom". Think "camera lens". Usually between 90° (extra wide) and 30° (quite zoomed in)
@@ -22,6 +23,11 @@ void Renderer::Init()
 	glDepthFunc(GL_LESS);
 
 	glEnable(GL_MULTISAMPLE);
+
+	if (!m_ChunkShader)
+	{
+		m_ChunkShader = new Shader("res/shaders/Chunk.shader");
+	}
 }
 
 void Renderer::Update()
@@ -36,6 +42,11 @@ void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& 
 	s.Bind();
 
 	glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
+}
+
+void Renderer::DrawChunk(const Mesh& mesh)
+{
+	DrawMesh(mesh, *m_ChunkShader);
 }
 
 // Todo: Create Renderer::m_VoxelShader for all voxel meshes.

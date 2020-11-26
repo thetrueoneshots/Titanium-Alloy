@@ -3,14 +3,14 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 // Todo: Check if cube position already exists and return true/false
-void Mesh::AddCube(glm::vec3 position, glm::vec4 color, float size)
+void Mesh::AddCube(glm::vec3 position, glm::vec4 color, float size, unsigned char flags)
 {
-	m_Cubes.push_back(Cube(position, color, size));
+	m_Cubes.push_back(Cube(position, color, size, flags));
 }
 
-void Mesh::AddCube(float p1, float p2, float p3, glm::vec4 color, float size)
+void Mesh::AddCube(float p1, float p2, float p3, glm::vec4 color, float size, unsigned char flags)
 {
-	AddCube(glm::vec3(p1, p2, p3), color, size);
+	AddCube(glm::vec3(p1, p2, p3), color, size, flags);
 }
 
 std::vector<Quad> Mesh::GetQuads() const
@@ -18,7 +18,7 @@ std::vector<Quad> Mesh::GetQuads() const
 	std::vector<Quad> quads;
 	for (Cube cube : m_Cubes)
 	{
-		auto cubeQuads = cube.GetQuads(0);
+		auto cubeQuads = cube.GetQuads();
 		quads.insert(quads.end(), cubeQuads.begin(), cubeQuads.end());
 	}
 	return quads;
