@@ -10,19 +10,14 @@
 
 #include "Geometry/Mesh.h"
 
-const static float FIELD_OF_VIEW = 45.0f;
-
-static 
-
 class Renderer
 {
 private:
-	Camera m_Camera;
-	glm::mat4 m_ProjectionMatrix;
+	Camera* m_Camera;
 	glm::mat4 m_VP;
 	Shader* m_ChunkShader;
 public:
-	Renderer(int WindowWidth, int WindowHeight);
+	Renderer(Camera* camera);
 	~Renderer() {
 		if (m_ChunkShader)
 		{
@@ -36,6 +31,4 @@ public:
 	void DrawChunk(const Mesh& mesh);
 	void DrawMesh(const Mesh& mesh, Shader& s) const;
 	void Clear() const;
-
-	inline Camera* GetCamera() { return &m_Camera; }
 };

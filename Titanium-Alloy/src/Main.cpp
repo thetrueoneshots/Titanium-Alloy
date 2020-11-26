@@ -1,7 +1,3 @@
-#include <glad/gl.h>
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
-
 #include <cstddef>
 #include <linmath.h>
 
@@ -22,19 +18,20 @@
 
 #include "Geometry/Mesh.h"
 
-#include "World/World.h"
+#include "Game/Game.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-static int ANTI_ALIAS_SAMPLE_SIZE = 4;
-
 const int WIDTH = 640;
 const int HEIGHT = 480;
-static Renderer renderer(WIDTH, HEIGHT);
+
+static Game* game;
 
 static void error_callback(int error, const char* description);
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+static void cursor_callback(GLFWwindow* window, double xPos, double yPos);
+static void scroll_callback(GLFWwindow* window, double xOffset, double yOffset);
 GLFWwindow* InitGlfwWindow(const unsigned int width, const unsigned int height, const std::string& title);
 
 // Todo: Move camera.
@@ -44,26 +41,18 @@ int main(void)
 {
     // Create window and setup glfw context.
     GLFWwindow* window = InitGlfwWindow(WIDTH, HEIGHT, "Engine Window");
-
-    renderer.Init();
-    renderer.GetCamera()->SetPosition(glm::vec3(5.0f, 50.0f, 50.0f));
-
-    World* world = new World(&renderer);
-    world->GenerateWorld();
+    game = new Game(window);
     
     // Game loop
     while (!glfwWindowShouldClose(window))
     {
-        renderer.Clear();
-        renderer.Update();
-        
-        world->Update();
+        game->Update(glfwGetTime());
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    delete world;
+    delete game;
 
     // Cleanup.
     glfwDestroyWindow(window);
@@ -77,23 +66,25 @@ static void error_callback(int error, const char* description)
     fprintf(stderr, "Error: %s\n", description);
 }
 
-// Todo: Implement actual moving
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
-    if (key == GLFW_KEY_LEFT)
-        renderer.GetCamera()->Move(glm::vec3(-1.0f, 0.0f, 0.0f));
-    if (key == GLFW_KEY_RIGHT)
-        renderer.GetCamera()->Move(glm::vec3(1.0f, 0.0f, 0.0f));
-    if (key == GLFW_KEY_UP)
-        renderer.GetCamera()->Move(glm::vec3(0.0f, 1.0f, 0.0f));
-    if (key == GLFW_KEY_DOWN)
-        renderer.GetCamera()->Move(glm::vec3(0.0f, -1.0f, 0.0f));
+    game->HandleKeyInput(key, scancode, action, mods);
+}
+
+static void cursor_callback(GLFWwindow* window, double xPos, double yPos)
+{
+    game->HandleCursorPosition(xPos, yPos);
+}
+
+static void scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
+{
+    game->HandleScrollInput(xOffset, yOffset);
 }
 
 GLFWwindow* InitGlfwWindow(const unsigned int width, const unsigned int height, const std::string& title)
 {
+    const static int ANTI_ALIAS_SAMPLE_SIZE = 4;
+
     GLFWwindow* window;
 
     glfwSetErrorCallback(error_callback);
@@ -113,6 +104,12 @@ GLFWwindow* InitGlfwWindow(const unsigned int width, const unsigned int height, 
     }
 
     glfwSetKeyCallback(window, key_callback);
+    glfwSetCursorPosCallback(window, cursor_callback);
+    //glfwSetCursorPosCallBack(window, cursor_callback);
+    glfwSetScrollCallback(window, scroll_callback);
+
+    // Maybe GLFW_CURSOR_HIDDEN?
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glfwMakeContextCurrent(window);
     gladLoadGL(glfwGetProcAddress);

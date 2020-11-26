@@ -4,16 +4,9 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
-Renderer::Renderer(int WindowWidth, int WindowHeight)
-	: m_ChunkShader(nullptr)
-{
-	m_ProjectionMatrix = glm::perspective(
-		glm::radians(FIELD_OF_VIEW), // The vertical Field of View, in radians: the amount of "zoom". Think "camera lens". Usually between 90° (extra wide) and 30° (quite zoomed in)
-		1.0f * WindowWidth / WindowHeight, // Aspect Ratio. Depends on the size of your window. Notice that 4/3 == 800/600 == 1280/960, sounds familiar ?
-		0.1f,              // Near clipping plane. Keep as big as possible, or you'll get precision issues.
-		200.0f             // Far clipping plane. Keep as little as possible.
-	);
-}
+Renderer::Renderer(Camera* camera)
+	: m_ChunkShader(nullptr), m_Camera(camera), m_VP(glm::mat4(1.0f))
+{ }
 
 void Renderer::Init()
 {
@@ -32,7 +25,7 @@ void Renderer::Init()
 
 void Renderer::Update()
 {
-	m_VP = m_ProjectionMatrix * m_Camera.GetViewMatrix();
+	m_VP = m_Camera->GetProjectionMatrix() * m_Camera->GetViewMatrix();
 }
 
 void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& s) const
