@@ -10,8 +10,9 @@ const unsigned char NOISE_MULTIPLIER = 5;
 static const glm::vec4 COLOR_BROWN = glm::vec4(0.54f, 0.27f, 0.07f, 1.0f);
 static const glm::vec4 COLOR_DARK_GREEN = glm::vec4(0.12f, 0.51f, 0.28f, 1.0f);
 static const glm::vec4 COLOR_GREEN = glm::vec4(0.22f, 0.71f, 0.38f, 1.0f);
+static const glm::vec4 COLOR_GRAY = glm::vec4(0.3f, 0.3f, 0.3f, 1.0f);
 
-char GetBlockType(char height, char maxHeight);
+char GetBlockType(char height, char maxHeight, float simplex);
 int GetBlockOffset(int i, int j, int k);
 unsigned char CheckSurroundingBlocks(unsigned char* blocks, int i, int j, int k);
 int CheckBlock(unsigned char* blocks, int i, int j, int k);
@@ -29,7 +30,10 @@ Chunk::Chunk(int x, int y, int z)
 
 Chunk::~Chunk()
 {
-	delete[] m_Blocks;
+	if (m_Blocks)
+	{
+		delete[] m_Blocks;
+	}
 	if (m_Mesh)
 	{
 		delete m_Mesh;
@@ -65,6 +69,12 @@ void Chunk::RenderChunk(Renderer* renderer)
 					break;
 				case 2:
 					color = COLOR_BROWN;
+					break;
+				case 3:
+					color = COLOR_DARK_GREEN;
+					break;
+				case 4:
+					color = COLOR_GRAY;
 					break;
 				default:
 					color = glm::vec4(0.0f);
@@ -112,21 +122,23 @@ void Chunk::GenerateChunk()
 			{
 				int offset = GetBlockOffset(i, j, k);
 				if (offset == -1) continue;
-				m_Blocks[offset] = GetBlockType(j, height);
+				m_Blocks[offset] = GetBlockType(j, height, simplex);
 			}
 		}
 	}
 }
 
-char GetBlockType(char height, char maxHeight)
+char GetBlockType(char height, char maxHeight, float simplex)
 {
 	int dist = maxHeight - height;
 	if (dist < 0) return 0; //AIR
 
 	if (height <= 5) return 2; //DIRT
 
+	if (3 * simplex < dist) return 4; //STONE
+
 	if (dist <= 3)
-	{
+	{	
 		return 1; //GRASS
 	}
 	else {

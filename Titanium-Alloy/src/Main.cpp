@@ -22,7 +22,7 @@
 
 #include "Geometry/Mesh.h"
 
-#include "World/Chunk.h"
+#include "World/World.h"
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -48,22 +48,8 @@ int main(void)
     renderer.Init();
     renderer.GetCamera()->SetPosition(glm::vec3(5.0f, 50.0f, 50.0f));
 
-    Shader shader("res/shaders/Basic.shader");
-
-    // Only for texture shaders
-    /*Texture texture("res/image/texture.png");
-    texture.Bind();
-    shader.SetUniform<int>("u_Texture", 0);*/
-
-    static int CHUNKS = 4;
-    std::vector<Chunk*> chunks;
-    for (int i = 0; i < CHUNKS; i++)
-    {
-        for (int j = 0; j < CHUNKS; j++)
-        {
-            chunks.push_back(new Chunk(i - CHUNKS / 2, 0, j - CHUNKS /2));
-        }
-    }
+    World* world = new World(&renderer);
+    world->GenerateWorld();
     
     // Game loop
     while (!glfwWindowShouldClose(window))
@@ -71,14 +57,13 @@ int main(void)
         renderer.Clear();
         renderer.Update();
         
-        for (Chunk* m1 : chunks)
-        {
-            m1->RenderChunk(&renderer);
-        }
+        world->Update();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    delete world;
 
     // Cleanup.
     glfwDestroyWindow(window);
