@@ -7,11 +7,11 @@ Game::Game(GLFWwindow* window)
 {
 	glfwGetWindowSize(m_Window, &m_ScreenSize.x, &m_ScreenSize.y);
 	m_LastMouse = glm::vec2(m_ScreenSize.x / 2, m_ScreenSize.y / 2);
-	m_Camera = new Camera(&m_ScreenSize);
+	m_Camera = new Camera(&m_ScreenSize, 500.0f);
 	m_Camera->SetPosition(glm::vec3(0.0f, 15.0f, -20.0f));
 	m_Renderer = new Renderer(m_Camera);
 	m_Renderer->Init();
-	m_World = new World(m_Renderer);
+	m_World = new World(m_Renderer, m_Camera);
 	m_World->GenerateWorld();
 }
 

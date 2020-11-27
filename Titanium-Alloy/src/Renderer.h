@@ -14,7 +14,6 @@ class Renderer
 {
 private:
 	Camera* m_Camera;
-	glm::mat4 m_VP;
 	Shader* m_ChunkShader;
 public:
 	Renderer(Camera* camera);

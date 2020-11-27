@@ -11,7 +11,7 @@
 #include "../Renderer.h"
 
 static const std::string WINDOW_NAME = "Titanium Alloy";
-static const float MOVEMENT_SPEED = 10.0f;
+static const float MOVEMENT_SPEED = 20.0f;
 static const float MOUSE_SENSITIVITY = 0.1f;
 
 class Game

@@ -5,22 +5,24 @@
 
 #include <iostream>
 
-const unsigned char NOISE_MULTIPLIER = 5;
+const unsigned char TEST_FREQUENCY = 1;
 
 static const glm::vec4 COLOR_BROWN = glm::vec4(0.54f, 0.27f, 0.07f, 1.0f);
 static const glm::vec4 COLOR_DARK_GREEN = glm::vec4(0.12f, 0.51f, 0.28f, 1.0f);
 static const glm::vec4 COLOR_GREEN = glm::vec4(0.22f, 0.71f, 0.38f, 1.0f);
 static const glm::vec4 COLOR_GRAY = glm::vec4(0.3f, 0.3f, 0.3f, 1.0f);
+static const glm::vec4 COLOR_BLUE = glm::vec4(0.3f, 0.2f, 0.8f, 1.0f);
 
 char GetBlockType(char height, char maxHeight, float simplex);
 int GetBlockOffset(int i, int j, int k);
 unsigned char CheckSurroundingBlocks(unsigned char* blocks, int i, int j, int k);
 int CheckBlock(unsigned char* blocks, int i, int j, int k);
 
-Chunk::Chunk(int x, int y, int z)
-	: m_Position(glm::ivec3(x, y, z)), m_Mesh(nullptr)//, m_Blocks(nullptr)
+Chunk::Chunk(int x, int y, int z, int chunkSize)
+	: m_Position(glm::ivec3(x, y, z)), m_Mesh(nullptr),
+	m_ChunkSize(chunkSize)
 {
-	int size = CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE;
+	int size = m_ChunkSize * m_ChunkSize * m_ChunkSize;
 	m_Blocks = new unsigned char[size];
 	if (!m_Blocks) return;
 	std::fill_n(m_Blocks, size, 0);
@@ -48,15 +50,15 @@ void Chunk::RenderChunk(Renderer* renderer)
 		return;
 	}
 	if (!m_Blocks) return;
-	m_Mesh = new Mesh(glm::vec3(m_Position.x * CHUNK_SIZE, m_Position.y * CHUNK_SIZE, m_Position.z * CHUNK_SIZE));
+	m_Mesh = new Mesh(glm::vec3(m_Position.x * m_ChunkSize, m_Position.y * m_ChunkSize, m_Position.z * m_ChunkSize));
 
-	for (unsigned char i = 0; i < CHUNK_SIZE; i++)
+	for (unsigned char i = 0; i < m_ChunkSize; i++)
 	{
-		for (unsigned char j = 0; j < CHUNK_SIZE; j++)
+		for (unsigned char j = 0; j < m_ChunkSize; j++)
 		{
-			for (unsigned char k = 0; k < CHUNK_SIZE; k++)
+			for (unsigned char k = 0; k < m_ChunkSize; k++)
 			{
-				unsigned char flag = CheckSurroundingBlocks(m_Blocks, i, j, k);
+				unsigned char flag = CheckSurroundingBlocks(i, j, k);
 				if (flag >= 63) continue; // 2 ^ 6 - 1 (all collision flags)
 
 				glm::vec4 color;
@@ -76,6 +78,9 @@ void Chunk::RenderChunk(Renderer* renderer)
 				case 4:
 					color = COLOR_GRAY;
 					break;
+				case 5:
+					color = COLOR_BLUE;
+					break;
 				default:
 					color = glm::vec4(0.0f);
 					break;
@@ -92,90 +97,97 @@ void Chunk::RenderChunk(Renderer* renderer)
 
 void Chunk::GenerateChunk()
 {
+	const static float PERLIN_AMPLITUDE = 1.0f;
+	const static float PERLIN_FREQUENCY = 1.0f;
+
+	const static float SIMPLEX_AMPLITUDE = 0.1f;
+	const static float SIMPLEX_FREQUENCY = 5.0f;
+
 	FastNoiseLite perlinNoise(PERLIN_SEED);
 	FastNoiseLite simplexNoise(SIMPLEX_SEED);
 	perlinNoise.SetNoiseType(FastNoiseLite::NoiseType::NoiseType_Perlin);
 	simplexNoise.SetNoiseType(FastNoiseLite::NoiseType::NoiseType_OpenSimplex2);
 
-	for (unsigned char i = 0; i < CHUNK_SIZE; i++)
+	for (unsigned char i = 0; i < m_ChunkSize; i++)
 	{
-		for (unsigned char k = 0; k < CHUNK_SIZE; k++)
+		for (unsigned char k = 0; k < m_ChunkSize; k++)
 		{
 			glm::vec3 worldPos;
-			worldPos.x = (float)m_Position.x * CHUNK_SIZE + i;
-			worldPos.y = (float)m_Position.y * CHUNK_SIZE;
-			worldPos.z = (float)m_Position.z * CHUNK_SIZE + k;
+			worldPos.x = (float)m_Position.x * m_ChunkSize + i;
+			worldPos.y = (float)m_Position.y * m_ChunkSize;
+			worldPos.z = (float)m_Position.z * m_ChunkSize + k;
 
-			float perlin = perlinNoise.GetNoise(
-				worldPos.x,
-				worldPos.z
+			float perlin = PERLIN_AMPLITUDE * perlinNoise.GetNoise(
+				worldPos.x * PERLIN_FREQUENCY * TEST_FREQUENCY,
+				worldPos.z * PERLIN_FREQUENCY * TEST_FREQUENCY
 			);
 
-			float simplex = simplexNoise.GetNoise(
-				worldPos.x * NOISE_MULTIPLIER,
-				worldPos.z * NOISE_MULTIPLIER
+			float simplex = SIMPLEX_AMPLITUDE * simplexNoise.GetNoise(
+				worldPos.x * SIMPLEX_FREQUENCY * TEST_FREQUENCY,
+				worldPos.z * SIMPLEX_FREQUENCY * TEST_FREQUENCY
 			);
 
-			int height = (int)((perlin * simplex + 1.0f) / 2.0f * CHUNK_SIZE);
+			//int height = (int)((perlin + simplex + 1.0f) / 2.0f * CHUNK_SIZE);
+			int height = (int)((perlin + simplex) * m_ChunkSize);
+			height = height < 0 ? 0 : height >= m_ChunkSize ? m_ChunkSize - 1 : height;
 
-			for (unsigned char j = 0; j < CHUNK_SIZE; j++)
+			for (unsigned char j = 0; j < m_ChunkSize; j++)
 			{
 				int offset = GetBlockOffset(i, j, k);
 				if (offset == -1) continue;
-				m_Blocks[offset] = GetBlockType(j, height, simplex);
+				m_Blocks[offset] = GetBlockType(j, height, perlin);
 			}
 		}
 	}
 }
 
-char GetBlockType(char height, char maxHeight, float simplex)
+char GetBlockType(char height, char maxHeight, float perlin)
 {
 	int dist = maxHeight - height;
 	if (dist < 0) return 0; //AIR
+	if (maxHeight == 0) return 5; //WATER
+
+	height *= (perlin + 1.0f) / 2.0f;
 
 	if (height <= 5) return 2; //DIRT
 
-	if (3 * simplex < dist) return 4; //STONE
+	if (height > 20) return 4; //STONE
+	
+	if (height > 15) return 3;
 
-	if (dist <= 3)
-	{	
-		return 1; //GRASS
-	}
-	else {
-		return 2; //DIRT
-	}
+	return 1;
 }
 
-int GetBlockOffset(int i, int j, int k) 
+int Chunk::GetBlockOffset(int i, int j, int k) 
 {
 	if (i < 0 || j < 0 || k < 0) return -1;
-	if (i >= CHUNK_SIZE || j >= CHUNK_SIZE || k >= CHUNK_SIZE) return -1;
-	return (i * CHUNK_SIZE * CHUNK_SIZE) + (j * CHUNK_SIZE) + k;
+	if (i >= m_ChunkSize || j >= m_ChunkSize || k >= m_ChunkSize) return -1;
+	return (i * m_ChunkSize * m_ChunkSize) + (j * m_ChunkSize) + k;
 }
 
-unsigned char CheckSurroundingBlocks(unsigned char* blocks, int i, int j, int k)
+unsigned char Chunk::CheckSurroundingBlocks(int i, int j, int k)
 {
 	unsigned char flag = 0;
 	
-	flag |= CheckBlock(blocks, i + 1, j, k) << 0;
-	flag |= CheckBlock(blocks, i - 1, j, k) << 1;
-	flag |= CheckBlock(blocks, i, j + 1, k) << 2;
-	flag |= CheckBlock(blocks, i, j - 1, k) << 3;
-	flag |= CheckBlock(blocks, i, j, k + 1) << 4;
-	flag |= CheckBlock(blocks, i, j, k - 1) << 5;
+	flag |= CheckBlock(i + 1, j, k) << 0;
+	flag |= CheckBlock(i - 1, j, k) << 1;
+	flag |= CheckBlock(i, j + 1, k) << 2;
+	flag |= CheckBlock(i, j - 1, k) << 3;
+	flag |= CheckBlock(i, j, k + 1) << 4;
+	flag |= CheckBlock(i, j, k - 1) << 5;
 
 	return flag;
 }
 
-int CheckBlock(unsigned char* blocks, int i, int j, int k)
+int Chunk::CheckBlock(int i, int j, int k)
 {
 	int offset = GetBlockOffset(i, j, k);
 	if (offset == -1) return 0;
 
-	switch (blocks[offset])
+	switch (m_Blocks[offset])
 	{
 	case 0:
-	case 4:
+	case 6:
 		return 0;
 		break;
 	default:

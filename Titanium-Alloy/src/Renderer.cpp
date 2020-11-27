@@ -5,7 +5,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 Renderer::Renderer(Camera* camera)
-	: m_ChunkShader(nullptr), m_Camera(camera), m_VP(glm::mat4(1.0f))
+	: m_ChunkShader(nullptr), m_Camera(camera)
 { }
 
 void Renderer::Init()
@@ -25,7 +25,6 @@ void Renderer::Init()
 
 void Renderer::Update()
 {
-	m_VP = m_Camera->GetProjectionMatrix() * m_Camera->GetViewMatrix();
 }
 
 void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& s) const
@@ -42,7 +41,7 @@ void Renderer::DrawChunk(const Mesh& mesh)
 	DrawMesh(mesh, *m_ChunkShader);
 }
 
-// Todo: Create Renderer::m_VoxelShader for all voxel meshes.
+// Todo: Make mesh a pointer to avoid copying.
 void Renderer::DrawMesh(const Mesh& mesh, Shader& s) const
 {
 	VertexArray va;
@@ -51,6 +50,7 @@ void Renderer::DrawMesh(const Mesh& mesh, Shader& s) const
 	layout.Push<float>(4); //Color
 	layout.Push<float>(3); //Normal
 
+	// Todo: Cache mesh.getQuads() and make it a pointer.
 	std::vector<Quad> quads = mesh.GetQuads();
 	size_t verticesSize = quads.size() * 4 * sizeof(Vertex);
 	size_t indicesSize = quads.size() * 6 * sizeof(unsigned int);
@@ -84,8 +84,9 @@ void Renderer::DrawMesh(const Mesh& mesh, Shader& s) const
 	ib.Bind();
 	s.Bind();
 
-	glm::mat4 mvp = m_VP * mesh.GetModelMatrix();
-	s.SetUniform<glm::mat4>("u_MVP", mvp);
+	s.SetUniform("u_Projection", m_Camera->GetProjectionMatrix());
+	s.SetUniform("u_View", m_Camera->GetViewMatrix());
+	s.SetUniform("u_Model", mesh.GetModelMatrix());
 
 	glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
 }
