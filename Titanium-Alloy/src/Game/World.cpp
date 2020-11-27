@@ -12,10 +12,6 @@ World::World(Renderer* renderer, Camera* camera)
 
 World::~World()
 {
-    /*for (Chunk* chunk : m_Chunks)
-    {
-        delete chunk;
-    }*/
     for (auto item : m_Chunks)
     {
         delete item.second;
@@ -44,16 +40,13 @@ void World::Update()
     AddChunks(camPos);
 
     // Update graphics (make this thread safe)
-    /*for (Chunk* chunk : m_Chunks)
-    {
-        chunk->RenderChunk(m_Renderer);
-    }*/
     for (auto item : m_Chunks)
     {
         item.second->RenderChunk(m_Renderer);
     }
 }
 
+// Todo: Make this in sync with World::AddChunks to prevent unneeded chunk deletion and creation
 void World::RemoveChunks(glm::vec3 camPos)
 {
     std::vector<std::pair<int, int>> toRemove;

@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-const unsigned char TEST_FREQUENCY = 1;
+const float TEST_FREQUENCY = 0.5f;
 
 static const glm::vec4 COLOR_BROWN = glm::vec4(0.54f, 0.27f, 0.07f, 1.0f);
 static const glm::vec4 COLOR_DARK_GREEN = glm::vec4(0.12f, 0.51f, 0.28f, 1.0f);
@@ -13,7 +13,7 @@ static const glm::vec4 COLOR_GREEN = glm::vec4(0.22f, 0.71f, 0.38f, 1.0f);
 static const glm::vec4 COLOR_GRAY = glm::vec4(0.3f, 0.3f, 0.3f, 1.0f);
 static const glm::vec4 COLOR_BLUE = glm::vec4(0.3f, 0.2f, 0.8f, 1.0f);
 
-char GetBlockType(char height, char maxHeight, float simplex);
+char GetBlockType(char height, char maxHeight, float perlin, float simplex);
 int GetBlockOffset(int i, int j, int k);
 unsigned char CheckSurroundingBlocks(unsigned char* blocks, int i, int j, int k);
 int CheckBlock(unsigned char* blocks, int i, int j, int k);
@@ -135,25 +135,26 @@ void Chunk::GenerateChunk()
 			{
 				int offset = GetBlockOffset(i, j, k);
 				if (offset == -1) continue;
-				m_Blocks[offset] = GetBlockType(j, height, perlin);
+				m_Blocks[offset] = GetBlockType(j, height, perlin, simplex);
 			}
 		}
 	}
 }
 
-char GetBlockType(char height, char maxHeight, float perlin)
+char GetBlockType(char height, char maxHeight, float perlin, float simplex)
 {
 	int dist = maxHeight - height;
 	if (dist < 0) return 0; //AIR
 	if (maxHeight == 0) return 5; //WATER
 
-	height *= (perlin + 1.0f) / 2.0f;
+	float h = height * (perlin + 1.0f);
+	h += simplex * 100.0f;
 
-	if (height <= 5) return 2; //DIRT
+	if (h <= 5) return 2; //DIRT
 
-	if (height > 20) return 4; //STONE
+	if (h > 20) return 4; //STONE
 	
-	if (height > 15) return 3;
+	if (h > 15) return 3;
 
 	return 1;
 }
