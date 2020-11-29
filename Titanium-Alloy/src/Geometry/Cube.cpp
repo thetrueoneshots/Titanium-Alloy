@@ -1,20 +1,33 @@
 #include "Cube.h"
 
-// Todo: Move to new file
-// Todo: Leave out quads if the according flags are set
+glm::vec4 Cube::GetColor() const
+{
+	return m_Color;
+}
+
+glm::vec3 Cube::GetPosition() const
+{
+	return m_Position;
+}
+
+void Cube::SetFlags(unsigned char flags)
+{
+	m_Flags = flags;
+}
+
 std::vector<Quad> Cube::GetQuads() const
 {
 	std::vector<Quad> quads;
 
 	glm::vec3 points[] = {
-		m_Position + glm::vec3(-m_Size / 2.0f, -m_Size / 2.0f, m_Size / 2.0f), //0
-		m_Position + glm::vec3(m_Size / 2.0f, -m_Size / 2.0f, m_Size / 2.0f), //1
-		m_Position + glm::vec3(m_Size / 2.0f, m_Size / 2.0f, m_Size / 2.0f), //2
-		m_Position + glm::vec3(-m_Size / 2.0f, m_Size / 2.0f, m_Size / 2.0f), //3
-		m_Position + glm::vec3(-m_Size / 2.0f, -m_Size / 2.0f, -m_Size / 2.0f), //4
-		m_Position + glm::vec3(m_Size / 2.0f, -m_Size / 2.0f, -m_Size / 2.0f), //5
-		m_Position + glm::vec3(m_Size / 2.0f, m_Size / 2.0f, -m_Size / 2.0f), //6
-		m_Position + glm::vec3(-m_Size / 2.0f, m_Size / 2.0f, -m_Size / 2.0f), //7
+		m_Position + glm::vec3(-0.5f, -0.5f, 0.5f), //0
+		m_Position + glm::vec3(0.5f, -0.5f, 0.5f), //1
+		m_Position + glm::vec3(0.5f, 0.5f, 0.5f), //2
+		m_Position + glm::vec3(-0.5f, 0.5f, 0.5f), //3
+		m_Position + glm::vec3(-0.5f, -0.5f, -0.5f), //4
+		m_Position + glm::vec3(0.5f, -0.5f, -0.5f), //5
+		m_Position + glm::vec3(0.5f, 0.5f, -0.5f), //6
+		m_Position + glm::vec3(-0.5f, 0.5f, -0.5f), //7
 	};
 
 

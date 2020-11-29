@@ -5,13 +5,11 @@
 
 #include <iostream>
 
+#include "../Geometry/ColorTypes.h"
+#include "../Geometry/MeshGenerator.h"
+
 const float TEST_FREQUENCY = 0.5f;
 
-static const glm::vec4 COLOR_BROWN = glm::vec4(0.54f, 0.27f, 0.07f, 1.0f);
-static const glm::vec4 COLOR_DARK_GREEN = glm::vec4(0.12f, 0.51f, 0.28f, 1.0f);
-static const glm::vec4 COLOR_GREEN = glm::vec4(0.22f, 0.71f, 0.38f, 1.0f);
-static const glm::vec4 COLOR_GRAY = glm::vec4(0.3f, 0.3f, 0.3f, 1.0f);
-static const glm::vec4 COLOR_BLUE = glm::vec4(0.3f, 0.2f, 0.8f, 1.0f);
 
 char GetBlockType(char height, char maxHeight, float perlin, float simplex);
 int GetBlockOffset(int i, int j, int k);
@@ -40,17 +38,28 @@ Chunk::~Chunk()
 	{
 		delete m_Mesh;
 	}
+	for (Mesh* m : objects)
+	{
+		delete m;
+	}
 }
 
 void Chunk::RenderChunk(Renderer* renderer)
 {
+	for (Mesh* m : objects)
+	{
+		renderer->DrawChunk(m);
+	}
+
 	if (m_Mesh)
 	{
-		renderer->DrawChunk(*m_Mesh);
+		renderer->DrawChunk(m_Mesh);
 		return;
 	}
 	if (!m_Blocks) return;
-	m_Mesh = new Mesh(glm::vec3(m_Position.x * m_ChunkSize, m_Position.y * m_ChunkSize, m_Position.z * m_ChunkSize));
+	glm::vec3 pos = glm::vec3(m_Position.x * m_ChunkSize, m_Position.y * m_ChunkSize, m_Position.z * m_ChunkSize);
+	m_Mesh = new Mesh();
+	m_Mesh->SetTranslation(pos);
 
 	for (unsigned char i = 0; i < m_ChunkSize; i++)
 	{
@@ -87,12 +96,13 @@ void Chunk::RenderChunk(Renderer* renderer)
 				}
 				if (color.a > 0.0f)
 				{
-					m_Mesh->AddCube(glm::vec3(i, j, k), color, 1.0f, flag);
+					m_Mesh->AddCube(glm::vec3(i, j, k), color, flag);
 				}
 			}
 		}
 	}
-	renderer->DrawChunk(*m_Mesh);
+	//m_Mesh->UpdateRenderFlags();
+	renderer->DrawChunk(m_Mesh);
 }
 
 void Chunk::GenerateChunk()
@@ -105,7 +115,11 @@ void Chunk::GenerateChunk()
 
 	FastNoiseLite perlinNoise(PERLIN_SEED);
 	FastNoiseLite simplexNoise(SIMPLEX_SEED);
+
+	FastNoiseLite treeNoise(PERLIN_SEED + SIMPLEX_SEED);
+
 	perlinNoise.SetNoiseType(FastNoiseLite::NoiseType::NoiseType_Perlin);
+	treeNoise.SetNoiseType(FastNoiseLite::NoiseType::NoiseType_Perlin);
 	simplexNoise.SetNoiseType(FastNoiseLite::NoiseType::NoiseType_OpenSimplex2);
 
 	for (unsigned char i = 0; i < m_ChunkSize; i++)
@@ -131,11 +145,28 @@ void Chunk::GenerateChunk()
 			int height = (int)((perlin + simplex) * m_ChunkSize);
 			height = height < 0 ? 0 : height >= m_ChunkSize ? m_ChunkSize - 1 : height;
 
+			//Add trees (add in terrain next time)
+			float treeNoiseRes = treeNoise.GetNoise(
+				10 * worldPos.x * PERLIN_FREQUENCY * SIMPLEX_FREQUENCY, 
+				10 * worldPos.y * PERLIN_FREQUENCY * SIMPLEX_FREQUENCY,
+				10 * worldPos.z * PERLIN_FREQUENCY * SIMPLEX_FREQUENCY
+			);
+			if (height > 5 && height < 15 && treeNoiseRes > 0.5f)
+			{
+				Mesh* m = MeshGenerator::GenerateMesh(MeshGeneratorType::TREE);
+				if (m != nullptr)
+				{
+					m->SetTranslation(glm::vec3(worldPos.x, height, worldPos.z));
+					objects.push_back(m);
+				}
+			}
+
 			for (unsigned char j = 0; j < m_ChunkSize; j++)
 			{
 				int offset = GetBlockOffset(i, j, k);
 				if (offset == -1) continue;
-				m_Blocks[offset] = GetBlockType(j, height, perlin, simplex);
+				unsigned char type = GetBlockType(j, height, perlin, simplex);
+				m_Blocks[offset] = type;
 			}
 		}
 	}
@@ -154,7 +185,7 @@ char GetBlockType(char height, char maxHeight, float perlin, float simplex)
 
 	if (h > 20) return 4; //STONE
 	
-	if (h > 15) return 3;
+	//if (h > 15) return 3;
 
 	return 1;
 }

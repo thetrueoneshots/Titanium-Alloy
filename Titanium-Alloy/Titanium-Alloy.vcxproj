@@ -160,6 +160,7 @@
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Geometry\Cube.cpp" />
     <ClCompile Include="src\Geometry\Mesh.cpp" />
+    <ClCompile Include="src\Geometry\MeshGenerator.cpp" />
     <ClCompile Include="src\Geometry\Quad.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -319,6 +320,8 @@
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Geometry\Cube.h" />
+    <ClInclude Include="src\Geometry\ColorTypes.h" />
+    <ClInclude Include="src\Geometry\MeshGenerator.h" />
     <ClInclude Include="src\Geometry\Mesh.h" />
     <ClInclude Include="src\Geometry\Quad.h" />
     <ClInclude Include="src\Shader.h" />

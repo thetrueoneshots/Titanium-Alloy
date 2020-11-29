@@ -27,7 +27,7 @@ public:
 	void Update();
 	void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& s) const;
 	// Shader is non-const, because of setting mvp. Standard shader should be made a member;
-	void DrawChunk(const Mesh& mesh);
-	void DrawMesh(const Mesh& mesh, Shader& s) const;
+	void DrawChunk(Mesh* mesh);
+	void DrawMesh(Mesh* mesh, Shader& s) const;
 	void Clear() const;
 };

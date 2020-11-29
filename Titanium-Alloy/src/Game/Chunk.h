@@ -12,6 +12,7 @@ private:
 	unsigned char* m_Blocks;
 	glm::ivec3 m_Position;
 	Mesh* m_Mesh;
+	std::vector<Mesh*> objects;
 	int m_ChunkSize;
 public:
 	Chunk(int x, int y, int z, int chunkSize = 32);
