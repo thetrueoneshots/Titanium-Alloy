@@ -9,6 +9,12 @@ Mesh* MeshGenerator::GenerateMesh(MeshGeneratorType t)
 	case MeshGeneratorType::TREE:
 		return GenerateTree();
 		break;
+	case MeshGeneratorType::FLOWER:
+		return GenerateFlower();
+		break;
+	case MeshGeneratorType::GRASS:
+		return GenerateGrass();
+		break;
 	default:
 		return nullptr;
 	}
@@ -48,10 +54,39 @@ Mesh* MeshGenerator::GenerateTree(int base, int width, int height)
 
 Mesh* MeshGenerator::GenerateFlower()
 {
-	return nullptr;
+	std::vector<Cube*> cubes;
+	
+	cubes.push_back(new Cube(glm::vec3(0, 0, 0), COLOR_DARK_GREEN));
+	cubes.push_back(new Cube(glm::vec3(0, 1, 0), COLOR_DARK_GREEN));
+	cubes.push_back(new Cube(glm::vec3(0, 2, 0), COLOR_BLUE));
+	cubes.push_back(new Cube(glm::vec3(0, 3, 0), COLOR_BLUE));
+	cubes.push_back(new Cube(glm::vec3(1, 2, 0), COLOR_RED));
+	cubes.push_back(new Cube(glm::vec3(-1, 2, 0), COLOR_RED));
+	cubes.push_back(new Cube(glm::vec3(0, 2, 1), COLOR_RED));
+	cubes.push_back(new Cube(glm::vec3(0, 2, -1), COLOR_RED));
+
+	Mesh* m = new Mesh(cubes);
+	m->SetScale(0.25f);
+	m->Translate(glm::vec3(0.0f, -0.35f, 0.0f));
+	return m;
 }
 
 Mesh* MeshGenerator::GenerateGrass()
 {
-	return nullptr;
+	std::vector<Cube*> cubes;
+	
+	for (int j = -2; j < 2; j++)
+	{
+		for (int i = 0; i < 5; i++)
+			{
+				cubes.push_back(new Cube(glm::vec3(i + (j * 3) % 5, i, (j * 3) % 4), COLOR_DARK_GREEN));
+				cubes.push_back(new Cube(glm::vec3(1 + i + (j * 3) % 5, i, (j * 3) % 4), COLOR_GREEN));
+			}
+	}
+
+	Mesh* m = new Mesh(cubes);
+	m->SetScale(0.125f);
+	m->Translate(glm::vec3(0.0f, -0.45f, 0.0f));
+	m->Rotate(glm::vec3(glm::radians(10.0f), 0.0f, 0.0f));
+	return m;
 }

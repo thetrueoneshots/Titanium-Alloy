@@ -158,6 +158,7 @@
     <ClCompile Include="..\Dependencies\glad\src\gl.c" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
+    <ClCompile Include="src\Game\WorldGenerator.cpp" />
     <ClCompile Include="src\Geometry\Cube.cpp" />
     <ClCompile Include="src\Geometry\Mesh.cpp" />
     <ClCompile Include="src\Geometry\MeshGenerator.cpp" />
@@ -319,6 +320,7 @@
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Game\Game.h" />
+    <ClInclude Include="src\Game\WorldGenerator.h" />
     <ClInclude Include="src\Geometry\Cube.h" />
     <ClInclude Include="src\Geometry\ColorTypes.h" />
     <ClInclude Include="src\Geometry\MeshGenerator.h" />

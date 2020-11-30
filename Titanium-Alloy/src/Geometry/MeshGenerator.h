@@ -4,7 +4,7 @@
 
 enum class MeshGeneratorType
 {
-	TYPE_BEGIN,
+	TYPE_BEGIN = 0,
 	TREE,
 	FLOWER,
 	GRASS,

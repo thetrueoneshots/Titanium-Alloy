@@ -7,11 +7,10 @@
 
 #include "../Geometry/ColorTypes.h"
 #include "../Geometry/MeshGenerator.h"
+#include "WorldGenerator.h"
 
 const float TEST_FREQUENCY = 0.5f;
 
-
-char GetBlockType(char height, char maxHeight, float perlin, float simplex);
 int GetBlockOffset(int i, int j, int k);
 unsigned char CheckSurroundingBlocks(unsigned char* blocks, int i, int j, int k);
 int CheckBlock(unsigned char* blocks, int i, int j, int k);
@@ -70,30 +69,10 @@ void Chunk::RenderChunk(Renderer* renderer)
 				unsigned char flag = CheckSurroundingBlocks(i, j, k);
 				if (flag >= 63) continue; // 2 ^ 6 - 1 (all collision flags)
 
-				glm::vec4 color;
 				int offset = GetBlockOffset(i, j, k);
 				if (offset == -1) continue;
-				switch (m_Blocks[offset])
-				{
-				case 1:
-					color = COLOR_GREEN;
-					break;
-				case 2:
-					color = COLOR_BROWN;
-					break;
-				case 3:
-					color = COLOR_DARK_GREEN;
-					break;
-				case 4:
-					color = COLOR_GRAY;
-					break;
-				case 5:
-					color = COLOR_BLUE;
-					break;
-				default:
-					color = glm::vec4(0.0f);
-					break;
-				}
+
+				glm::vec4 color = WorldGenerator::GetBlockColor((BlockType)m_Blocks[offset]);
 				if (color.a > 0.0f)
 				{
 					m_Mesh->AddCube(glm::vec3(i, j, k), color, flag);
@@ -107,21 +86,6 @@ void Chunk::RenderChunk(Renderer* renderer)
 
 void Chunk::GenerateChunk()
 {
-	const static float PERLIN_AMPLITUDE = 1.0f;
-	const static float PERLIN_FREQUENCY = 1.0f;
-
-	const static float SIMPLEX_AMPLITUDE = 0.1f;
-	const static float SIMPLEX_FREQUENCY = 5.0f;
-
-	FastNoiseLite perlinNoise(PERLIN_SEED);
-	FastNoiseLite simplexNoise(SIMPLEX_SEED);
-
-	FastNoiseLite treeNoise(PERLIN_SEED + SIMPLEX_SEED);
-
-	perlinNoise.SetNoiseType(FastNoiseLite::NoiseType::NoiseType_Perlin);
-	treeNoise.SetNoiseType(FastNoiseLite::NoiseType::NoiseType_Perlin);
-	simplexNoise.SetNoiseType(FastNoiseLite::NoiseType::NoiseType_OpenSimplex2);
-
 	for (unsigned char i = 0; i < m_ChunkSize; i++)
 	{
 		for (unsigned char k = 0; k < m_ChunkSize; k++)
@@ -131,32 +95,16 @@ void Chunk::GenerateChunk()
 			worldPos.y = (float)m_Position.y * m_ChunkSize;
 			worldPos.z = (float)m_Position.z * m_ChunkSize + k;
 
-			float perlin = PERLIN_AMPLITUDE * perlinNoise.GetNoise(
-				worldPos.x * PERLIN_FREQUENCY * TEST_FREQUENCY,
-				worldPos.z * PERLIN_FREQUENCY * TEST_FREQUENCY
-			);
+			float noise = WorldGenerator::GetHeight(worldPos);
+			int height = (int)(noise * (m_ChunkSize - 1));
 
-			float simplex = SIMPLEX_AMPLITUDE * simplexNoise.GetNoise(
-				worldPos.x * SIMPLEX_FREQUENCY * TEST_FREQUENCY,
-				worldPos.z * SIMPLEX_FREQUENCY * TEST_FREQUENCY
-			);
-
-			//int height = (int)((perlin + simplex + 1.0f) / 2.0f * CHUNK_SIZE);
-			int height = (int)((perlin + simplex) * m_ChunkSize);
-			height = height < 0 ? 0 : height >= m_ChunkSize ? m_ChunkSize - 1 : height;
-
-			//Add trees (add in terrain next time)
-			float treeNoiseRes = treeNoise.GetNoise(
-				10 * worldPos.x * PERLIN_FREQUENCY * SIMPLEX_FREQUENCY, 
-				10 * worldPos.y * PERLIN_FREQUENCY * SIMPLEX_FREQUENCY,
-				10 * worldPos.z * PERLIN_FREQUENCY * SIMPLEX_FREQUENCY
-			);
-			if (height > 5 && height < 15 && treeNoiseRes > 0.5f)
+			MeshGeneratorType obj = WorldGenerator::PlaceObject(worldPos, height);
+			if (obj != MeshGeneratorType::TYPE_BEGIN)
 			{
-				Mesh* m = MeshGenerator::GenerateMesh(MeshGeneratorType::TREE);
+				Mesh* m = MeshGenerator::GenerateMesh(obj);
 				if (m != nullptr)
 				{
-					m->SetTranslation(glm::vec3(worldPos.x, height, worldPos.z));
+					m->Translate(glm::vec3(worldPos.x, height + 1.0f, worldPos.z));
 					objects.push_back(m);
 				}
 			}
@@ -165,29 +113,11 @@ void Chunk::GenerateChunk()
 			{
 				int offset = GetBlockOffset(i, j, k);
 				if (offset == -1) continue;
-				unsigned char type = GetBlockType(j, height, perlin, simplex);
+				unsigned char type = (unsigned char)WorldGenerator::GetBlockType(glm::vec3(i, j, k), j, height);
 				m_Blocks[offset] = type;
 			}
 		}
 	}
-}
-
-char GetBlockType(char height, char maxHeight, float perlin, float simplex)
-{
-	int dist = maxHeight - height;
-	if (dist < 0) return 0; //AIR
-	if (maxHeight == 0) return 5; //WATER
-
-	float h = height * (perlin + 1.0f);
-	h += simplex * 100.0f;
-
-	if (h <= 5) return 2; //DIRT
-
-	if (h > 20) return 4; //STONE
-	
-	//if (h > 15) return 3;
-
-	return 1;
 }
 
 int Chunk::GetBlockOffset(int i, int j, int k) 

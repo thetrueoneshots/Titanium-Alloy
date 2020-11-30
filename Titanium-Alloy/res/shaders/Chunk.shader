@@ -32,9 +32,10 @@ void main()
     // Todo: Add light direction
     // Todo: Add ambient light
     vec4 ambientColor = vec4(1, 1, 1, 1);
+    vec3 light = vec3(-.5f, -1.0f, 0.5f);
 
-    float diffuseIntensity = 0.1f;
-    float diffuseFactor = dot(normalize(v_Normal), normalize(-vec3(0.0f, -1.0f, 0.0f)));
+    float diffuseIntensity = 0.2f;
+    float diffuseFactor = dot(normalize(v_Normal), normalize(-light));
 
     vec4 diffuseColor;
     if (diffuseFactor > 0)
