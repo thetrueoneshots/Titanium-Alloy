@@ -1,21 +1,21 @@
 #include "Cube.h"
 
-glm::vec4 Cube::GetColor() const
+glm::vec4 Voxel::Cube::GetColor() const
 {
 	return m_Color;
 }
 
-glm::vec3 Cube::GetPosition() const
+glm::vec3 Voxel::Cube::GetPosition() const
 {
 	return m_Position;
 }
 
-void Cube::SetFlags(unsigned char flags)
+void Voxel::Cube::SetFlags(unsigned char flags)
 {
 	m_Flags = flags;
 }
 
-std::vector<Quad> Cube::GetQuads() const
+std::vector<Voxel::Quad> Voxel::Cube::GetQuads() const
 {
 	std::vector<Quad> quads;
 

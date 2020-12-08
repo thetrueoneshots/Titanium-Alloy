@@ -7,10 +7,13 @@ Game::Game(GLFWwindow* window)
 {
 	glfwGetWindowSize(m_Window, &m_ScreenSize.x, &m_ScreenSize.y);
 	m_LastMouse = glm::vec2(m_ScreenSize.x / 2, m_ScreenSize.y / 2);
-	m_Camera = new Camera(&m_ScreenSize, 500.0f);
+
+	m_Camera = new Voxel::Camera(&m_ScreenSize, 500.0f);
 	m_Camera->SetPosition(glm::vec3(0.0f, 15.0f, -20.0f));
-	m_Renderer = new Renderer(m_Camera);
+
+	m_Renderer = new Voxel::Renderer(m_Camera);
 	m_Renderer->Init();
+
 	m_World = new World(m_Renderer, m_Camera);
 	m_World->GenerateWorld();
 }
@@ -39,17 +42,17 @@ void Game::HandleKeyInput(int key, int scancode, int action, int mods)
 
 	float cameraSpeed = m_MovementSpeed * m_DeltaTime;
 	if (key == GLFW_KEY_LEFT || key == GLFW_KEY_A)
-		m_Camera->Move(Camera::Direction::LEFT, cameraSpeed);
+		m_Camera->Move(Voxel::Camera::Direction::LEFT, cameraSpeed);
 	if (key == GLFW_KEY_RIGHT || key == GLFW_KEY_D)
-		m_Camera->Move(Camera::Direction::RIGHT, cameraSpeed);
+		m_Camera->Move(Voxel::Camera::Direction::RIGHT, cameraSpeed);
 	if (key == GLFW_KEY_UP || key == GLFW_KEY_W)
-		m_Camera->Move(Camera::Direction::FORWARD, cameraSpeed);
+		m_Camera->Move(Voxel::Camera::Direction::FORWARD, cameraSpeed);
 	if (key == GLFW_KEY_DOWN || key == GLFW_KEY_S)
-		m_Camera->Move(Camera::Direction::BACKWARD, cameraSpeed);
+		m_Camera->Move(Voxel::Camera::Direction::BACKWARD, cameraSpeed);
 	if (key == GLFW_KEY_LEFT_SHIFT)
-		m_Camera->Move(Camera::Direction::DOWN, cameraSpeed);
+		m_Camera->Move(Voxel::Camera::Direction::DOWN, cameraSpeed);
 	if (key == GLFW_KEY_SPACE)
-		m_Camera->Move(Camera::Direction::UP, cameraSpeed);
+		m_Camera->Move(Voxel::Camera::Direction::UP, cameraSpeed);
 }
 
 void Game::HandleCursorPosition(double xPos, double yPos)

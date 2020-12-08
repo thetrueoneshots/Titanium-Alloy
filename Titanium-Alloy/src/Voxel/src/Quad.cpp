@@ -1,6 +1,6 @@
 #include "Quad.h"
 
-QuadData Quad::GetData() const
+Voxel::QuadData Voxel::Quad::GetData() const
 {
 	//float* vertices = (float*)_malloca(4 * sizeof(Vertex));
 

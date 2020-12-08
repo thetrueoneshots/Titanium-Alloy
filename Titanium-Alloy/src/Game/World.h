@@ -3,8 +3,10 @@
 #include <vector>
 #include <map>
 
+#include "../Voxel/Voxel.h"
+
 #include "Chunk.h"
-#include "../Renderer.h"
+
 
 static const int CHUNK_SIZE = 32;
 
@@ -13,10 +15,10 @@ class World
 private:
 	//std::vector<Chunk*> m_Chunks;
 	std::map<std::pair<int, int>, Chunk*> m_Chunks;
-	Renderer* m_Renderer;
-	Camera* m_Camera;
+	Voxel::Renderer* m_Renderer;
+	Voxel::Camera* m_Camera;
 public:
-	World(Renderer* renderer, Camera* m_Camera);
+	World(Voxel::Renderer* renderer, Voxel::Camera* m_Camera);
 	~World();
 
 	void GenerateWorld();

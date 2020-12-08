@@ -8,16 +8,6 @@
 #include <string>
 #include <sstream>
 
-#include "Renderer.h"
-
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "VertexArray.h"
-#include "Shader.h"
-#include "Texture.h"
-
-#include "Geometry/Mesh.h"
-
 #include "Game/Game.h"
 
 #include "glm/glm.hpp"

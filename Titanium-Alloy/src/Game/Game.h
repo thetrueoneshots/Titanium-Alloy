@@ -7,8 +7,7 @@
 
 #include "World.h"
 
-#include "../Camera.h"
-#include "../Renderer.h"
+#include "../Voxel/Voxel.h"
 
 static const std::string WINDOW_NAME = "Titanium Alloy";
 static const float MOVEMENT_SPEED = 20.0f;
@@ -21,8 +20,8 @@ private:
 	GLFWwindow* m_Window;
 	float m_DeltaTime;
 	float m_LastFrame;
-	Camera* m_Camera;
-	Renderer* m_Renderer;
+	Voxel::Camera* m_Camera;
+	Voxel::Renderer* m_Renderer;
 	World* m_World;
 	float m_MovementSpeed;
 

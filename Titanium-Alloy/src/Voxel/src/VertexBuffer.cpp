@@ -2,29 +2,29 @@
 
 #include "Renderer.h"
 
-VertexBuffer::VertexBuffer(const void* data, unsigned int size)
+Voxel::VertexBuffer::VertexBuffer(const void* data, unsigned int size)
 {
     glGenBuffers(1, &m_RendererID);
     glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
     glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 }
 
-VertexBuffer::~VertexBuffer()
+Voxel::VertexBuffer::~VertexBuffer()
 {
     glDeleteBuffers(1, &m_RendererID);
 }
 
-void VertexBuffer::Bind() const
+void Voxel::VertexBuffer::Bind() const
 {
     glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 }
 
-void VertexBuffer::Unbind() const
+void Voxel::VertexBuffer::Unbind() const
 {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void VertexBuffer::SetData(const void* data, unsigned int size) const
+void Voxel::VertexBuffer::SetData(const void* data, unsigned int size) const
 {
     unsigned int selectedID;
     glGetIntegerv(GL_ARRAY_BUFFER_BINDING, (GLint*)&selectedID);

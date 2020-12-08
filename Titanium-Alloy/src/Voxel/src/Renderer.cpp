@@ -4,11 +4,11 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
-Renderer::Renderer(Camera* camera)
+Voxel::Renderer::Renderer(Camera* camera)
 	: m_ChunkShader(nullptr), m_Camera(camera)
 { }
 
-void Renderer::Init()
+void  Voxel::Renderer::Init()
 {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -23,11 +23,11 @@ void Renderer::Init()
 	}
 }
 
-void Renderer::Update()
+void Voxel::Renderer::Update()
 {
 }
 
-void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& s) const
+void Voxel::Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& s) const
 {
 	va.Bind();
 	ib.Bind();
@@ -36,13 +36,13 @@ void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& 
 	glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
 }
 
-void Renderer::DrawChunk(Mesh* mesh)
+void Voxel::Renderer::DrawChunk(Mesh* mesh)
 {
 	DrawMesh(mesh, *m_ChunkShader);
 }
 
 // Todo: Make mesh a pointer to avoid copying.
-void Renderer::DrawMesh(Mesh* mesh, Shader& s) const
+void Voxel::Renderer::DrawMesh(Mesh* mesh, Shader& s) const
 {
 	VertexArray va;
 	VertexBufferLayout layout;
@@ -91,7 +91,7 @@ void Renderer::DrawMesh(Mesh* mesh, Shader& s) const
 	glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
 }
 
-void Renderer::Clear() const
+void Voxel::Renderer::Clear() const
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

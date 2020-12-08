@@ -14,7 +14,7 @@ static const struct ShaderProgramSource
 static unsigned int CompileShader(unsigned int type, const std::string& source);
 static ShaderProgramSource ParseShader(const std::string& filepath);
 
-Shader::Shader(const std::string& filepath)
+Voxel::Shader::Shader(const std::string& filepath)
 {
     m_FilePath = filepath;
 	m_RendererID = glCreateProgram();
@@ -29,12 +29,12 @@ Shader::Shader(const std::string& filepath)
     Bind();
 }
 
-Shader::~Shader()
+Voxel::Shader::~Shader()
 {
 	glDeleteProgram(m_RendererID);
 }
 
-void Shader::AddShader(unsigned int type, const std::string& source)
+void Voxel::Shader::AddShader(unsigned int type, const std::string& source)
 {
     unsigned int s = CompileShader(type, source);
     assert(s != 0);
@@ -43,7 +43,7 @@ void Shader::AddShader(unsigned int type, const std::string& source)
     glDeleteShader(s);
 }
 
-int Shader::GetLocation(const std::string& name)
+int Voxel::Shader::GetLocation(const std::string& name)
 {
     if (m_LocationCache.count(name) != 0)
     {
@@ -64,12 +64,12 @@ int Shader::GetLocation(const std::string& name)
     return location;
 }
 
-void Shader::Bind() const
+void Voxel::Shader::Bind() const
 {
 	glUseProgram(m_RendererID);
 }
 
-void Shader::Unbind() const
+void Voxel::Shader::Unbind() const
 {
 	glUseProgram(0);
 }

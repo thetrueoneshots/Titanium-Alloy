@@ -5,8 +5,9 @@
 
 #include <iostream>
 
-#include "../Geometry/ColorTypes.h"
-#include "../Geometry/MeshGenerator.h"
+#include "Geometry/ColorTypes.h"
+#include "Geometry/MeshGenerator.h"
+
 #include "WorldGenerator.h"
 
 const float TEST_FREQUENCY = 0.5f;
@@ -37,15 +38,15 @@ Chunk::~Chunk()
 	{
 		delete m_Mesh;
 	}
-	for (Mesh* m : objects)
+	for (auto m : objects)
 	{
 		delete m;
 	}
 }
 
-void Chunk::RenderChunk(Renderer* renderer)
+void Chunk::RenderChunk(Voxel::Renderer* renderer)
 {
-	for (Mesh* m : objects)
+	for (auto m : objects)
 	{
 		renderer->DrawChunk(m);
 	}
@@ -57,7 +58,7 @@ void Chunk::RenderChunk(Renderer* renderer)
 	}
 	if (!m_Blocks) return;
 	glm::vec3 pos = glm::vec3(m_Position.x * m_ChunkSize, m_Position.y * m_ChunkSize, m_Position.z * m_ChunkSize);
-	m_Mesh = new Mesh();
+	m_Mesh = new Voxel::Mesh();
 	m_Mesh->SetTranslation(pos);
 
 	for (unsigned char i = 0; i < m_ChunkSize; i++)
@@ -101,7 +102,7 @@ void Chunk::GenerateChunk()
 			MeshGeneratorType obj = WorldGenerator::PlaceObject(worldPos, height);
 			if (obj != MeshGeneratorType::TYPE_BEGIN)
 			{
-				Mesh* m = MeshGenerator::GenerateMesh(obj);
+				Voxel::Mesh* m = MeshGenerator::GenerateMesh(obj);
 				if (m != nullptr)
 				{
 					m->Translate(glm::vec3(worldPos.x, height + 1.0f, worldPos.z));

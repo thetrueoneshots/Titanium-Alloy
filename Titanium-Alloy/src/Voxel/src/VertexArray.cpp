@@ -1,26 +1,26 @@
 #include "VertexArray.h"
 
-VertexArray::VertexArray()
+Voxel::VertexArray::VertexArray()
 {
 	glGenVertexArrays(1, &m_RendererID);
 }
 
-VertexArray::~VertexArray()
+Voxel::VertexArray::~VertexArray()
 {
 	glDeleteVertexArrays(1, &m_RendererID);
 }
 
-void VertexArray::Bind() const
+void Voxel::VertexArray::Bind() const
 {
 	glBindVertexArray(m_RendererID);
 }
 
-void VertexArray::Unbind() const
+void Voxel::VertexArray::Unbind() const
 {
 	glBindVertexArray(0);
 }
 
-void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout) const
+void Voxel::VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout) const
 {
 	Bind();
 	vb.Bind();

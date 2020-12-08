@@ -156,23 +156,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Dependencies\glad\src\gl.c" />
-    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Voxel\src\Camera.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Game\WorldGenerator.cpp" />
-    <ClCompile Include="src\Geometry\Cube.cpp" />
-    <ClCompile Include="src\Geometry\Mesh.cpp" />
-    <ClCompile Include="src\Geometry\MeshGenerator.cpp" />
-    <ClCompile Include="src\Geometry\Quad.cpp" />
-    <ClCompile Include="src\IndexBuffer.cpp" />
+    <ClCompile Include="src\Voxel\src\Cube.cpp" />
+    <ClCompile Include="src\Voxel\src\Mesh.cpp" />
+    <ClCompile Include="src\Game\Geometry\MeshGenerator.cpp" />
+    <ClCompile Include="src\Voxel\src\Quad.cpp" />
+    <ClCompile Include="src\Voxel\src\IndexBuffer.cpp" />
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\Renderer.cpp" />
-    <ClCompile Include="src\Shader.cpp" />
-    <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\Voxel\src\Renderer.cpp" />
+    <ClCompile Include="src\Voxel\src\Shader.cpp" />
+    <ClCompile Include="src\Voxel\src\Texture.cpp" />
     <ClCompile Include="src\vendor\glm\detail\glm.cpp" />
     <ClCompile Include="src\vendor\noise\fast_noise_lite.hpp" />
     <ClCompile Include="src\vendor\stb\stb_image.cpp" />
-    <ClCompile Include="src\VertexArray.cpp" />
-    <ClCompile Include="src\VertexBuffer.cpp" />
+    <ClCompile Include="src\Voxel\src\VertexArray.cpp" />
+    <ClCompile Include="src\Voxel\src\VertexBuffer.cpp" />
     <ClCompile Include="src\Game\Chunk.cpp" />
     <ClCompile Include="src\Game\World.cpp" />
   </ItemGroup>
@@ -318,16 +318,17 @@
     <None Include="src\vendor\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\Voxel\src\Camera.h" />
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Game\WorldGenerator.h" />
-    <ClInclude Include="src\Geometry\Cube.h" />
-    <ClInclude Include="src\Geometry\ColorTypes.h" />
-    <ClInclude Include="src\Geometry\MeshGenerator.h" />
-    <ClInclude Include="src\Geometry\Mesh.h" />
-    <ClInclude Include="src\Geometry\Quad.h" />
-    <ClInclude Include="src\Shader.h" />
-    <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\Voxel\src\Cube.h" />
+    <ClInclude Include="src\Game\Geometry\ColorTypes.h" />
+    <ClInclude Include="src\Game\Geometry\MeshGenerator.h" />
+    <ClInclude Include="src\Voxel\Voxel.h" />
+    <ClInclude Include="src\Voxel\src\Mesh.h" />
+    <ClInclude Include="src\Voxel\src\Quad.h" />
+    <ClInclude Include="src\Voxel\src\Shader.h" />
+    <ClInclude Include="src\Voxel\src\Texture.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_vector_relational.hpp" />
@@ -611,11 +612,11 @@
     <ClInclude Include="src\vendor\glm\vec4.hpp" />
     <ClInclude Include="src\vendor\glm\vector_relational.hpp" />
     <ClInclude Include="src\vendor\stb\stb_image.h" />
-    <ClInclude Include="src\VertexBufferLayout.h" />
-    <ClInclude Include="src\IndexBuffer.h" />
-    <ClInclude Include="src\Renderer.h" />
-    <ClInclude Include="src\VertexArray.h" />
-    <ClInclude Include="src\VertexBuffer.h" />
+    <ClInclude Include="src\Voxel\src\VertexBufferLayout.h" />
+    <ClInclude Include="src\Voxel\src\IndexBuffer.h" />
+    <ClInclude Include="src\Voxel\src\Renderer.h" />
+    <ClInclude Include="src\Voxel\src\VertexArray.h" />
+    <ClInclude Include="src\Voxel\src\VertexBuffer.h" />
     <ClInclude Include="src\Game\Chunk.h" />
     <ClInclude Include="src\Game\World.h" />
   </ItemGroup>

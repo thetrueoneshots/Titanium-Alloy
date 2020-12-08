@@ -1,7 +1,8 @@
 #pragma once
 
 #include "../vendor/noise/fast_noise_lite.hpp"
-#include "../Renderer.h"
+
+#include "../Voxel/Voxel.h"
 
 const static int PERLIN_SEED = 813;
 const static int SIMPLEX_SEED = 603;
@@ -11,8 +12,8 @@ class Chunk
 private:
 	unsigned char* m_Blocks;
 	glm::ivec3 m_Position;
-	Mesh* m_Mesh;
-	std::vector<Mesh*> objects;
+	Voxel::Mesh* m_Mesh;
+	std::vector<Voxel::Mesh*> objects;
 	int m_ChunkSize;
 public:
 	Chunk(int x, int y, int z, int chunkSize = 32);
@@ -20,7 +21,7 @@ public:
 
 	inline glm::ivec3 GetPosition() const { return m_Position; }
 
-	void RenderChunk(Renderer* renderer);
+	void RenderChunk(Voxel::Renderer* renderer);
 private:
 	void GenerateChunk();
 	int GetBlockOffset(int i, int j, int k);

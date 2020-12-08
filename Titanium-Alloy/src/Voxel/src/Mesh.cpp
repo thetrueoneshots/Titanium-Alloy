@@ -5,14 +5,14 @@
 std::pair<int, std::pair<int, int>> ConvertPosToKey(glm::vec3 pos);
 glm::vec3 ConvertKeyToPos(std::pair<int, std::pair<int, int>> key);
 
-Mesh::Mesh()
+Voxel::Mesh::Mesh()
 	: m_Translation(glm::vec3(0.0f)), m_Scale(glm::vec3(1.0f)), m_Rotation(glm::vec3(0.0f)),
 	m_State(0)
 {
 	SetState(State::UPDATED);
 }
 
-Mesh::~Mesh()
+Voxel::Mesh::~Mesh()
 {
 	for (auto& item : m_Cubes)
 	{
@@ -20,7 +20,7 @@ Mesh::~Mesh()
 	}
 }
 
-Mesh::Mesh(std::vector<Cube*> cubes)
+Voxel::Mesh::Mesh(std::vector<Cube*> cubes)
 	:m_Translation(glm::vec3(0.0f)), m_Scale(glm::vec3(1.0f)), m_Rotation(glm::vec3(0.0f)),
 	m_State(0)
 {
@@ -39,7 +39,7 @@ Mesh::Mesh(std::vector<Cube*> cubes)
 }
 
 // Todo: Check if cube position already exists and return true/false
-void Mesh::AddCube(glm::vec3 position, glm::vec4 color, unsigned char flags)
+void Voxel::Mesh::AddCube(glm::vec3 position, glm::vec4 color, unsigned char flags)
 {
 	auto key = ConvertPosToKey(position);
 	if (m_Cubes.count(key) == 0)
@@ -50,43 +50,43 @@ void Mesh::AddCube(glm::vec3 position, glm::vec4 color, unsigned char flags)
 	}
 }
 
-void Mesh::AddCube(float p1, float p2, float p3, glm::vec4 color, unsigned char flags)
+void Voxel::Mesh::AddCube(float p1, float p2, float p3, glm::vec4 color, unsigned char flags)
 {
 	AddCube(glm::vec3(p1, p2, p3), color, flags);
 }
 
-void Mesh::SetTranslation(const glm::vec3& translation)
+void Voxel::Mesh::SetTranslation(const glm::vec3& translation)
 {
 	m_Translation = translation;
 }
 
-void Mesh::Translate(const glm::vec3& translation)
+void Voxel::Mesh::Translate(const glm::vec3& translation)
 {
 	m_Translation += translation;
 }
 
-void Mesh::SetScale(float scale)
+void Voxel::Mesh::SetScale(float scale)
 {
 	SetScale(glm::vec3(scale));
 }
 
-void Mesh::SetScale(const glm::vec3& scale)
+void Voxel::Mesh::SetScale(const glm::vec3& scale)
 {
 	m_Scale = scale;
 }
 
-void Mesh::Rotate(const glm::vec3& rotation)
+void Voxel::Mesh::Rotate(const glm::vec3& rotation)
 {
 	m_Rotation += rotation;
 }
 
-void Mesh::SetRotation(const glm::vec3& rotation)
+void Voxel::Mesh::SetRotation(const glm::vec3& rotation)
 {
 	m_Rotation = rotation;
 }
 
 // Todo: Implement
-void Mesh::UpdateRenderFlags()
+void Voxel::Mesh::UpdateRenderFlags()
 {
 	for (auto& item : m_Cubes)
 	{
@@ -96,7 +96,7 @@ void Mesh::UpdateRenderFlags()
 }
 
 // Todo: Fix caching
-std::vector<Quad> Mesh::GetQuads()
+std::vector<Voxel::Quad> Voxel::Mesh::GetQuads()
 {
 	std::vector<Quad> quads;
 
@@ -111,7 +111,7 @@ std::vector<Quad> Mesh::GetQuads()
 	return quads;
 }
 
-glm::mat4 Mesh::GetModelMatrix() const
+glm::mat4 Voxel::Mesh::GetModelMatrix() const
 {
 	glm::mat4 trans = glm::translate(glm::mat4(1.0f), m_Translation);
 	glm::mat4 rx = glm::rotate(trans, m_Rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -120,7 +120,7 @@ glm::mat4 Mesh::GetModelMatrix() const
 	return glm::scale(rz, m_Scale);
 }
 
-bool Mesh::GetState(State s) const
+bool Voxel::Mesh::GetState(State s) const
 {
 	if (s <= State::STATE_BEGIN || s >= State::STATE_END)
 	{
@@ -129,7 +129,7 @@ bool Mesh::GetState(State s) const
 	return ((m_State >> (unsigned char)s) & 1) == 1;
 }
 
-bool Mesh::SetState(State s)
+bool Voxel::Mesh::SetState(State s)
 {
 	if (s <= State::STATE_BEGIN || s >= State::STATE_END)
 	{
@@ -139,7 +139,7 @@ bool Mesh::SetState(State s)
 	return true;
 }
 
-bool Mesh::UnsetState(State s)
+bool Voxel::Mesh::UnsetState(State s)
 {
 	if (s <= State::STATE_BEGIN || s >= State::STATE_END)
 	{
@@ -149,7 +149,7 @@ bool Mesh::UnsetState(State s)
 	return true;
 }
 
-unsigned char Mesh::GetConnectedBlockFlags(const glm::vec3& pos)
+unsigned char Voxel::Mesh::GetConnectedBlockFlags(const glm::vec3& pos)
 {
 	unsigned char flags = 0;
 
@@ -163,7 +163,7 @@ unsigned char Mesh::GetConnectedBlockFlags(const glm::vec3& pos)
 	return flags;
 }
 
-int Mesh::CheckBlock(int x, int y, int z)
+int Voxel::Mesh::CheckBlock(int x, int y, int z)
 {
 	auto key = ConvertPosToKey(glm::vec3(x, y, z));
 	if (m_Cubes.count(key) == 0)

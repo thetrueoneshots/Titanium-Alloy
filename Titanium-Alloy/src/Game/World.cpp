@@ -4,7 +4,7 @@
 
 const static int CHUNKS = 8;
 
-World::World(Renderer* renderer, Camera* camera)
+World::World(Voxel::Renderer* renderer, Voxel::Camera* camera)
 	: m_Renderer(renderer), m_Camera(camera)
 {
 
