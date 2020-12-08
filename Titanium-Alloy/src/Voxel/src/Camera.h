@@ -34,6 +34,8 @@ namespace Voxel
         void Mouse(glm::vec2 offset);
         void Scroll(double yOffset);
 
+        bool InFrustum(const glm::vec3& pos, float radius);
+
         glm::mat4 GetProjectionMatrix() const;
         glm::mat4 GetViewMatrix() const;
 

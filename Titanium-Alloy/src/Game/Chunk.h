@@ -20,6 +20,7 @@ public:
 	~Chunk();
 
 	inline glm::ivec3 GetPosition() const { return m_Position; }
+	inline int GetChunkSize() const { return m_ChunkSize; }
 
 	void RenderChunk(Voxel::Renderer* renderer);
 private:

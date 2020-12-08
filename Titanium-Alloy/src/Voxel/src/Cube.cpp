@@ -20,14 +20,14 @@ std::vector<Voxel::Quad> Voxel::Cube::GetQuads() const
 	std::vector<Quad> quads;
 
 	glm::vec3 points[] = {
-		m_Position + glm::vec3(-0.5f, -0.5f, 0.5f), //0
-		m_Position + glm::vec3(0.5f, -0.5f, 0.5f), //1
-		m_Position + glm::vec3(0.5f, 0.5f, 0.5f), //2
-		m_Position + glm::vec3(-0.5f, 0.5f, 0.5f), //3
-		m_Position + glm::vec3(-0.5f, -0.5f, -0.5f), //4
-		m_Position + glm::vec3(0.5f, -0.5f, -0.5f), //5
-		m_Position + glm::vec3(0.5f, 0.5f, -0.5f), //6
-		m_Position + glm::vec3(-0.5f, 0.5f, -0.5f), //7
+		m_Position + glm::vec3(.0f, .0f, 1.f), //0
+		m_Position + glm::vec3(1.f, .0f, 1.f), //1
+		m_Position + glm::vec3(1.f, 1.f, 1.f), //2
+		m_Position + glm::vec3(.0f, 1.f, 1.f), //3
+		m_Position + glm::vec3(.0f, .0f, .0f), //4
+		m_Position + glm::vec3(1.f, .0f, .0f), //5
+		m_Position + glm::vec3(1.f, 1.f, .0f), //6
+		m_Position + glm::vec3(.0f, 1.f, .0f), //7
 	};
 
 

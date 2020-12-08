@@ -66,6 +66,11 @@ void Voxel::Camera::Scroll(double yOffset)
 	}
 }
 
+bool Voxel::Camera::InFrustum(const glm::vec3& pos, float radius)
+{
+	return glm::dot(m_Normal, pos) - glm::dot(m_Position, m_Normal) + 1.42f*radius > 0;
+}
+
 glm::mat4 Voxel::Camera::GetProjectionMatrix() const
 {
 	return glm::perspective(

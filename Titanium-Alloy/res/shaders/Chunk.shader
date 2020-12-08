@@ -1,7 +1,7 @@
 #shader vertex
 #version 330 core
 
-layout(location = 0) in vec4 position;
+layout(location = 0) in int position;
 layout(location = 1) in int color;
 layout(location = 2) in int normal;
 
@@ -14,7 +14,8 @@ uniform mat4 u_Model;
 
 void main()
 {
-    gl_Position = u_Projection * u_View * u_Model * position;
+    vec4 pos = vec4((position & 255) - 127, ((position & (255 << 8)) >> 8) - 127, ((position & (255 << 16)) >> 16) - 127, 1.0f);// -vec4(0.5f, 0.5f, 0.5f, 0.0f);
+    gl_Position = u_Projection * u_View * u_Model * pos;
     v_Color = vec4(color & 255, (color & (255 << 8)) >> 8, (color & (255 << 16)) >> 16, 255.0f) / 255.0f;
     v_Normal = vec3(normal & 255, (normal & (255 << 8)) >> 8, (normal & (255 << 16)) >> 16) / 255.0f;
 }

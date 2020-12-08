@@ -45,10 +45,13 @@ void World::Update()
     // Update graphics (make this thread safe)
     for (const auto& item : m_Chunks)
     {
+        glm::vec3 chunkPos = item.second->GetPosition() * CHUNK_SIZE;
+        if (!m_Camera->InFrustum(chunkPos, (float)CHUNK_SIZE))
+        {
+            continue;
+        }
         item.second->RenderChunk(m_Renderer);
     }
-    //std::async(std::launch::async, RenderChunks, &m_Chunks, m_Renderer);
-    
 }
 
 void World::RemoveChunks(glm::vec3 camPos)

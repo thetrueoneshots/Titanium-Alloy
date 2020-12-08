@@ -8,17 +8,15 @@ namespace Voxel
 {
 	struct Vertex
 	{
-		float position[3];
+		int32_t position;
 		int32_t color;
 		int32_t normal;
 
 		Vertex() {}
 
-		Vertex(glm::vec3 p, glm::vec4 c, glm::vec3 n)
+		Vertex(glm::ivec3 p, glm::vec4 c, glm::vec3 n)
 		{
-			position[0] = p.x;
-			position[1] = p.y;
-			position[2] = p.z;
+			position = p.x + 127 | p.y + 127 << 8 | p.z + 127 << 16;
 			color = (int)(255 * c.x) | (int)(255 * c.y) << 8 | (int)(255 * c.z) << 16 | (int)(255 * c.w) << 24;
 			normal = (int)(255 * n.x) | (int)(255 * n.y) << 8 | (int)(255 * n.z) << 16;
 		}
