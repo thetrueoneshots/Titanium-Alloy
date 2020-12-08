@@ -27,8 +27,22 @@ Game::~Game()
 
 void Game::Update(float currentFrame)
 {
+	static double totalTime = 0.0f;
+	static int frames = 0;
 	m_DeltaTime = currentFrame - m_LastFrame;
 	m_LastFrame = currentFrame;
+
+	totalTime += m_DeltaTime;
+	frames++;
+	if (totalTime >= 1.0f)
+	{
+		char buffer[250];
+		sprintf_s(buffer, 250, "Engine Window: [fps: %d]", frames);
+		glfwSetWindowTitle(m_Window, buffer);
+		totalTime -= 1.0f;
+		frames = 0;
+	}
+
 	m_Renderer->Clear();
 	
 	m_Renderer->Update();

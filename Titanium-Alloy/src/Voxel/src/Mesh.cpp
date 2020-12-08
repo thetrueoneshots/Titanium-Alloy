@@ -18,11 +18,17 @@ Voxel::Mesh::~Mesh()
 	{
 		delete item.second;
 	}
+	if (m_RenderData)
+	{
+		free(m_RenderData->indices);
+		free(m_RenderData->vertices);
+		delete m_RenderData;
+	}
 }
 
 Voxel::Mesh::Mesh(std::vector<Cube*> cubes)
 	:m_Translation(glm::vec3(0.0f)), m_Scale(glm::vec3(1.0f)), m_Rotation(glm::vec3(0.0f)),
-	m_State(0)
+	m_State(0), m_RenderData(nullptr)
 {
 	for (Cube* cube : cubes)
 	{
@@ -109,6 +115,45 @@ std::vector<Voxel::Quad> Voxel::Mesh::GetQuads()
 	UnsetState(State::UPDATED);
 	assert(!GetState(State::UPDATED));
 	return quads;
+}
+
+RenderData* Voxel::Mesh::GetRenderData()
+{
+	if (m_RenderData != nullptr)
+	{
+		return m_RenderData;
+	}
+
+	std::vector<Quad> quads;
+
+	for (auto& item : m_Cubes)
+	{
+		auto cubeQuads = item.second->GetQuads();
+		quads.insert(quads.end(), cubeQuads.begin(), cubeQuads.end());
+	}
+
+	size_t verticesSize = quads.size() * 4 * sizeof(Vertex);
+	size_t indicesSize = quads.size() * 6 * sizeof(unsigned int);
+	float* vertices = (float*)malloc(verticesSize);
+	unsigned int* indices = (unsigned int*)malloc(indicesSize);
+
+	int vertexCounter = 0;
+	int indexCounter = 0;
+	for (int i = 0; i < quads.size(); i++)
+	{
+		auto data = quads.at(i).GetData();
+		memcpy(&vertices[vertexCounter * (sizeof(Vertex) / sizeof(float))], data.vertices, 4 * sizeof(Vertex));
+		for (int j = 0; j < 6; j++)
+		{
+			indices[indexCounter + j] = data.indices[j] + vertexCounter;
+		}
+
+		vertexCounter += 4;
+		indexCounter += 6;
+	}
+
+	m_RenderData = new RenderData(vertices, verticesSize, indices, 6 * quads.size());
+	return m_RenderData;
 }
 
 glm::mat4 Voxel::Mesh::GetModelMatrix() const

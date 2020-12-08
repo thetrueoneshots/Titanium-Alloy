@@ -4,6 +4,9 @@
 
 const static int CHUNKS = 8;
 
+static std::mutex s_ChunkMutex;
+static void AddChunk(std::map<std::pair<int, int>, Chunk*>* map, glm::ivec2 pos);
+
 World::World(Voxel::Renderer* renderer, Voxel::Camera* camera)
 	: m_Renderer(renderer), m_Camera(camera)
 {
@@ -49,6 +52,7 @@ void World::Update()
 // Todo: Make this in sync with World::AddChunks to prevent unneeded chunk deletion and creation
 void World::RemoveChunks(glm::vec3 camPos)
 {
+    const int HALF_CHUNK_SIZE = CHUNKS * CHUNK_SIZE / 2;
     std::vector<std::pair<int, int>> toRemove;
     for (const auto& item : m_Chunks) {
         std::pair<int, int> p = item.first;
@@ -56,7 +60,7 @@ void World::RemoveChunks(glm::vec3 camPos)
         glm::vec2 camXZ(camPos.x, camPos.z);
         glm::vec2 chunkXZ((float)CHUNK_SIZE * p.first, (float)CHUNK_SIZE * p.second);
 
-        if (glm::distance(camXZ, chunkXZ) > 100.0f)
+        if (glm::max(glm::distance(camXZ.x, chunkXZ.x), glm::distance(camXZ.y, chunkXZ.y)) > HALF_CHUNK_SIZE)
         {
             toRemove.push_back(item.first);
         }
@@ -72,18 +76,31 @@ void World::RemoveChunks(glm::vec3 camPos)
 
 void World::AddChunks(glm::vec3 camPos)
 {
+    glm::ivec2 camXZ(camPos.x / CHUNK_SIZE, camPos.z / CHUNK_SIZE);
     for (int i = 0; i < CHUNKS; i++)
     {
         for (int j = 0; j < CHUNKS; j++)
         {
-            glm::ivec2 camXZ(camPos.x / CHUNK_SIZE, camPos.z / CHUNK_SIZE);
             glm::ivec2 pos = glm::ivec2(i - CHUNKS / 2, j - CHUNKS / 2);
             pos += camXZ;
-            if (m_Chunks.count(std::make_pair(pos.x, pos.y)) == 0)
+            /*if (m_Chunks.count(std::make_pair(pos.x, pos.y)) == 0)
             {
                 Chunk* chunk = new Chunk(pos.x, 0, pos.y, CHUNK_SIZE);
                 m_Chunks.insert_or_assign(std::make_pair(pos.x, pos.y), chunk);
-            }
+            }*/
+            std::async(std::launch::async, AddChunk, &m_Chunks, pos);
         }
+    }
+}
+
+static void AddChunk(std::map<std::pair<int, int>, Chunk*>* map, glm::ivec2 pos)
+{
+    if (map->count(std::make_pair(pos.x, pos.y)) == 0)
+    {
+        Chunk* chunk = new Chunk(pos.x, 0, pos.y, CHUNK_SIZE);
+
+        std::lock_guard<std::mutex> lock(s_ChunkMutex);
+        map->insert_or_assign(std::make_pair(pos.x, pos.y), chunk);
+        //std::lock_guard<std::mutex> unlock();
     }
 }

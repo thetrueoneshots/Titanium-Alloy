@@ -9,6 +9,21 @@
 #include "Cube.h"
 #include "Quad.h"
 
+struct RenderData
+{
+	float* vertices;
+	size_t vertex_array_size;
+	unsigned int* indices;
+	size_t indices_array_count;
+	RenderData(float* v, size_t s1, unsigned int* i, size_t s2)
+	{
+		vertices = v;
+		vertex_array_size = s1;
+		indices = i;
+		indices_array_count = s2;
+	}
+};
+
 namespace Voxel
 {
 	class Mesh
@@ -25,6 +40,7 @@ namespace Voxel
 		std::map<std::pair<int, std::pair<int, int>>, Cube*> m_Cubes;
 		unsigned char m_State;
 		std::vector<Quad> m_Cache;
+		RenderData* m_RenderData;
 	public:
 		Mesh();
 		~Mesh();
@@ -44,6 +60,7 @@ namespace Voxel
 		void SetRotation(const glm::vec3& rotation);
 
 		std::vector<Quad> GetQuads();
+		RenderData* GetRenderData();
 
 		void UpdateRenderFlags();
 		glm::mat4 GetModelMatrix() const;

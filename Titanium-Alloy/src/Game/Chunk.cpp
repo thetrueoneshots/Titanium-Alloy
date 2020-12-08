@@ -10,11 +10,7 @@
 
 #include "WorldGenerator.h"
 
-const float TEST_FREQUENCY = 0.5f;
 
-int GetBlockOffset(int i, int j, int k);
-unsigned char CheckSurroundingBlocks(unsigned char* blocks, int i, int j, int k);
-int CheckBlock(unsigned char* blocks, int i, int j, int k);
 
 Chunk::Chunk(int x, int y, int z, int chunkSize)
 	: m_Position(glm::ivec3(x, y, z)), m_Mesh(nullptr),
@@ -56,6 +52,7 @@ void Chunk::RenderChunk(Voxel::Renderer* renderer)
 		renderer->DrawChunk(m_Mesh);
 		return;
 	}
+
 	if (!m_Blocks) return;
 	glm::vec3 pos = glm::vec3(m_Position.x * m_ChunkSize, m_Position.y * m_ChunkSize, m_Position.z * m_ChunkSize);
 	m_Mesh = new Voxel::Mesh();

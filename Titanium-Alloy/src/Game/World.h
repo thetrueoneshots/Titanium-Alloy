@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <map>
+#include <future>
+#include <mutex>
 
 #include "../Voxel/Voxel.h"
 
