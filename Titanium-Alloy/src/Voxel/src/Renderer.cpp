@@ -21,6 +21,15 @@ void  Voxel::Renderer::Init()
 	{
 		m_ChunkShader = new Shader("res/shaders/Chunk.shader");
 	}
+
+	m_VertexArray = new VertexArray;
+	VertexBufferLayout layout;
+	layout.Push<float>(3); //Position
+	layout.Push<float>(4); //Color
+	layout.Push<float>(3); //Normal
+
+	m_VertexBuffer = new VertexBuffer(nullptr, 0);
+	m_VertexArray->AddBuffer(*m_VertexBuffer, layout);
 }
 
 void Voxel::Renderer::Update()
@@ -44,23 +53,16 @@ void Voxel::Renderer::DrawChunk(Mesh* mesh)
 
 void Voxel::Renderer::DrawMesh(Mesh* mesh, Shader* s) const
 {
-	VertexArray va;
-	VertexBufferLayout layout;
-	layout.Push<float>(3); //Position
-	layout.Push<float>(4); //Color
-	layout.Push<float>(3); //Normal
-
 	RenderData* data = mesh->GetRenderData();
 
-	VertexBuffer vb(data->vertices, data->vertex_array_size);
-	va.AddBuffer(vb, layout);
+	m_VertexArray->Bind();
+	m_VertexBuffer->SetData(data->vertices, data->vertex_array_size);
 
 	IndexBuffer ib(data->indices, data->indices_array_count);
-
-	va.Bind();
 	ib.Bind();
 	s->Bind();
 
+	// Todo: Calculate MVP once per frame
 	s->SetUniform("u_Projection", m_Camera->GetProjectionMatrix());
 	s->SetUniform("u_View", m_Camera->GetViewMatrix());
 	s->SetUniform("u_Model", mesh->GetModelMatrix());

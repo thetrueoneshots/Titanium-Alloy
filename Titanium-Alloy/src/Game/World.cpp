@@ -15,7 +15,7 @@ World::World(Voxel::Renderer* renderer, Voxel::Camera* camera)
 
 World::~World()
 {
-    for (auto item : m_Chunks)
+    for (const auto& item : m_Chunks)
     {
         delete item.second;
     }
@@ -43,13 +43,14 @@ void World::Update()
     AddChunks(camPos);
 
     // Update graphics (make this thread safe)
-    for (auto item : m_Chunks)
+    for (const auto& item : m_Chunks)
     {
         item.second->RenderChunk(m_Renderer);
     }
+    //std::async(std::launch::async, RenderChunks, &m_Chunks, m_Renderer);
+    
 }
 
-// Todo: Make this in sync with World::AddChunks to prevent unneeded chunk deletion and creation
 void World::RemoveChunks(glm::vec3 camPos)
 {
     const int HALF_CHUNK_SIZE = CHUNKS * CHUNK_SIZE / 2;
@@ -66,7 +67,7 @@ void World::RemoveChunks(glm::vec3 camPos)
         }
     }
 
-    for (auto p : toRemove)
+    for (const auto& p : toRemove)
     {
         Chunk* chunk = m_Chunks.at(p);
         delete chunk;
@@ -83,11 +84,6 @@ void World::AddChunks(glm::vec3 camPos)
         {
             glm::ivec2 pos = glm::ivec2(i - CHUNKS / 2, j - CHUNKS / 2);
             pos += camXZ;
-            /*if (m_Chunks.count(std::make_pair(pos.x, pos.y)) == 0)
-            {
-                Chunk* chunk = new Chunk(pos.x, 0, pos.y, CHUNK_SIZE);
-                m_Chunks.insert_or_assign(std::make_pair(pos.x, pos.y), chunk);
-            }*/
             std::async(std::launch::async, AddChunk, &m_Chunks, pos);
         }
     }
@@ -101,6 +97,6 @@ static void AddChunk(std::map<std::pair<int, int>, Chunk*>* map, glm::ivec2 pos)
 
         std::lock_guard<std::mutex> lock(s_ChunkMutex);
         map->insert_or_assign(std::make_pair(pos.x, pos.y), chunk);
-        //std::lock_guard<std::mutex> unlock();
+        std::lock_guard<std::mutex> unlock();
     }
 }

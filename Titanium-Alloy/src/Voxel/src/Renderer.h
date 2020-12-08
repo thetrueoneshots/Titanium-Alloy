@@ -17,6 +17,10 @@ namespace Voxel
 	private:
 		Camera* m_Camera;
 		Shader* m_ChunkShader;
+		VertexArray* m_VertexArray;
+		VertexBufferLayout* m_VertexBufferLayout;
+		VertexBuffer* m_VertexBuffer;
+		IndexBuffer* m_IndexBuffer;
 	public:
 		Renderer(Camera* camera);
 		~Renderer() {

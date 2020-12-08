@@ -42,7 +42,7 @@ Chunk::~Chunk()
 
 void Chunk::RenderChunk(Voxel::Renderer* renderer)
 {
-	for (auto m : objects)
+	for (const auto& m : objects)
 	{
 		renderer->DrawChunk(m);
 	}
@@ -71,6 +71,7 @@ void Chunk::RenderChunk(Voxel::Renderer* renderer)
 				if (offset == -1) continue;
 
 				glm::vec4 color = WorldGenerator::GetBlockColor((BlockType)m_Blocks[offset]);
+
 				if (color.a > 0.0f)
 				{
 					m_Mesh->AddCube(glm::vec3(i, j, k), color, flag);
@@ -78,7 +79,6 @@ void Chunk::RenderChunk(Voxel::Renderer* renderer)
 			}
 		}
 	}
-	//m_Mesh->UpdateRenderFlags();
 	renderer->DrawChunk(m_Mesh);
 }
 
