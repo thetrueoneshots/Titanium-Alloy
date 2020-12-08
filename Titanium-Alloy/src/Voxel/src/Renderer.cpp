@@ -25,8 +25,10 @@ void  Voxel::Renderer::Init()
 	m_VertexArray = new VertexArray;
 	VertexBufferLayout layout;
 	layout.Push<float>(3); //Position
-	layout.Push<float>(4); //Color
-	layout.Push<float>(3); //Normal
+	//layout.Push<float>(4); //Color
+	//layout.Push<float>(3); //Normal
+	layout.Push<float>(1); //Color
+	layout.Push<float>(1); //Normal
 
 	m_VertexBuffer = new VertexBuffer(nullptr, 0);
 	m_VertexArray->AddBuffer(*m_VertexBuffer, layout);

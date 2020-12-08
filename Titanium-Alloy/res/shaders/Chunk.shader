@@ -2,8 +2,8 @@
 #version 330 core
 
 layout(location = 0) in vec4 position;
-layout(location = 1) in vec4 color;
-layout(location = 2) in vec3 normal;
+layout(location = 1) in int color;
+layout(location = 2) in int normal;
 
 out vec4 v_Color;
 out vec3 v_Normal;
@@ -15,8 +15,8 @@ uniform mat4 u_Model;
 void main()
 {
     gl_Position = u_Projection * u_View * u_Model * position;
-    v_Color = color;
-    v_Normal = normal;
+    v_Color = vec4(color & 255, (color & (255 << 8)) >> 8, (color & (255 << 16)) >> 16, 255.0f) / 255.0f;
+    v_Normal = vec3(normal & 255, (normal & (255 << 8)) >> 8, (normal & (255 << 16)) >> 16) / 255.0f;
 }
 
 #shader fragment

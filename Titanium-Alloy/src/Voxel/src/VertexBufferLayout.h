@@ -54,6 +54,13 @@ namespace Voxel
 		}
 
 		template<>
+		void Push<int>(unsigned int count)
+		{
+			m_Elements.push_back({ GL_INT, count, GL_FALSE });
+			m_Stride += VertexBufferElement::GetSizeOfType(GL_INT) * count;
+		}
+
+		template<>
 		void Push<unsigned char>(unsigned int count)
 		{
 			m_Elements.push_back({ GL_UNSIGNED_BYTE, count, GL_TRUE });

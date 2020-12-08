@@ -9,8 +9,8 @@ namespace Voxel
 	struct Vertex
 	{
 		float position[3];
-		float color[4];
-		float normal[3];
+		int32_t color;
+		int32_t normal;
 
 		Vertex() {}
 
@@ -19,13 +19,8 @@ namespace Voxel
 			position[0] = p.x;
 			position[1] = p.y;
 			position[2] = p.z;
-			color[0] = c.x;
-			color[1] = c.y;
-			color[2] = c.z;
-			color[3] = c.w;
-			normal[0] = n.x;
-			normal[1] = n.y;
-			normal[2] = n.z;
+			color = (int)(255 * c.x) | (int)(255 * c.y) << 8 | (int)(255 * c.z) << 16 | (int)(255 * c.w) << 24;
+			normal = (int)(255 * n.x) | (int)(255 * n.y) << 8 | (int)(255 * n.z) << 16;
 		}
 	};
 
