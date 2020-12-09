@@ -34,18 +34,31 @@ Chunk::~Chunk()
 	{
 		delete m_Mesh;
 	}
-	for (auto m : objects)
+	/*for (auto m : objects)
 	{
 		delete m;
-	}
+	}*/
 }
 
 void Chunk::RenderChunk(Voxel::Renderer* renderer)
 {
-	for (const auto& m : objects)
+	Voxel::Mesh* tree = MeshGenerator::GenerateMesh(MeshGeneratorType::TREE);
+	if (tree)
+	{
+		renderer->BatchVoxelDraw(m_Trees, tree);
+		delete tree;
+	}
+
+	Voxel::Mesh* flower = MeshGenerator::GenerateMesh(MeshGeneratorType::FLOWER);
+	if (flower)
+	{
+		renderer->BatchVoxelDraw(m_Flowers, flower);
+		delete flower;
+	}
+	/*for (const auto& m : objects)
 	{
 		renderer->DrawChunk(m);
-	}
+	}*/
 
 	if (m_Mesh)
 	{
@@ -99,12 +112,23 @@ void Chunk::GenerateChunk()
 			MeshGeneratorType obj = WorldGenerator::PlaceObject(worldPos, height);
 			if (obj != MeshGeneratorType::TYPE_BEGIN)
 			{
-				Voxel::Mesh* m = MeshGenerator::GenerateMesh(obj);
+				switch (obj)
+				{
+				case MeshGeneratorType::TREE:
+					m_Trees.push_back(glm::vec3(worldPos.x, height + 1.0f, worldPos.z));
+					break;
+				case MeshGeneratorType::FLOWER:
+					m_Flowers.push_back(glm::vec3(worldPos.x, height + 1.0f, worldPos.z));
+					break;
+				default:
+					break;
+				}
+				/*Voxel::Mesh* m = MeshGenerator::GenerateMesh(obj);
 				if (m != nullptr)
 				{
 					m->Translate(glm::vec3(worldPos.x, height + 1.0f, worldPos.z));
 					objects.push_back(m);
-				}
+				}*/
 			}
 
 			for (unsigned char j = 0; j < m_ChunkSize; j++)

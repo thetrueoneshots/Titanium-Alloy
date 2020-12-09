@@ -63,6 +63,7 @@ namespace Voxel
 		RenderData* GetRenderData();
 
 		void UpdateRenderFlags();
+		inline glm::vec3 GetTranslation() const { return m_Translation; }
 		glm::mat4 GetModelMatrix() const;
 
 	private:

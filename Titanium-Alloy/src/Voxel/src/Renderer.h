@@ -34,6 +34,7 @@ namespace Voxel
 		void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& s) const;
 		// Shader is non-const, because of setting mvp. Standard shader should be made a member;
 		void DrawChunk(Mesh* mesh);
+		void BatchVoxelDraw(const std::vector<glm::vec3>& positions, Mesh* mesh);
 		void DrawMesh(Mesh* mesh, Shader* s) const;
 		void Clear() const;
 	};

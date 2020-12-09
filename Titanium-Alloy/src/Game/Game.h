@@ -18,8 +18,8 @@ class Game
 private:
 	glm::ivec2 m_ScreenSize;
 	GLFWwindow* m_Window;
-	float m_DeltaTime;
-	float m_LastFrame;
+	double m_DeltaTime;
+	double m_LastFrame;
 	Voxel::Camera* m_Camera;
 	Voxel::Renderer* m_Renderer;
 	World* m_World;
@@ -32,7 +32,7 @@ public:
 	Game(GLFWwindow* window);
 	~Game();
 
-	void Update(float currentFrame);
+	void Update(double currentFrame);
 
 	void HandleKeyInput(int key, int scancode, int action, int mods);
 	void HandleCursorPosition(double xPos, double yPos);

@@ -52,6 +52,34 @@ void Voxel::Renderer::DrawChunk(Mesh* mesh)
 	DrawMesh(mesh, m_ChunkShader);
 }
 
+void Voxel::Renderer::BatchVoxelDraw(const std::vector<glm::vec3>& positions, Mesh* mesh)
+{
+	RenderData* data = mesh->GetRenderData();
+
+	m_VertexArray->Bind();
+	m_VertexBuffer->SetData(data->vertices, data->vertex_array_size);
+
+	IndexBuffer ib(data->indices, data->indices_array_count);
+	ib.Bind();
+	m_ChunkShader->Bind();
+	m_ChunkShader->SetUniform("u_Projection", m_Camera->GetProjectionMatrix());
+	m_ChunkShader->SetUniform("u_View", m_Camera->GetViewMatrix());
+
+	glm::vec3 oldPosition = mesh->GetTranslation();
+
+	// Todo: Calculate MVP once per frame
+	glm::vec3 prev = glm::vec3(0);
+	for (const auto& position : positions)
+	{
+		mesh->Translate(position - prev);
+		prev = position;
+		m_ChunkShader->SetUniform("u_Model", mesh->GetModelMatrix());
+		glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
+	}
+
+	mesh->SetTranslation(oldPosition);
+}
+
 
 void Voxel::Renderer::DrawMesh(Mesh* mesh, Shader* s) const
 {

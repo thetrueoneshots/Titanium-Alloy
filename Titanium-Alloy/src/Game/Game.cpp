@@ -25,7 +25,7 @@ Game::~Game()
 	if (m_World) delete m_World;
 }
 
-void Game::Update(float currentFrame)
+void Game::Update(double currentFrame)
 {
 	static double totalTime = 0.0f;
 	static int frames = 0;

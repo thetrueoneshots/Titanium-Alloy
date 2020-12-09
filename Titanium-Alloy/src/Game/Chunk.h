@@ -13,7 +13,9 @@ private:
 	unsigned char* m_Blocks;
 	glm::ivec3 m_Position;
 	Voxel::Mesh* m_Mesh;
-	std::vector<Voxel::Mesh*> objects;
+	//std::vector<Voxel::Mesh*> objects;
+	std::vector<glm::vec3> m_Trees;
+	std::vector<glm::vec3> m_Flowers;
 	int m_ChunkSize;
 public:
 	Chunk(int x, int y, int z, int chunkSize = 32);
