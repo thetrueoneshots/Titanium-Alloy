@@ -75,6 +75,9 @@
     <ClCompile Include="src\Voxel\src\VertexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Voxel\src\Frustum.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
@@ -1391,6 +1394,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Voxel\src\VertexBufferLayout.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Voxel\src\Frustum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

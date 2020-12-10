@@ -160,6 +160,7 @@
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Game\WorldGenerator.cpp" />
     <ClCompile Include="src\Voxel\src\Cube.cpp" />
+    <ClCompile Include="src\Voxel\src\Frustum.cpp" />
     <ClCompile Include="src\Voxel\src\Mesh.cpp" />
     <ClCompile Include="src\Game\Geometry\MeshGenerator.cpp" />
     <ClCompile Include="src\Voxel\src\Quad.cpp" />
@@ -324,6 +325,7 @@
     <ClInclude Include="src\Voxel\src\Cube.h" />
     <ClInclude Include="src\Game\Geometry\ColorTypes.h" />
     <ClInclude Include="src\Game\Geometry\MeshGenerator.h" />
+    <ClInclude Include="src\Voxel\src\Frustum.h" />
     <ClInclude Include="src\Voxel\Voxel.h" />
     <ClInclude Include="src\Voxel\src\Mesh.h" />
     <ClInclude Include="src\Voxel\src\Quad.h" />
