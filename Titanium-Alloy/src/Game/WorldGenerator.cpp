@@ -79,14 +79,62 @@ MeshGeneratorType WorldGenerator::PlaceObject(const glm::vec3& pos, int height)
 		50.0f * pos.y,
 		50.0f * pos.z
 	);
+	
+	float typeNoise = objectNoise.GetNoise(
+		-10.0f * pos.x + 400.0f,
+		80.0f * pos.y + 39.0f,
+		42.0f * pos.z - 100.0f
+	);
 
-	if (height > 5 && height < 15 && treeNoiseRes > 0.5f)
+	unsigned int type = (unsigned int)((treeNoiseRes + 1.0f) * (typeNoise + 1.0f) * 309.221f) % 3;
+
+	if (height < 3 || height > 15)
+	{
+		return MeshGeneratorType::TYPE_BEGIN;
+	}
+
+	if (height > 5 && treeNoiseRes > 0.5f)
 	{
 		return MeshGeneratorType::TREE;
 	}
-	if (height > 3 && treeNoiseRes > 0.4f)
+
+	if (treeNoiseRes > 0.4f)
 	{
-		return MeshGeneratorType::FLOWER;
+		switch (type)
+		{
+		case 0:
+			return MeshGeneratorType::FLOWER1;
+			break;
+		case 1:
+			return MeshGeneratorType::FLOWER2;
+			break;
+		case 2:
+			return MeshGeneratorType::FLOWER3;
+			break;
+		default:
+			return MeshGeneratorType::FLOWER1;
+			break;
+		}
 	}
+
+	if (treeNoiseRes > 0.f)
+	{
+		switch (type)
+		{
+		case 0:
+			return MeshGeneratorType::GRASS1;
+			break;
+		case 1:
+			return MeshGeneratorType::GRASS2;
+			break;
+		case 2:
+			return MeshGeneratorType::GRASS3;
+			break;
+		default:
+			return MeshGeneratorType::GRASS1;
+			break;
+		}
+	}
+
 	return MeshGeneratorType::TYPE_BEGIN;
 }

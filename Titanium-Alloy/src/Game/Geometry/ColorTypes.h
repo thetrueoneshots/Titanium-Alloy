@@ -10,3 +10,5 @@ static const glm::vec4 COLOR_GRAY = glm::vec4(0.3f, 0.3f, 0.3f, 1.0f);
 static const glm::vec4 COLOR_WATER = glm::vec4(0.0f, 0.2f, 0.68f, 1.0f);
 static const glm::vec4 COLOR_BLUE = glm::vec4(0.0f, 0.41f, 0.58f, 1.0f);
 static const glm::vec4 COLOR_RED = glm::vec4(0.9f, 0.1f, 0.23f, 1.0f);
+static const glm::vec4 COLOR_WHITE = glm::vec4(1.f, 1.f, 1.f, 1.0f);
+static const glm::vec4 COLOR_YELLOW = glm::vec4(1.f, .8f, .1f, 1.0f);

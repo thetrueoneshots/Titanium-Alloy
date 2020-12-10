@@ -15,7 +15,12 @@ private:
 	Voxel::Mesh* m_Mesh;
 	//std::vector<Voxel::Mesh*> objects;
 	std::vector<glm::vec3> m_Trees;
-	std::vector<glm::vec3> m_Flowers;
+	std::vector<glm::vec3> m_Flowers1;
+	std::vector<glm::vec3> m_Flowers2;
+	std::vector<glm::vec3> m_Flowers3;
+	std::vector<glm::vec3> m_Grass1;
+	std::vector<glm::vec3> m_Grass2;
+	std::vector<glm::vec3> m_Grass3;
 	int m_ChunkSize;
 public:
 	Chunk(int x, int y, int z, int chunkSize = 32);

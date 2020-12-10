@@ -34,31 +34,17 @@ Chunk::~Chunk()
 	{
 		delete m_Mesh;
 	}
-	/*for (auto m : objects)
-	{
-		delete m;
-	}*/
 }
 
 void Chunk::RenderChunk(Voxel::Renderer* renderer)
 {
-	Voxel::Mesh* tree = MeshGenerator::GenerateMesh(MeshGeneratorType::TREE);
-	if (tree)
-	{
-		renderer->BatchVoxelDraw(m_Trees, tree);
-		delete tree;
-	}
-
-	Voxel::Mesh* flower = MeshGenerator::GenerateMesh(MeshGeneratorType::FLOWER);
-	if (flower)
-	{
-		renderer->BatchVoxelDraw(m_Flowers, flower);
-		delete flower;
-	}
-	/*for (const auto& m : objects)
-	{
-		renderer->DrawChunk(m);
-	}*/
+	renderer->BatchVoxelDraw(m_Trees, (unsigned int)MeshGeneratorType::TREE);
+	renderer->BatchVoxelDraw(m_Flowers1, (unsigned int)MeshGeneratorType::FLOWER1);
+	renderer->BatchVoxelDraw(m_Flowers2, (unsigned int)MeshGeneratorType::FLOWER2);
+	renderer->BatchVoxelDraw(m_Flowers3, (unsigned int)MeshGeneratorType::FLOWER3);
+	renderer->BatchVoxelDraw(m_Grass1, (unsigned int)MeshGeneratorType::GRASS1);
+	renderer->BatchVoxelDraw(m_Grass2, (unsigned int)MeshGeneratorType::GRASS2);
+	renderer->BatchVoxelDraw(m_Grass3, (unsigned int)MeshGeneratorType::GRASS3);
 
 	if (m_Mesh)
 	{
@@ -112,13 +98,29 @@ void Chunk::GenerateChunk()
 			MeshGeneratorType obj = WorldGenerator::PlaceObject(worldPos, height);
 			if (obj != MeshGeneratorType::TYPE_BEGIN)
 			{
+				glm::vec3 pos = glm::vec3(worldPos.x, height + 1.0f, worldPos.z);
 				switch (obj)
 				{
 				case MeshGeneratorType::TREE:
-					m_Trees.push_back(glm::vec3(worldPos.x, height + 1.0f, worldPos.z));
+					m_Trees.push_back(pos);
 					break;
-				case MeshGeneratorType::FLOWER:
-					m_Flowers.push_back(glm::vec3(worldPos.x, height + 1.0f, worldPos.z));
+				case MeshGeneratorType::FLOWER1:
+					m_Flowers1.push_back(pos);
+					break;
+				case MeshGeneratorType::FLOWER2:
+					m_Flowers2.push_back(pos);
+					break;
+				case MeshGeneratorType::FLOWER3:
+					m_Flowers3.push_back(pos);
+					break;
+				case MeshGeneratorType::GRASS1:
+					m_Grass1.push_back(pos);
+					break;
+				case MeshGeneratorType::GRASS2:
+					m_Grass2.push_back(pos);
+					break;
+				case MeshGeneratorType::GRASS3:
+					m_Grass3.push_back(pos);
 					break;
 				default:
 					break;

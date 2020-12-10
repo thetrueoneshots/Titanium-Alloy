@@ -6,8 +6,12 @@ enum class MeshGeneratorType
 {
 	TYPE_BEGIN = 0,
 	TREE,
-	FLOWER,
-	GRASS,
+	FLOWER1,
+	FLOWER2,
+	FLOWER3,
+	GRASS1,
+	GRASS2,
+	GRASS3,
 	TYPE_END,
 };
 
@@ -17,6 +21,6 @@ public:
 	static Voxel::Mesh* GenerateMesh(MeshGeneratorType t);
 private:
 	static Voxel::Mesh* GenerateTree(int base = 5, int width = 6, int height = 13);
-	static Voxel::Mesh* GenerateFlower();
-	static Voxel::Mesh* GenerateGrass();
+	static Voxel::Mesh* GenerateFlower(unsigned int variation = 0);
+	static Voxel::Mesh* GenerateGrass(unsigned int variation = 0);
 };

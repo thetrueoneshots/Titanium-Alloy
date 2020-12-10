@@ -1,5 +1,9 @@
 #include "Game.h"
 
+#include "Geometry/MeshGenerator.h"
+
+static void InitMeshes(Voxel::Renderer* renderer);
+
 Game::Game(GLFWwindow* window)
 	:m_DeltaTime(0.0f), m_LastFrame(0.0f), 
 	m_Camera(nullptr), m_Renderer(nullptr), m_World(nullptr), m_Window(window),
@@ -16,6 +20,8 @@ Game::Game(GLFWwindow* window)
 
 	m_World = new World(m_Renderer, m_Camera);
 	m_World->GenerateWorld();
+
+	InitMeshes(m_Renderer);
 }
 
 Game::~Game()
@@ -88,4 +94,15 @@ void Game::HandleCursorPosition(double xPos, double yPos)
 void Game::HandleScrollInput(double xOffset, double yOffset)
 {
 	m_Camera->Scroll(yOffset);
+}
+
+static void InitMeshes(Voxel::Renderer* renderer)
+{
+	renderer->AddMesh((unsigned int)MeshGeneratorType::TREE, MeshGenerator::GenerateMesh(MeshGeneratorType::TREE));
+	renderer->AddMesh((unsigned int)MeshGeneratorType::FLOWER1, MeshGenerator::GenerateMesh(MeshGeneratorType::FLOWER1));
+	renderer->AddMesh((unsigned int)MeshGeneratorType::FLOWER2, MeshGenerator::GenerateMesh(MeshGeneratorType::FLOWER2));
+	renderer->AddMesh((unsigned int)MeshGeneratorType::FLOWER3, MeshGenerator::GenerateMesh(MeshGeneratorType::FLOWER3));
+	renderer->AddMesh((unsigned int)MeshGeneratorType::GRASS1, MeshGenerator::GenerateMesh(MeshGeneratorType::GRASS1));
+	renderer->AddMesh((unsigned int)MeshGeneratorType::GRASS2, MeshGenerator::GenerateMesh(MeshGeneratorType::GRASS2));
+	renderer->AddMesh((unsigned int)MeshGeneratorType::GRASS3, MeshGenerator::GenerateMesh(MeshGeneratorType::GRASS3));
 }

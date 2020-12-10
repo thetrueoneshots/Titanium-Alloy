@@ -5,8 +5,27 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 Voxel::Renderer::Renderer(Camera* camera)
-	: m_ChunkShader(nullptr), m_Camera(camera)
+	: m_ChunkShader(nullptr), m_Camera(camera), m_VertexArray(nullptr), m_VertexBuffer(nullptr), m_Store(nullptr)
 { }
+
+Voxel::Renderer::~Renderer(){
+	if (m_ChunkShader)
+	{
+		delete m_ChunkShader;
+	}
+	if (m_VertexArray)
+	{
+		delete m_VertexArray;
+	}
+	if (m_VertexBuffer)
+	{
+		delete m_VertexBuffer;
+	}
+	if (m_Store)
+	{
+		delete m_Store;
+	}
+}
 
 void  Voxel::Renderer::Init()
 {
@@ -25,17 +44,18 @@ void  Voxel::Renderer::Init()
 	m_VertexArray = new VertexArray;
 	VertexBufferLayout layout;
 	layout.Push<float>(1); //Position
-	//layout.Push<float>(4); //Color
-	//layout.Push<float>(3); //Normal
 	layout.Push<float>(1); //Color
 	layout.Push<float>(1); //Normal
 
 	m_VertexBuffer = new VertexBuffer(nullptr, 0);
 	m_VertexArray->AddBuffer(*m_VertexBuffer, layout);
+
+	m_Store = new MeshStore();
 }
 
 void Voxel::Renderer::Update()
 {
+
 }
 
 void Voxel::Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& s) const
@@ -78,6 +98,30 @@ void Voxel::Renderer::BatchVoxelDraw(const std::vector<glm::vec3>& positions, Me
 	}
 
 	mesh->SetTranslation(oldPosition);
+}
+
+void Voxel::Renderer::BatchVoxelDraw(const std::vector<glm::vec3>& positions, unsigned int key)
+{
+	if (m_Store == nullptr)
+	{
+		return;
+	}
+
+	Mesh* m = m_Store->GetMesh(key);
+	if (m == nullptr)
+	{
+		return;
+	}
+	BatchVoxelDraw(positions, m);
+}
+
+bool Voxel::Renderer::AddMesh(unsigned int key, Mesh* m)
+{
+	if (m_Store == nullptr || m == nullptr)
+	{
+		return false;
+	}
+	return m_Store->InsertMesh(key, m);
 }
 
 
