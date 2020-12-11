@@ -1,16 +1,22 @@
 #pragma once
 
-#include "src/CubLoader.h"
-#include "src/Camera.h"
-#include "src/Cube.h"
-#include "src/IndexBuffer.h"
-#include "src/Mesh.h"
-#include "src/Quad.h"
-#include "src/Renderer.h"
-#include "src/Shader.h"
-#include "src/Texture.h"
-#include "src/VertexArray.h"
-#include "src/VertexBuffer.h"
-#include "src/VertexBufferLayout.h"
+/*
+* Voxel Framework for rendering voxels. Created by Gijs Groenewegen. Usage: `#include "Voxel/Voxel.h"`.
+*/
+
+#include "src/Mesh/CubLoader.h""
+#include "src/Mesh/Cube.h"
+#include "src/Mesh/Mesh.h"
+#include "src/Mesh/Quad.h"
+
+#include "src/OpenGL/Shader.h"
+#include "src/OpenGL/Texture.h"
+#include "src/OpenGL/VertexArray.h"
+#include "src/OpenGL/VertexBuffer.h"
+#include "src/OpenGL/VertexBufferLayout.h"
+#include "src/OpenGL/IndexBuffer.h"
+
+#include "src/Renderer/Renderer.h"
+#include "src/Renderer/Camera.h"
 
 namespace Voxel {}

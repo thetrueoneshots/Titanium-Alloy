@@ -93,12 +93,12 @@ MeshGeneratorType WorldGenerator::PlaceObject(const glm::vec3& pos, int height)
 		return MeshGeneratorType::TYPE_BEGIN;
 	}
 
-	if (height >= 15)
+	if (height > 15)
 	{
-		if (treeNoiseRes > 0.45f)
+		/*if (treeNoiseRes > 0.49f)
 		{
-			return MeshGeneratorType::DIAMOND_DEPOSIT;
-		}
+			return MeshGeneratorType::GRASS1;
+		}*/
 		return MeshGeneratorType::TYPE_BEGIN;
 	}
 

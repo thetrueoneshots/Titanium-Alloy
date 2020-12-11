@@ -1,6 +1,6 @@
 #include "IndexBuffer.h"
 
-#include "Renderer.h"
+#include "../Renderer/Renderer.h"
 
 Voxel::IndexBuffer::IndexBuffer(const unsigned int* data, unsigned int count)
     : m_Count(count)

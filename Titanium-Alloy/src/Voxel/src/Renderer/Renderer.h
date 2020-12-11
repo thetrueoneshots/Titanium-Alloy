@@ -3,13 +3,14 @@
 #include <glad/GL.h>
 #include <assert.h>
 
-#include "VertexArray.h"
-#include "IndexBuffer.h"
-#include "Shader.h"
-#include "Camera.h"
+#include "../OpenGL/VertexArray.h"
+#include "../OpenGL/IndexBuffer.h"
+#include "../OpenGL/Shader.h"
 
-#include "Mesh.h"
-#include "MeshStore.h"
+#include "../Mesh/Mesh.h"
+#include "../Mesh/MeshStore.h"
+
+#include "Camera.h"
 
 namespace Voxel
 {

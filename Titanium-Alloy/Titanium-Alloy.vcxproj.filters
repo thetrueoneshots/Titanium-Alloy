@@ -45,43 +45,43 @@
     <ClCompile Include="src\Game\Geometry\MeshGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Voxel\src\Camera.cpp">
+    <ClCompile Include="src\Voxel\src\OpenGL\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Voxel\src\Cube.cpp">
+    <ClCompile Include="src\Voxel\src\OpenGL\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Voxel\src\IndexBuffer.cpp">
+    <ClCompile Include="src\Voxel\src\OpenGL\VertexArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Voxel\src\Mesh.cpp">
+    <ClCompile Include="src\Voxel\src\OpenGL\VertexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Voxel\src\Quad.cpp">
+    <ClCompile Include="src\Voxel\src\OpenGL\IndexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Voxel\src\Renderer.cpp">
+    <ClCompile Include="src\Voxel\src\Renderer\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Voxel\src\Shader.cpp">
+    <ClCompile Include="src\Voxel\src\Renderer\Frustum.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Voxel\src\Texture.cpp">
+    <ClCompile Include="src\Voxel\src\Renderer\Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Voxel\src\VertexArray.cpp">
+    <ClCompile Include="src\Voxel\src\Mesh\Cube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Voxel\src\VertexBuffer.cpp">
+    <ClCompile Include="src\Voxel\src\Mesh\CubLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Voxel\src\Frustum.cpp">
+    <ClCompile Include="src\Voxel\src\Mesh\Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Voxel\src\MeshStore.cpp">
+    <ClCompile Include="src\Voxel\src\Mesh\MeshStore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Voxel\src\CubLoader.cpp">
+    <ClCompile Include="src\Voxel\src\Mesh\Quad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1369,46 +1369,46 @@
     <ClInclude Include="src\Game\Geometry\MeshGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Voxel\src\Camera.h">
+    <ClInclude Include="src\Voxel\src\OpenGL\VertexBufferLayout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Voxel\src\Cube.h">
+    <ClInclude Include="src\Voxel\src\OpenGL\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Voxel\src\IndexBuffer.h">
+    <ClInclude Include="src\Voxel\src\OpenGL\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Voxel\src\Mesh.h">
+    <ClInclude Include="src\Voxel\src\OpenGL\VertexArray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Voxel\src\Quad.h">
+    <ClInclude Include="src\Voxel\src\OpenGL\VertexBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Voxel\src\Renderer.h">
+    <ClInclude Include="src\Voxel\src\OpenGL\IndexBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Voxel\src\Shader.h">
+    <ClInclude Include="src\Voxel\src\Renderer\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Voxel\src\Texture.h">
+    <ClInclude Include="src\Voxel\src\Renderer\Frustum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Voxel\src\VertexArray.h">
+    <ClInclude Include="src\Voxel\src\Renderer\Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Voxel\src\VertexBuffer.h">
+    <ClInclude Include="src\Voxel\src\Mesh\Cube.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Voxel\src\VertexBufferLayout.h">
+    <ClInclude Include="src\Voxel\src\Mesh\CubLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Voxel\src\Frustum.h">
+    <ClInclude Include="src\Voxel\src\Mesh\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Voxel\src\MeshStore.h">
+    <ClInclude Include="src\Voxel\src\Mesh\MeshStore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Voxel\src\CubLoader.h">
+    <ClInclude Include="src\Voxel\src\Mesh\Quad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
