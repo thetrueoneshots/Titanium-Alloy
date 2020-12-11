@@ -88,8 +88,17 @@ MeshGeneratorType WorldGenerator::PlaceObject(const glm::vec3& pos, int height)
 
 	unsigned int type = (unsigned int)((treeNoiseRes + 1.0f) * (typeNoise + 1.0f) * 309.221f) % 3;
 
-	if (height < 3 || height > 15)
+	if (height < 3)
 	{
+		return MeshGeneratorType::TYPE_BEGIN;
+	}
+
+	if (height >= 15)
+	{
+		if (treeNoiseRes > 0.45f)
+		{
+			return MeshGeneratorType::DIAMOND_DEPOSIT;
+		}
 		return MeshGeneratorType::TYPE_BEGIN;
 	}
 

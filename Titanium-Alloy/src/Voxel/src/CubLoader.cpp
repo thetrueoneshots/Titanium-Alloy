@@ -13,9 +13,13 @@ struct Cub
 
 Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const std::string& path)
 {
+	char buffer[250];
 	std::string filepath(path.c_str());
 	filepath.append(file);
 	std::ifstream stream;
+
+	sprintf_s(buffer, 250, "Loading cube file: %s", filepath.c_str());
+	std::cout << buffer << std::endl;
 
 	stream.open(filepath, std::ios::in);
 	if (!stream.is_open())
@@ -33,27 +37,10 @@ Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const s
 	stream.read((char*)&h, sizeof(h));
 	bytes += sizeof(h);
 
-	char buffer[250];
 	sprintf_s(buffer, 250, "Cube size: %d, %d, %d", w, d, h);
 	std::cout << buffer << std::endl;
 
-	std::vector<Color> colors;
-	
-	for (int i = 0; i < w * d * h; i++)
-	{
-		Color c;
-		stream.read((char*)&c.r, sizeof(c.r));
-		stream.read((char*)&c.g, sizeof(c.g));
-		stream.read((char*)&c.b, sizeof(c.b));
-
-		bytes += sizeof(c.r)+ sizeof(c.g)+ sizeof(c.b);
-
-		colors.push_back(c);
-	}
 	std::vector<Voxel::Cube*> cubes;
-
-	sprintf_s(buffer, 250, "Amount of bytes read: %d", bytes);
-	std::cout << buffer << std::endl;
 
 	int counter = 0;
 	for (int i = 0; i < h; i++)
@@ -63,7 +50,12 @@ Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const s
 			for (int k = 0; k < d; k++)
 			{
 				unsigned char r, g, b;
-				Color c = colors.at(counter);
+				Color c;
+				stream.read((char*)&c.r, sizeof(c.r));
+				stream.read((char*)&c.g, sizeof(c.g));
+				stream.read((char*)&c.b, sizeof(c.b));
+
+				bytes += sizeof(c.r) + sizeof(c.g) + sizeof(c.b);
 				r = c.r;
 				g = c.g;
 				b = c.b;
@@ -82,6 +74,8 @@ Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const s
 			}
 		}
 	}
+	sprintf_s(buffer, 250, "Amount of bytes read: %d", bytes);
+	std::cout << buffer << std::endl;
 	stream.close();
 
 	Mesh* m = new Mesh(cubes);

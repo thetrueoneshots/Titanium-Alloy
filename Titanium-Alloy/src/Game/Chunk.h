@@ -21,6 +21,7 @@ private:
 	std::vector<glm::vec3> m_Grass1;
 	std::vector<glm::vec3> m_Grass2;
 	std::vector<glm::vec3> m_Grass3;
+	std::vector<glm::vec3> m_DiamondDeposits;
 	int m_ChunkSize;
 public:
 	Chunk(int x, int y, int z, int chunkSize = 32);

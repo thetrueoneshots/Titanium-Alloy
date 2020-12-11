@@ -3,34 +3,71 @@
 #include "glm/glm.hpp"
 
 #include "ColorTypes.h"
+#include "../Voxel/Voxel.h"
+
+static std::string FileNames[] = {
+	"diamond-deposit.cub"
+};
+
+static int s_Scales[] = {
+	8
+};
+
+static std::vector<std::pair<MeshGeneratorType, int>> FileNameLookup = {
+	std::make_pair(MeshGeneratorType::DIAMOND_DEPOSIT, 0)
+};
+
+static Voxel::Mesh* MeshDB[(int)MeshGeneratorType::TYPE_END];
 
 Voxel::Mesh* MeshGenerator::GenerateMesh(MeshGeneratorType t)
 {
+	Voxel::Mesh* m = MeshDB[(int)t];
+	if (m != nullptr)
+	{
+		return m;
+	}
+
+	Voxel::Mesh* mesh = nullptr;
+
 	switch (t) {
 	case MeshGeneratorType::TREE:
-		return GenerateTree();
+		mesh = GenerateTree();
 		break;
 	case MeshGeneratorType::FLOWER1:
-		return GenerateFlower();
+		mesh = GenerateFlower();
 		break;
 	case MeshGeneratorType::FLOWER2:
-		return GenerateFlower(1);
+		mesh = GenerateFlower(1);
 		break;
 	case MeshGeneratorType::FLOWER3:
-		return GenerateFlower(2);
+		mesh = GenerateFlower(2);
 		break;
 	case MeshGeneratorType::GRASS1:
-		return GenerateGrass();
+		mesh = GenerateGrass();
 		break;
 	case MeshGeneratorType::GRASS2:
-		return GenerateGrass(1);
+		mesh = GenerateGrass(1);
 		break;
 	case MeshGeneratorType::GRASS3:
-		return GenerateGrass(2);
+		mesh = GenerateGrass(2);
 		break;
 	default:
-		return nullptr;
+		for (const auto& item : FileNameLookup)
+		{
+			if (item.first == t)
+			{
+				std::string file = FileNames[item.second];
+				int scale = s_Scales[item.second];
+				mesh = Voxel::CubLoader::LoadMeshFromFile(file);
+				mesh->SetScale(1.0f / scale);
+				mesh->Translate(glm::vec3(0.5f - scale / 2, 0, 0.5f - scale / 2));
+			}
+		}
+		break;
 	}
+
+	MeshDB[(int)t] = mesh;
+	return mesh;
 }
 
 Voxel::Mesh* MeshGenerator::GenerateTree(int base, int width, int height)

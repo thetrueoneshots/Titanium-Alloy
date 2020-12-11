@@ -10,8 +10,6 @@
 
 #include "WorldGenerator.h"
 
-
-
 Chunk::Chunk(int x, int y, int z, int chunkSize)
 	: m_Position(glm::ivec3(x, y, z)), m_Mesh(nullptr),
 	m_ChunkSize(chunkSize)
@@ -45,6 +43,7 @@ void Chunk::RenderChunk(Voxel::Renderer* renderer)
 	renderer->BatchVoxelDraw(m_Grass1, (unsigned int)MeshGeneratorType::GRASS1);
 	renderer->BatchVoxelDraw(m_Grass2, (unsigned int)MeshGeneratorType::GRASS2);
 	renderer->BatchVoxelDraw(m_Grass3, (unsigned int)MeshGeneratorType::GRASS3);
+	renderer->BatchVoxelDraw(m_DiamondDeposits, (unsigned int)MeshGeneratorType::DIAMOND_DEPOSIT);
 
 	if (m_Mesh)
 	{
@@ -121,6 +120,9 @@ void Chunk::GenerateChunk()
 					break;
 				case MeshGeneratorType::GRASS3:
 					m_Grass3.push_back(pos);
+					break;
+				case MeshGeneratorType::DIAMOND_DEPOSIT:
+					m_DiamondDeposits.push_back(pos);
 					break;
 				default:
 					break;
