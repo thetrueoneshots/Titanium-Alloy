@@ -53,6 +53,9 @@ void Game::Update(double currentFrame)
 	
 	m_Renderer->Update();
 	m_World->Update();
+
+	static Voxel::Mesh* statue = Voxel::CubLoader::LoadMeshFromFile("bird-statue.cub");
+	m_Renderer->DrawChunk(statue);
 }
 
 void Game::HandleKeyInput(int key, int scancode, int action, int mods)
@@ -105,4 +108,6 @@ static void InitMeshes(Voxel::Renderer* renderer)
 	renderer->AddMesh((unsigned int)MeshGeneratorType::GRASS1, MeshGenerator::GenerateMesh(MeshGeneratorType::GRASS1));
 	renderer->AddMesh((unsigned int)MeshGeneratorType::GRASS2, MeshGenerator::GenerateMesh(MeshGeneratorType::GRASS2));
 	renderer->AddMesh((unsigned int)MeshGeneratorType::GRASS3, MeshGenerator::GenerateMesh(MeshGeneratorType::GRASS3));
+
+	
 }

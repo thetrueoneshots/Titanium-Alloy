@@ -52,7 +52,7 @@ void Voxel::Mesh::AddCube(glm::vec3 position, glm::vec4 color, unsigned char fla
 	{
 		m_Cubes.insert_or_assign(key, new Cube(position, color, flags));
 		SetState(State::UPDATED);
-		assert(GetState(State::UPDATED));
+		//assert(GetState(State::UPDATED));
 	}
 }
 
