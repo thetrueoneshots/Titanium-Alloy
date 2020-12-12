@@ -1,4 +1,6 @@
 #pragma once
+// Remove and move logic to [ Mesh.h ]
+
 #include "Mesh.h"
 #include <string>
 #include <iostream>

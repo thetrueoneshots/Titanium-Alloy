@@ -1,4 +1,5 @@
 #pragma once
+// Remove file and move logic to [ Mesh.h ]
 
 #include <cstring>
 
@@ -12,7 +13,7 @@ namespace Voxel
 		int32_t color;
 		int32_t normal;
 
-		Vertex() {}
+		Vertex() : position(0), color(0), normal(0) {}
 
 		Vertex(glm::ivec3 p, glm::vec4 c, glm::vec3 n)
 		{

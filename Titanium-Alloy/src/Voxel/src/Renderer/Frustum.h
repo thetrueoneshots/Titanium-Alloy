@@ -1,5 +1,5 @@
 #pragma once
-
+// Todo: Cleanup + implement
 #include "glm/glm.hpp"
 
 struct Plane

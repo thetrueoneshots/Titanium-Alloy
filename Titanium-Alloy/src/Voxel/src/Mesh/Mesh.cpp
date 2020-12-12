@@ -2,9 +2,12 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
+// Todo: Remove
 std::pair<int, std::pair<int, int>> ConvertPosToKey(glm::vec3 pos);
+// Todo: Remove
 glm::vec3 ConvertKeyToPos(std::pair<int, std::pair<int, int>> key);
 
+// Todo: Rewrite based on new member variables
 Voxel::Mesh::Mesh()
 	: m_Translation(glm::vec3(0.0f)), m_Scale(glm::vec3(1.0f)), m_Rotation(glm::vec3(0.0f)),
 	m_State(0)
@@ -12,6 +15,7 @@ Voxel::Mesh::Mesh()
 	SetState(State::UPDATED);
 }
 
+// Todo: Rewrite based on new member variables
 Voxel::Mesh::~Mesh()
 {
 	for (auto& item : m_Cubes)
@@ -26,6 +30,7 @@ Voxel::Mesh::~Mesh()
 	}
 }
 
+// Todo: Rewrite based on new member variables
 Voxel::Mesh::Mesh(std::vector<Cube*> cubes)
 	:m_Translation(glm::vec3(0.0f)), m_Scale(glm::vec3(1.0f)), m_Rotation(glm::vec3(0.0f)),
 	m_State(0), m_RenderData(nullptr)
@@ -44,7 +49,7 @@ Voxel::Mesh::Mesh(std::vector<Cube*> cubes)
 	UpdateRenderFlags();
 }
 
-// Todo: Check if cube position already exists and return true/false
+// Todo: Rewrite based on new member variables
 void Voxel::Mesh::AddCube(glm::vec3 position, glm::vec4 color, unsigned char flags)
 {
 	auto key = ConvertPosToKey(position);
@@ -56,42 +61,49 @@ void Voxel::Mesh::AddCube(glm::vec3 position, glm::vec4 color, unsigned char fla
 	}
 }
 
+// Todo: Remove flags variable
 void Voxel::Mesh::AddCube(float p1, float p2, float p3, glm::vec4 color, unsigned char flags)
 {
 	AddCube(glm::vec3(p1, p2, p3), color, flags);
 }
 
+// Todo: Make inline
 void Voxel::Mesh::SetTranslation(const glm::vec3& translation)
 {
 	m_Translation = translation;
 }
 
+// Todo: Make inline
 void Voxel::Mesh::Translate(const glm::vec3& translation)
 {
 	m_Translation += translation;
 }
 
+// Todo: Make inline
 void Voxel::Mesh::SetScale(float scale)
 {
 	SetScale(glm::vec3(scale));
 }
 
+// Todo: Make inline
 void Voxel::Mesh::SetScale(const glm::vec3& scale)
 {
 	m_Scale = scale;
 }
 
+// Todo: Make inline
 void Voxel::Mesh::Rotate(const glm::vec3& rotation)
 {
 	m_Rotation += rotation;
 }
 
+// Todo: Make inline
 void Voxel::Mesh::SetRotation(const glm::vec3& rotation)
 {
 	m_Rotation = rotation;
 }
 
-// Todo: Implement
+// Todo: Remove
 void Voxel::Mesh::UpdateRenderFlags()
 {
 	for (auto& item : m_Cubes)
@@ -101,7 +113,7 @@ void Voxel::Mesh::UpdateRenderFlags()
 	}
 }
 
-// Todo: Fix caching
+// Todo: Remove
 std::vector<Voxel::Quad> Voxel::Mesh::GetQuads()
 {
 	std::vector<Quad> quads;
@@ -117,6 +129,7 @@ std::vector<Voxel::Quad> Voxel::Mesh::GetQuads()
 	return quads;
 }
 
+// Todo: Rewrite based on member variables
 RenderData* Voxel::Mesh::GetRenderData()
 {
 	if (m_RenderData != nullptr)
@@ -156,6 +169,7 @@ RenderData* Voxel::Mesh::GetRenderData()
 	return m_RenderData;
 }
 
+// Todo: Rename as defined in [ Mesh.h ]
 glm::mat4 Voxel::Mesh::GetModelMatrix() const
 {
 	glm::mat4 trans = glm::translate(glm::mat4(1.0f), m_Translation);
@@ -165,6 +179,7 @@ glm::mat4 Voxel::Mesh::GetModelMatrix() const
 	return glm::scale(rz, m_Scale);
 }
 
+// Todo: Remove
 bool Voxel::Mesh::GetState(State s) const
 {
 	if (s <= State::STATE_BEGIN || s >= State::STATE_END)
@@ -174,6 +189,7 @@ bool Voxel::Mesh::GetState(State s) const
 	return ((m_State >> (unsigned char)s) & 1) == 1;
 }
 
+// Todo: Remove
 bool Voxel::Mesh::SetState(State s)
 {
 	if (s <= State::STATE_BEGIN || s >= State::STATE_END)
@@ -184,6 +200,7 @@ bool Voxel::Mesh::SetState(State s)
 	return true;
 }
 
+// Todo: Remove
 bool Voxel::Mesh::UnsetState(State s)
 {
 	if (s <= State::STATE_BEGIN || s >= State::STATE_END)
@@ -194,6 +211,7 @@ bool Voxel::Mesh::UnsetState(State s)
 	return true;
 }
 
+// Todo: Rewrite based on new member variables
 unsigned char Voxel::Mesh::GetConnectedBlockFlags(const glm::vec3& pos)
 {
 	unsigned char flags = 0;
@@ -208,6 +226,7 @@ unsigned char Voxel::Mesh::GetConnectedBlockFlags(const glm::vec3& pos)
 	return flags;
 }
 
+// Todo: Rewrite based on new member variables
 int Voxel::Mesh::CheckBlock(int x, int y, int z)
 {
 	auto key = ConvertPosToKey(glm::vec3(x, y, z));
@@ -218,11 +237,13 @@ int Voxel::Mesh::CheckBlock(int x, int y, int z)
 	return m_Cubes.at(key)->GetColor().a == 1.0f ? 1 : 0;
 }
 
+// Todo: Remove
 std::pair<int, std::pair<int, int>> ConvertPosToKey(glm::vec3 pos)
 {
 	return std::make_pair(pos.x, std::make_pair(pos.y, pos.z));
 }
 
+// Todo: Remove
 glm::vec3 ConvertKeyToPos(std::pair<int, std::pair<int, int>> key)
 {
 	return glm::vec3(key.first, key.second.first, key.second.second);
