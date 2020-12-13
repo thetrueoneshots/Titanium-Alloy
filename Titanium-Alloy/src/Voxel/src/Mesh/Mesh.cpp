@@ -9,15 +9,17 @@ glm::vec3 ConvertKeyToPos(std::pair<int, std::pair<int, int>> key);
 
 // Todo: Rewrite based on new member variables
 Voxel::Mesh::Mesh()
-	: m_Translation(glm::vec3(0.0f)), m_Scale(glm::vec3(1.0f)), m_Rotation(glm::vec3(0.0f)),
-	m_State(0)
+	: m_State(0), m_RenderData(nullptr)
 {
+	m_Transform = new Transform();
 	SetState(State::UPDATED);
 }
 
 // Todo: Rewrite based on new member variables
 Voxel::Mesh::~Mesh()
 {
+	delete m_Transform;
+
 	for (auto& item : m_Cubes)
 	{
 		delete item.second;
@@ -32,9 +34,9 @@ Voxel::Mesh::~Mesh()
 
 // Todo: Rewrite based on new member variables
 Voxel::Mesh::Mesh(std::vector<Cube*> cubes)
-	:m_Translation(glm::vec3(0.0f)), m_Scale(glm::vec3(1.0f)), m_Rotation(glm::vec3(0.0f)),
-	m_State(0), m_RenderData(nullptr)
+	: m_State(0), m_RenderData(nullptr)
 {
+	m_Transform = new Transform();
 	for (Cube* cube : cubes)
 	{
 		auto key = ConvertPosToKey(cube->GetPosition());
@@ -65,42 +67,6 @@ void Voxel::Mesh::AddCube(glm::vec3 position, glm::vec4 color, unsigned char fla
 void Voxel::Mesh::AddCube(float p1, float p2, float p3, glm::vec4 color, unsigned char flags)
 {
 	AddCube(glm::vec3(p1, p2, p3), color, flags);
-}
-
-// Todo: Make inline
-void Voxel::Mesh::SetTranslation(const glm::vec3& translation)
-{
-	m_Translation = translation;
-}
-
-// Todo: Make inline
-void Voxel::Mesh::Translate(const glm::vec3& translation)
-{
-	m_Translation += translation;
-}
-
-// Todo: Make inline
-void Voxel::Mesh::SetScale(float scale)
-{
-	SetScale(glm::vec3(scale));
-}
-
-// Todo: Make inline
-void Voxel::Mesh::SetScale(const glm::vec3& scale)
-{
-	m_Scale = scale;
-}
-
-// Todo: Make inline
-void Voxel::Mesh::Rotate(const glm::vec3& rotation)
-{
-	m_Rotation += rotation;
-}
-
-// Todo: Make inline
-void Voxel::Mesh::SetRotation(const glm::vec3& rotation)
-{
-	m_Rotation = rotation;
 }
 
 // Todo: Remove
@@ -167,16 +133,6 @@ RenderData* Voxel::Mesh::GetRenderData()
 
 	m_RenderData = new RenderData(vertices, verticesSize, indices, 6 * quads.size());
 	return m_RenderData;
-}
-
-// Todo: Rename as defined in [ Mesh.h ]
-glm::mat4 Voxel::Mesh::GetModelMatrix() const
-{
-	glm::mat4 trans = glm::translate(glm::mat4(1.0f), m_Translation);
-	glm::mat4 rx = glm::rotate(trans, m_Rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
-	glm::mat4 ry = glm::rotate(rx, m_Rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 rz = glm::rotate(ry, m_Rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-	return glm::scale(rz, m_Scale);
 }
 
 // Todo: Remove

@@ -59,8 +59,8 @@ Voxel::Mesh* MeshGenerator::GenerateMesh(MeshGeneratorType t)
 				std::string file = FileNames[item.second];
 				int scale = s_Scales[item.second];
 				mesh = Voxel::CubLoader::LoadMeshFromFile(file);
-				mesh->SetScale(1.0f / scale);
-				mesh->Translate(glm::vec3(0.5f - scale / 2, 0, 0.5f - scale / 2));
+				mesh->GetTransForm()->SetScale(1.0f / scale);
+				mesh->GetTransForm()->Translate(glm::vec3(0.5f - scale / 2, 0, 0.5f - scale / 2));
 			}
 		}
 		break;
@@ -136,8 +136,8 @@ Voxel::Mesh* MeshGenerator::GenerateFlower(unsigned int variation)
 	cubes.push_back(new Voxel::Cube(glm::vec3(0, 2, -1), leafColor));
 
 	Voxel::Mesh* m = new Voxel::Mesh(cubes);
-	m->SetScale(scale);
-	m->Translate(glm::vec3(0.5f - scale / 2, 0.0f, 0.5f - scale / 2));
+	m->GetTransForm()->SetScale(scale);
+	m->GetTransForm()->Translate(glm::vec3(0.5f - scale / 2, 0.0f, 0.5f - scale / 2));
 	return m;
 }
 
@@ -172,8 +172,8 @@ Voxel::Mesh* MeshGenerator::GenerateGrass(unsigned int variation)
 	}
 
 	Voxel::Mesh* m = new Voxel::Mesh(cubes);
-	m->SetScale(scale);
-	m->Translate(glm::vec3(0.5f - scale / 2, 0.0f, 0.5f - scale / 2));
-	m->Rotate(glm::vec3(glm::radians(rotation.x), glm::radians(rotation.y), glm::radians(rotation.z)));
+	m->GetTransForm()->SetScale(scale);
+	m->GetTransForm()->Translate(glm::vec3(0.5f - scale / 2, 0.0f, 0.5f - scale / 2));
+	m->GetTransForm()->Rotate(glm::vec3(glm::radians(rotation.x), glm::radians(rotation.y), glm::radians(rotation.z)));
 	return m;
 }

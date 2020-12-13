@@ -10,6 +10,8 @@
 #include "Cube.h"
 #include "Quad.h"
 
+#include "../Renderer/Transform.h"
+
 /*
 * Struct for returning all the calculated (OpenGL) render data
 */
@@ -45,7 +47,7 @@ namespace Voxel
 			STATE_END
 		};
 
-		glm::vec3 m_Translation, m_Scale, m_Rotation;
+		Transform* m_Transform;
 		// Todo: Change to a Cube[width * depth * height]
 		std::map<std::pair<int, std::pair<int, int>>, Cube*> m_Cubes;
 		// Todo: Remove and add updated variable [ boolean ]
@@ -63,31 +65,6 @@ namespace Voxel
 		~Mesh();
 
 		/*
-		* Setters
-		*/
-		// Todo: inline
-		void SetTranslation(const glm::vec3& translation);
-		// Todo: inline
-		void Translate(const glm::vec3& translation);
-
-		// Todo: inline
-		void SetScale(float scale);
-		// Todo: inline
-		void SetScale(const glm::vec3& scale);
-
-		// Todo: inline
-		void SetRotation(const glm::vec3& rotation);			// Rotation is radians!
-		// Todo: inline
-		void Rotate(const glm::vec3& rotation);					// Rotation is radians!
-
-		/*
-		* Getters
-		*/
-		inline glm::vec3 GetTranslation() const { return m_Translation; }
-		// Todo: Write width, depth, height getters (inline)
-		// Todo: Write scale and rotation getters (inline)
-
-		/*
 		* Adding cubes
 		*/
 		// Todo: Rewrite based on new member variables
@@ -102,7 +79,7 @@ namespace Voxel
 		void UpdateRenderFlags();
 
 		// Todo: Rename to [ ModelMatrix() | CalculateModelMatrix() ]
-		glm::mat4 GetModelMatrix() const;
+		inline Transform* GetTransForm() const { return m_Transform; }
 
 	private:
 		// Todo: Rewrite based on new member variables

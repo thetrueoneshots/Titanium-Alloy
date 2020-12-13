@@ -84,6 +84,9 @@
     <ClCompile Include="src\Voxel\src\Mesh\Quad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Voxel\src\Renderer\Transform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
@@ -1409,6 +1412,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Voxel\src\Mesh\Quad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Voxel\src\Renderer\Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

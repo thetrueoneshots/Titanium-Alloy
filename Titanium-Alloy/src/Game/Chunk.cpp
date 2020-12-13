@@ -54,7 +54,7 @@ void Chunk::RenderChunk(Voxel::Renderer* renderer)
 	if (!m_Blocks) return;
 	glm::vec3 pos = glm::vec3(m_Position.x * m_ChunkSize, m_Position.y * m_ChunkSize, m_Position.z * m_ChunkSize);
 	m_Mesh = new Voxel::Mesh();
-	m_Mesh->SetTranslation(pos);
+	m_Mesh->GetTransForm()->SetTranslation(pos);
 
 	for (unsigned char i = 0; i < m_ChunkSize; i++)
 	{

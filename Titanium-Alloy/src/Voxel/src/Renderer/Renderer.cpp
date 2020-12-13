@@ -85,19 +85,19 @@ void Voxel::Renderer::BatchVoxelDraw(const std::vector<glm::vec3>& positions, Me
 	m_ChunkShader->SetUniform("u_Projection", m_Camera->GetProjectionMatrix());
 	m_ChunkShader->SetUniform("u_View", m_Camera->GetViewMatrix());
 
-	glm::vec3 oldPosition = mesh->GetTranslation();
+	glm::vec3 oldPosition = mesh->GetTransForm()->GetTranslation();
 
 	// Todo: Calculate MVP once per frame
 	glm::vec3 prev = glm::vec3(0);
 	for (const auto& position : positions)
 	{
-		mesh->Translate(position - prev);
+		mesh->GetTransForm()->Translate(position - prev);
 		prev = position;
-		m_ChunkShader->SetUniform("u_Model", mesh->GetModelMatrix());
+		m_ChunkShader->SetUniform("u_Model", mesh->GetTransForm()->CalculateModelMatrix());
 		glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
 
-	mesh->SetTranslation(oldPosition);
+	mesh->GetTransForm()->SetTranslation(oldPosition);
 }
 
 void Voxel::Renderer::BatchVoxelDraw(const std::vector<glm::vec3>& positions, unsigned int key)
@@ -139,7 +139,7 @@ void Voxel::Renderer::DrawMesh(Mesh* mesh, Shader* s) const
 	// Todo: Calculate MVP once per frame
 	s->SetUniform("u_Projection", m_Camera->GetProjectionMatrix());
 	s->SetUniform("u_View", m_Camera->GetViewMatrix());
-	s->SetUniform("u_Model", mesh->GetModelMatrix());
+	s->SetUniform("u_Model", mesh->GetTransForm()->CalculateModelMatrix());
 
 	glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
 }

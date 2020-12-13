@@ -1,6 +1,6 @@
 #include "VertexBuffer.h"
 
-#include "Renderer.h"
+#include "../Renderer/Renderer.h"
 
 Voxel::VertexBuffer::VertexBuffer(const void* data, unsigned int size)
 {
