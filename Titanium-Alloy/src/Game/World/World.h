@@ -7,7 +7,7 @@
 
 #include "../Voxel/Voxel.h"
 
-#include "Chunk/Chunk.h"
+#include "../Chunk/Chunk.h"
 
 
 static const int CHUNK_SIZE = 32;

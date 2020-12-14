@@ -3,8 +3,8 @@
 #include "glm/glm.hpp"
 #include "../vendor/noise/fast_noise_lite.hpp"
 
-#include "Geometry/ColorTypes.h"
-#include "Geometry/MeshGenerator.h"
+#include "../Geometry/ColorTypes.h"
+#include "../Geometry/MeshGenerator.h"
 
 static enum class BlockType {
 	AIR = 0,

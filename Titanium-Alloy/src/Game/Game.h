@@ -5,7 +5,7 @@
 
 #include "glm/glm.hpp"
 
-#include "World.h"
+#include "World/World.h"
 
 #include "../Voxel/Voxel.h"
 

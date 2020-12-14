@@ -8,7 +8,7 @@
 #include "../Geometry/ColorTypes.h"
 #include "../Geometry/MeshGenerator.h"
 
-#include "../WorldGenerator.h"
+#include "../World/WorldGenerator.h"
 
 Chunk::Chunk(int x, int y, int z, int chunkSize)
 	: m_Position(glm::ivec3(x, y, z)), m_Mesh(nullptr),
