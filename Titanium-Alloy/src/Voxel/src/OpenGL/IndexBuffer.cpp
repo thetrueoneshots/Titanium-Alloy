@@ -27,14 +27,20 @@ void Voxel::IndexBuffer::Unbind() const
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-/*
-void Voxel::IndexBuffer::SetData(const void* data, unsigned int size)
+void Voxel::IndexBuffer::SetData(const void* data, unsigned int count)
 {
     unsigned int selectedID;
-    glGetIntegerv(GL_ARRAY_BUFFER_BINDING, (GLint*)&selectedID);
+    glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, (GLint*)&selectedID);
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-    glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, selectedID);
+    m_Count = count;
+
+    if (selectedID == m_RendererID)
+    {
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW);
+        return;
+    }
+
+    Bind();
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, selectedID);
 }
-*/

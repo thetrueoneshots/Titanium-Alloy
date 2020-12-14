@@ -23,7 +23,7 @@ void ObjectMap::Render(Voxel::Renderer* renderer)
 	{
 		MeshGeneratorType t = p.first;
 		const auto& vTransforms = p.second;
-		renderer->BatchVoxelDraw(*vTransforms, MeshGenerator::GenerateMesh(t));
+		renderer->BatchRender(*vTransforms, MeshGenerator::GenerateMesh(t), Voxel::RenderType::VOXEL);
 	}
 }
 

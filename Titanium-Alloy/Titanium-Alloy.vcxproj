@@ -169,6 +169,7 @@
     <ClCompile Include="src\Voxel\src\Mesh\Quad.cpp" />
     <ClCompile Include="src\Voxel\src\OpenGL\IndexBuffer.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Voxel\src\Renderer\RenderContext.cpp" />
     <ClCompile Include="src\Voxel\src\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Voxel\src\OpenGL\Shader.cpp" />
     <ClCompile Include="src\Voxel\src\OpenGL\Texture.cpp" />
@@ -334,6 +335,7 @@
     <ClInclude Include="src\Voxel\src\Mesh\CubLoader.h" />
     <ClInclude Include="src\Voxel\src\Renderer\Frustum.h" />
     <ClInclude Include="src\Voxel\src\Mesh\MeshStore.h" />
+    <ClInclude Include="src\Voxel\src\Renderer\RenderContext.h" />
     <ClInclude Include="src\Voxel\src\Renderer\Transform.h" />
     <ClInclude Include="src\Voxel\Voxel.h" />
     <ClInclude Include="src\Voxel\src\Mesh\Mesh.h" />

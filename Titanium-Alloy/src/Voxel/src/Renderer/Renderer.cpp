@@ -5,25 +5,17 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 Voxel::Renderer::Renderer(Camera* camera)
-	: m_ChunkShader(nullptr), m_Camera(camera), m_VertexArray(nullptr), m_VertexBuffer(nullptr)
+	: m_VoxelContext(nullptr), m_Camera(camera)
 { }
 
-Voxel::Renderer::~Renderer(){
-	if (m_ChunkShader)
+Voxel::Renderer::~Renderer() {
+	if (m_VoxelContext != nullptr)
 	{
-		delete m_ChunkShader;
-	}
-	if (m_VertexArray)
-	{
-		delete m_VertexArray;
-	}
-	if (m_VertexBuffer)
-	{
-		delete m_VertexBuffer;
+		delete m_VoxelContext;
 	}
 }
 
-void  Voxel::Renderer::Init()
+void Voxel::Renderer::Init()
 {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -32,19 +24,14 @@ void  Voxel::Renderer::Init()
 
 	glEnable(GL_MULTISAMPLE);
 
-	if (!m_ChunkShader)
+	if (!m_VoxelContext)
 	{
-		m_ChunkShader = new Shader("res/shaders/Chunk.shader");
+		VertexBufferLayout* layout = new VertexBufferLayout;
+		layout->Push<float>(1); //Position
+		layout->Push<float>(1); //Color
+		layout->Push<float>(1); //Normal
+		m_VoxelContext = new RenderContext("res/shaders/Chunk.shader", layout);
 	}
-
-	m_VertexArray = new VertexArray;
-	VertexBufferLayout layout;
-	layout.Push<float>(1); //Position
-	layout.Push<float>(1); //Color
-	layout.Push<float>(1); //Normal
-
-	m_VertexBuffer = new VertexBuffer(nullptr, 0);
-	m_VertexArray->AddBuffer(*m_VertexBuffer, layout);
 }
 
 void Voxel::Renderer::Update()
@@ -52,62 +39,43 @@ void Voxel::Renderer::Update()
 
 }
 
-void Voxel::Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& s) const
-{
-	va.Bind();
-	ib.Bind();
-	s.Bind();
-
-	glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
-}
-
-void Voxel::Renderer::DrawChunk(Mesh* mesh)
-{
-	DrawMesh(mesh, m_ChunkShader);
-}
-
-void Voxel::Renderer::BatchVoxelDraw(const std::vector<glm::vec3>& positions, Mesh* mesh)
+void Voxel::Renderer::Render(Mesh* mesh, RenderContext* context) const
 {
 	RenderData* data = mesh->GetRenderData();
+	context->SetData(data);
 
-	m_VertexArray->Bind();
-	m_VertexBuffer->SetData(data->vertices, data->vertex_array_size);
+	Shader* s = context->GetShader();
 
-	IndexBuffer ib(data->indices, data->indices_array_count);
-	ib.Bind();
-	m_ChunkShader->Bind();
-	m_ChunkShader->SetUniform("u_Projection", m_Camera->GetProjectionMatrix());
-	m_ChunkShader->SetUniform("u_View", m_Camera->GetViewMatrix());
+	s->SetUniform("u_Projection", m_Camera->GetProjectionMatrix());
+	s->SetUniform("u_View", m_Camera->GetViewMatrix());
+	s->SetUniform("u_Model", mesh->GetTransForm()->CalculateModelMatrix());
 
-	glm::vec3 oldPosition = mesh->GetTransForm()->GetTranslation();
+	context->Render();
+}
 
-	// Todo: Calculate MVP once per frame
-	glm::vec3 prev = glm::vec3(0);
-	for (const auto& position : positions)
+void Voxel::Renderer::Render(Mesh* mesh, RenderType t) const
+{
+	switch (t)
 	{
-		mesh->GetTransForm()->Translate(position - prev);
-		prev = position;
-		m_ChunkShader->SetUniform("u_Model", mesh->GetTransForm()->CalculateModelMatrix());
-		glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
+	case RenderType::VOXEL:
+		Render(mesh, m_VoxelContext);
+		break;
+	default:
+		Render(mesh, m_VoxelContext);
+		break;
 	}
-
-	mesh->GetTransForm()->SetTranslation(oldPosition);
 }
 
-void Voxel::Renderer::BatchVoxelDraw(const std::vector<Transform*>& transforms, Mesh* mesh)
+void Voxel::Renderer::BatchRender(const std::vector<Transform*>& transforms, Mesh* mesh, RenderContext* context) const
 {
 	RenderData* data = mesh->GetRenderData();
+	context->SetData(data);
 
-	m_VertexArray->Bind();
-	m_VertexBuffer->SetData(data->vertices, data->vertex_array_size);
+	Shader* s = context->GetShader();
 
-	IndexBuffer ib(data->indices, data->indices_array_count);
-	ib.Bind();
-	m_ChunkShader->Bind();
-	m_ChunkShader->SetUniform("u_Projection", m_Camera->GetProjectionMatrix());
-	m_ChunkShader->SetUniform("u_View", m_Camera->GetViewMatrix());
+	s->SetUniform("u_Projection", m_Camera->GetProjectionMatrix());
+	s->SetUniform("u_View", m_Camera->GetViewMatrix());
 
-	// Todo: Calculate MVP once per frame
 	Transform t = *mesh->GetTransForm();
 
 	for (const auto& transform : transforms)
@@ -116,29 +84,24 @@ void Voxel::Renderer::BatchVoxelDraw(const std::vector<Transform*>& transforms, 
 		temp.Translate(transform->GetTranslation());
 		temp.Rotate(transform->GetRotation());
 		temp.SetScale(temp.GetScale() * transform->GetScale());
-		m_ChunkShader->SetUniform("u_Model", temp.CalculateModelMatrix());
-		glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
+
+		s->SetUniform("u_Model", temp.CalculateModelMatrix());
+
+		context->Render();
 	}
 }
 
-
-void Voxel::Renderer::DrawMesh(Mesh* mesh, Shader* s) const
+void Voxel::Renderer::BatchRender(const std::vector<Transform*>& transforms, Mesh* mesh, RenderType t) const
 {
-	RenderData* data = mesh->GetRenderData();
-
-	m_VertexArray->Bind();
-	m_VertexBuffer->SetData(data->vertices, data->vertex_array_size);
-
-	IndexBuffer ib(data->indices, data->indices_array_count);
-	ib.Bind();
-	s->Bind();
-
-	// Todo: Calculate MVP once per frame
-	s->SetUniform("u_Projection", m_Camera->GetProjectionMatrix());
-	s->SetUniform("u_View", m_Camera->GetViewMatrix());
-	s->SetUniform("u_Model", mesh->GetTransForm()->CalculateModelMatrix());
-
-	glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
+	switch (t)
+	{
+	case RenderType::VOXEL:
+		BatchRender(transforms, mesh, m_VoxelContext);
+		break;
+	default:
+		BatchRender(transforms, mesh, m_VoxelContext);
+		break;
+	}
 }
 
 void Voxel::Renderer::Clear() const

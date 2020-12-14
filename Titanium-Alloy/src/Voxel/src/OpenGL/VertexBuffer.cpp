@@ -32,11 +32,10 @@ void Voxel::VertexBuffer::SetData(const void* data, unsigned int size) const
     if (selectedID == m_RendererID)
     {
         glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+        return;
     }
-    else
-    {
-        Bind();
-        glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, selectedID);
-    }
+
+    Bind();
+    glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, selectedID);
 }

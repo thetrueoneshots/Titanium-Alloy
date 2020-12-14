@@ -18,7 +18,7 @@ Chunk::Chunk(int x, int y, int z, int chunkSize)
 	m_Blocks = new unsigned char[size];
 	if (!m_Blocks) return;
 	std::fill_n(m_Blocks, size, 0);
-	
+
 	GenerateChunk();
 }
 
@@ -40,7 +40,7 @@ void Chunk::RenderChunk(Voxel::Renderer* renderer)
 
 	if (m_Mesh)
 	{
-		renderer->DrawChunk(m_Mesh);
+		renderer->Render(m_Mesh, Voxel::RenderType::VOXEL);
 		return;
 	}
 
@@ -70,7 +70,7 @@ void Chunk::RenderChunk(Voxel::Renderer* renderer)
 			}
 		}
 	}
-	renderer->DrawChunk(m_Mesh);
+	renderer->Render(m_Mesh, Voxel::RenderType::VOXEL);
 }
 
 void Chunk::GenerateChunk()
@@ -107,7 +107,7 @@ void Chunk::GenerateChunk()
 	}
 }
 
-int Chunk::GetBlockOffset(int i, int j, int k) 
+int Chunk::GetBlockOffset(int i, int j, int k)
 {
 	if (i < 0 || j < 0 || k < 0) return -1;
 	if (i >= m_ChunkSize || j >= m_ChunkSize || k >= m_ChunkSize) return -1;
@@ -117,7 +117,7 @@ int Chunk::GetBlockOffset(int i, int j, int k)
 unsigned char Chunk::CheckSurroundingBlocks(int i, int j, int k)
 {
 	unsigned char flag = 0;
-	
+
 	flag |= CheckBlock(i + 1, j, k) << 0;
 	flag |= CheckBlock(i - 1, j, k) << 1;
 	flag |= CheckBlock(i, j + 1, k) << 2;
