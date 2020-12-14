@@ -104,7 +104,7 @@ MeshGeneratorType WorldGenerator::PlaceObject(const glm::vec3& pos, int height)
 
 	if (height > 5 && treeNoiseRes > 0.5f)
 	{
-		return MeshGeneratorType::TREE;
+		return MeshGeneratorType::PLANT;
 	}
 
 	if (treeNoiseRes > 0.4f)

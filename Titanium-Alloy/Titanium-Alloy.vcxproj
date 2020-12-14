@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Dependencies\glad\src\gl.c" />
+    <ClCompile Include="src\Game\Chunk\ObjectMap.cpp" />
     <ClCompile Include="src\Voxel\src\Renderer\Camera.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Game\WorldGenerator.cpp" />
@@ -176,7 +177,7 @@
     <ClCompile Include="src\vendor\stb\stb_image.cpp" />
     <ClCompile Include="src\Voxel\src\OpenGL\VertexArray.cpp" />
     <ClCompile Include="src\Voxel\src\OpenGL\VertexBuffer.cpp" />
-    <ClCompile Include="src\Game\Chunk.cpp" />
+    <ClCompile Include="src\Game\Chunk\Chunk.cpp" />
     <ClCompile Include="src\Game\World.cpp" />
     <ClCompile Include="src\Voxel\src\Renderer\Transform.cpp" />
   </ItemGroup>
@@ -322,6 +323,8 @@
     <None Include="src\vendor\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Game\Chunk\ObjectMap.h" />
+    <ClInclude Include="src\Voxel\src\Mesh\DataTypes.h" />
     <ClInclude Include="src\Voxel\src\Renderer\Camera.h" />
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Game\WorldGenerator.h" />
@@ -625,7 +628,7 @@
     <ClInclude Include="src\Voxel\src\Renderer\Renderer.h" />
     <ClInclude Include="src\Voxel\src\OpenGL\VertexArray.h" />
     <ClInclude Include="src\Voxel\src\OpenGL\VertexBuffer.h" />
-    <ClInclude Include="src\Game\Chunk.h" />
+    <ClInclude Include="src\Game\Chunk\Chunk.h" />
     <ClInclude Include="src\Game\World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

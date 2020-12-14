@@ -45,9 +45,9 @@ Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const s
 	int counter = 0;
 	for (int i = 0; i < h; i++)
 	{
-		for (int j = 0; j < w; j++)
+		for (int j = 0; j < d; j++)
 		{
-			for (int k = 0; k < d; k++)
+			for (int k = 0; k < w; k++)
 			{
 				unsigned char r, g, b;
 				Color c;
@@ -68,7 +68,7 @@ Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const s
 				}
 
 				glm::vec4 color = glm::vec4(r, g, b, 255.0f) / 255.0f;
-				glm::vec3 pos = glm::vec3(k, i, j);
+				glm::vec3 pos = glm::vec3(j, i, k);
 				cubes.push_back(new Cube(pos, color));
 
 			}

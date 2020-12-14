@@ -96,7 +96,7 @@ std::vector<Voxel::Quad> Voxel::Mesh::GetQuads()
 }
 
 // Todo: Rewrite based on member variables
-RenderData* Voxel::Mesh::GetRenderData()
+Voxel::RenderData* Voxel::Mesh::GetRenderData()
 {
 	if (m_RenderData != nullptr)
 	{

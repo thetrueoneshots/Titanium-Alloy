@@ -21,6 +21,7 @@
 
 #include "src/Renderer/Renderer.h"
 #include "src/Renderer/Camera.h"
+#include "src/Renderer/Transform.h"
 
 // Todo: Figure out if this is needed
 namespace Voxel {}

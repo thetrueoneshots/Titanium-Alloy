@@ -12,7 +12,8 @@ enum class MeshGeneratorType
 	GRASS1,
 	GRASS2,
 	GRASS3,
-	DIAMOND_DEPOSIT,
+	PLANT,
+	PLANT2,
 	TYPE_END,
 };
 

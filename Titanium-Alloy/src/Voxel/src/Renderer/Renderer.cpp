@@ -5,7 +5,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 Voxel::Renderer::Renderer(Camera* camera)
-	: m_ChunkShader(nullptr), m_Camera(camera), m_VertexArray(nullptr), m_VertexBuffer(nullptr), m_Store(nullptr)
+	: m_ChunkShader(nullptr), m_Camera(camera), m_VertexArray(nullptr), m_VertexBuffer(nullptr)
 { }
 
 Voxel::Renderer::~Renderer(){
@@ -20,10 +20,6 @@ Voxel::Renderer::~Renderer(){
 	if (m_VertexBuffer)
 	{
 		delete m_VertexBuffer;
-	}
-	if (m_Store)
-	{
-		delete m_Store;
 	}
 }
 
@@ -49,8 +45,6 @@ void  Voxel::Renderer::Init()
 
 	m_VertexBuffer = new VertexBuffer(nullptr, 0);
 	m_VertexArray->AddBuffer(*m_VertexBuffer, layout);
-
-	m_Store = new MeshStore();
 }
 
 void Voxel::Renderer::Update()
@@ -100,28 +94,31 @@ void Voxel::Renderer::BatchVoxelDraw(const std::vector<glm::vec3>& positions, Me
 	mesh->GetTransForm()->SetTranslation(oldPosition);
 }
 
-void Voxel::Renderer::BatchVoxelDraw(const std::vector<glm::vec3>& positions, unsigned int key)
+void Voxel::Renderer::BatchVoxelDraw(const std::vector<Transform*>& transforms, Mesh* mesh)
 {
-	if (m_Store == nullptr)
-	{
-		return;
-	}
+	RenderData* data = mesh->GetRenderData();
 
-	Mesh* m = m_Store->GetMesh(key);
-	if (m == nullptr)
-	{
-		return;
-	}
-	BatchVoxelDraw(positions, m);
-}
+	m_VertexArray->Bind();
+	m_VertexBuffer->SetData(data->vertices, data->vertex_array_size);
 
-bool Voxel::Renderer::AddMesh(unsigned int key, Mesh* m)
-{
-	if (m_Store == nullptr || m == nullptr)
+	IndexBuffer ib(data->indices, data->indices_array_count);
+	ib.Bind();
+	m_ChunkShader->Bind();
+	m_ChunkShader->SetUniform("u_Projection", m_Camera->GetProjectionMatrix());
+	m_ChunkShader->SetUniform("u_View", m_Camera->GetViewMatrix());
+
+	// Todo: Calculate MVP once per frame
+	Transform t = *mesh->GetTransForm();
+
+	for (const auto& transform : transforms)
 	{
-		return false;
+		Transform temp = Transform(t);
+		temp.Translate(transform->GetTranslation());
+		temp.Rotate(transform->GetRotation());
+		temp.SetScale(temp.GetScale() * transform->GetScale());
+		m_ChunkShader->SetUniform("u_Model", temp.CalculateModelMatrix());
+		glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr);
 	}
-	return m_Store->InsertMesh(key, m);
 }
 
 

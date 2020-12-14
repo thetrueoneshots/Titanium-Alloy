@@ -7,28 +7,11 @@
 
 #include "glm/glm.hpp"
 
+#include "DataTypes.h"
 #include "Cube.h"
 #include "Quad.h"
 
 #include "../Renderer/Transform.h"
-
-/*
-* Struct for returning all the calculated (OpenGL) render data
-*/
-struct RenderData
-{
-	float* vertices;
-	size_t vertex_array_size;
-	unsigned int* indices;
-	size_t indices_array_count;
-	RenderData(float* v, size_t s1, unsigned int* i, size_t s2)
-	{
-		vertices = v;
-		vertex_array_size = s1;
-		indices = i;
-		indices_array_count = s2;
-	}
-};
 
 namespace Voxel
 {

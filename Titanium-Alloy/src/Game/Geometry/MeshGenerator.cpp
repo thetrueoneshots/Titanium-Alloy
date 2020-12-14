@@ -6,15 +6,39 @@
 #include "../Voxel/Voxel.h"
 
 static std::string FileNames[] = {
-	"diamond-deposit.cub"
+	"plants/grass.cub",
+	"plants/grass2.cub",
+	"plants/grass3.cub",
+	"plants/cornflower.cub",
+	"plants/fire-scrub.cub",
+	"plants/flower1.cub",
+	"plants/flower2.cub",
+	"plants/flower6.cub",
+	"trees/fir-tree.cub",
 };
 
 static int s_Scales[] = {
-	8
+	16,
+	16,
+	16,
+	7,
+	16,
+	10,
+	12,
+	16,
+	4,
 };
 
 static std::vector<std::pair<MeshGeneratorType, int>> FileNameLookup = {
-	std::make_pair(MeshGeneratorType::DIAMOND_DEPOSIT, 0)
+	std::make_pair(MeshGeneratorType::GRASS1, 0),
+	std::make_pair(MeshGeneratorType::GRASS2, 1),
+	std::make_pair(MeshGeneratorType::GRASS3, 2),
+	std::make_pair(MeshGeneratorType::PLANT, 3),
+	std::make_pair(MeshGeneratorType::PLANT2, 4),
+	std::make_pair(MeshGeneratorType::FLOWER1, 5),
+	std::make_pair(MeshGeneratorType::FLOWER2, 6),
+	std::make_pair(MeshGeneratorType::FLOWER3, 7),
+	std::make_pair(MeshGeneratorType::TREE, 8),
 };
 
 static Voxel::Mesh* MeshDB[(int)MeshGeneratorType::TYPE_END];
@@ -30,10 +54,10 @@ Voxel::Mesh* MeshGenerator::GenerateMesh(MeshGeneratorType t)
 	Voxel::Mesh* mesh = nullptr;
 
 	switch (t) {
-	case MeshGeneratorType::TREE:
+	/*case MeshGeneratorType::TREE:
 		mesh = GenerateTree();
-		break;
-	case MeshGeneratorType::FLOWER1:
+		break;*/
+	/*case MeshGeneratorType::FLOWER1:
 		mesh = GenerateFlower();
 		break;
 	case MeshGeneratorType::FLOWER2:
@@ -41,16 +65,16 @@ Voxel::Mesh* MeshGenerator::GenerateMesh(MeshGeneratorType t)
 		break;
 	case MeshGeneratorType::FLOWER3:
 		mesh = GenerateFlower(2);
-		break;
-	case MeshGeneratorType::GRASS1:
-		mesh = GenerateGrass();
-		break;
-	case MeshGeneratorType::GRASS2:
+		break;*/
+	//case MeshGeneratorType::GRASS1:
+	//	mesh = GenerateGrass();
+	//	break;
+	/*case MeshGeneratorType::GRASS2:
 		mesh = GenerateGrass(1);
-		break;
-	case MeshGeneratorType::GRASS3:
+		break;*/
+	/*case MeshGeneratorType::GRASS3:
 		mesh = GenerateGrass(2);
-		break;
+		break;*/
 	default:
 		for (const auto& item : FileNameLookup)
 		{
@@ -60,7 +84,7 @@ Voxel::Mesh* MeshGenerator::GenerateMesh(MeshGeneratorType t)
 				int scale = s_Scales[item.second];
 				mesh = Voxel::CubLoader::LoadMeshFromFile(file);
 				mesh->GetTransForm()->SetScale(1.0f / scale);
-				mesh->GetTransForm()->Translate(glm::vec3(0.5f - scale / 2, 0, 0.5f - scale / 2));
+				//mesh->GetTransForm()->Translate(glm::vec3(0.5f - scale / 2, 0, 0.5f - scale / 2));
 			}
 		}
 		break;

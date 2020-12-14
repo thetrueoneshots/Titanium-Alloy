@@ -3,6 +3,7 @@
 #include "../vendor/noise/fast_noise_lite.hpp"
 
 #include "../Voxel/Voxel.h"
+#include "ObjectMap.h"
 
 const static int PERLIN_SEED = 813;
 const static int SIMPLEX_SEED = 603;
@@ -13,15 +14,7 @@ private:
 	unsigned char* m_Blocks;
 	glm::ivec3 m_Position;
 	Voxel::Mesh* m_Mesh;
-	//std::vector<Voxel::Mesh*> objects;
-	std::vector<glm::vec3> m_Trees;
-	std::vector<glm::vec3> m_Flowers1;
-	std::vector<glm::vec3> m_Flowers2;
-	std::vector<glm::vec3> m_Flowers3;
-	std::vector<glm::vec3> m_Grass1;
-	std::vector<glm::vec3> m_Grass2;
-	std::vector<glm::vec3> m_Grass3;
-	std::vector<glm::vec3> m_DiamondDeposits;
+	ObjectMap m_Objects;
 	int m_ChunkSize;
 public:
 	Chunk(int x, int y, int z, int chunkSize = 32);

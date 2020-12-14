@@ -5,10 +5,10 @@
 
 #include <iostream>
 
-#include "Geometry/ColorTypes.h"
-#include "Geometry/MeshGenerator.h"
+#include "../Geometry/ColorTypes.h"
+#include "../Geometry/MeshGenerator.h"
 
-#include "WorldGenerator.h"
+#include "../WorldGenerator.h"
 
 Chunk::Chunk(int x, int y, int z, int chunkSize)
 	: m_Position(glm::ivec3(x, y, z)), m_Mesh(nullptr),
@@ -36,14 +36,7 @@ Chunk::~Chunk()
 
 void Chunk::RenderChunk(Voxel::Renderer* renderer)
 {
-	renderer->BatchVoxelDraw(m_Trees, (unsigned int)MeshGeneratorType::TREE);
-	renderer->BatchVoxelDraw(m_Flowers1, (unsigned int)MeshGeneratorType::FLOWER1);
-	renderer->BatchVoxelDraw(m_Flowers2, (unsigned int)MeshGeneratorType::FLOWER2);
-	renderer->BatchVoxelDraw(m_Flowers3, (unsigned int)MeshGeneratorType::FLOWER3);
-	renderer->BatchVoxelDraw(m_Grass1, (unsigned int)MeshGeneratorType::GRASS1);
-	renderer->BatchVoxelDraw(m_Grass2, (unsigned int)MeshGeneratorType::GRASS2);
-	renderer->BatchVoxelDraw(m_Grass3, (unsigned int)MeshGeneratorType::GRASS3);
-	renderer->BatchVoxelDraw(m_DiamondDeposits, (unsigned int)MeshGeneratorType::DIAMOND_DEPOSIT);
+	m_Objects.Render(renderer);
 
 	if (m_Mesh)
 	{
@@ -98,41 +91,9 @@ void Chunk::GenerateChunk()
 			if (obj != MeshGeneratorType::TYPE_BEGIN)
 			{
 				glm::vec3 pos = glm::vec3(worldPos.x, height + 1.0f, worldPos.z);
-				switch (obj)
-				{
-				case MeshGeneratorType::TREE:
-					m_Trees.push_back(pos);
-					break;
-				case MeshGeneratorType::FLOWER1:
-					m_Flowers1.push_back(pos);
-					break;
-				case MeshGeneratorType::FLOWER2:
-					m_Flowers2.push_back(pos);
-					break;
-				case MeshGeneratorType::FLOWER3:
-					m_Flowers3.push_back(pos);
-					break;
-				case MeshGeneratorType::GRASS1:
-					m_Grass1.push_back(pos);
-					break;
-				case MeshGeneratorType::GRASS2:
-					m_Grass2.push_back(pos);
-					break;
-				case MeshGeneratorType::GRASS3:
-					m_Grass3.push_back(pos);
-					break;
-				case MeshGeneratorType::DIAMOND_DEPOSIT:
-					m_DiamondDeposits.push_back(pos);
-					break;
-				default:
-					break;
-				}
-				/*Voxel::Mesh* m = MeshGenerator::GenerateMesh(obj);
-				if (m != nullptr)
-				{
-					m->Translate(glm::vec3(worldPos.x, height + 1.0f, worldPos.z));
-					objects.push_back(m);
-				}*/
+				Voxel::Transform* transform = new Voxel::Transform();
+				transform->SetTranslation(pos);
+				m_Objects.Add(obj, transform);
 			}
 
 			for (unsigned char j = 0; j < m_ChunkSize; j++)

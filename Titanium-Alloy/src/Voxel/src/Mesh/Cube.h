@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "DataTypes.h"
+
 #include "Quad.h"
 
 namespace Voxel
