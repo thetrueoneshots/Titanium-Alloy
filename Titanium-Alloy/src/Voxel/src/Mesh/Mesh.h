@@ -15,6 +15,35 @@
 
 namespace Voxel
 {
+	// Todo: Make chars
+	struct Color
+	{
+		float r, g, b, a;
+
+		Color(const glm::vec4& color)
+		{
+			this->r = color.r;
+			this->g = color.g;
+			this->b = color.b;
+			this->a = color.a;
+		}
+
+		Color(float r, float g, float b, float a)
+		{
+			this->r = r;
+			this->g = g;
+			this->b = b;
+			this->a = a;
+		}
+
+		Color()
+		{
+			this->r = 0;
+			this->g = 0;
+			this->b = 0;
+			this->a = 0;
+		}
+	};
 	/*
 	* A mesh containing all cubes, as well as model state, such as rotation, translation and scale
 	*/
@@ -22,56 +51,34 @@ namespace Voxel
 	class Mesh
 	{
 	private:
-		// Todo: Remove state, add updated variable [ boolean ]
-		static enum class State
-		{
-			STATE_BEGIN,
-			UPDATED = 0,
-			STATE_END
-		};
-
+		int m_Width, m_Depth, m_Height;
+		Color*** m_Cubes;
 		Transform* m_Transform;
-		// Todo: Change to a Cube[width * depth * height]
-		std::map<std::pair<int, std::pair<int, int>>, Cube*> m_Cubes;
-		// Todo: Remove and add updated variable [ boolean ]
-		unsigned char m_State;
-		// Todo: Remove
-		std::vector<Quad> m_Cache;
-		// Todo: Decide whether to name this cache or renderdata
+		bool m_Updated;
 		RenderData* m_RenderData;
+
 	public:
 		/*
 		* Constructors and deconstructor
 		*/
-		Mesh();
-		Mesh(std::vector<Cube*> cubes);
+		Mesh(const glm::ivec3& size);
+		Mesh(unsigned int w, unsigned int h, unsigned int d);
+		Mesh(const std::vector<Cube*>& cubes);
 		~Mesh();
 
 		/*
 		* Adding cubes
 		*/
-		// Todo: Rewrite based on new member variables
-		void AddCube(glm::vec3 position, glm::vec4 color, unsigned char flags = 0);
-		void AddCube(float p1, float p2, float p3, glm::vec4 color, unsigned char flags = 0);
+		void AddCube(const glm::ivec3& position, const glm::vec4& color);
+		void AddCube(unsigned int x, unsigned int y, unsigned int z, const glm::vec4& color);
 
-		// Todo: Remove
-		std::vector<Quad> GetQuads();
 		RenderData* GetRenderData();
 
-		// Todo: Remove and calculate in [ GetRenderData() ]
-		void UpdateRenderFlags();
-
-		// Todo: Rename to [ ModelMatrix() | CalculateModelMatrix() ]
 		inline Transform* GetTransForm() const { return m_Transform; }
 
 	private:
-		// Todo: Rewrite based on new member variables
+		void Init(unsigned int w, unsigned int h, unsigned int d);
 		unsigned char GetConnectedBlockFlags(const glm::vec3& pos);
-		int CheckBlock(int x, int y, int z);
-
-		// Todo: Remove state private functions
-		bool GetState(State s) const;
-		bool SetState(State s);
-		bool UnsetState(State s);
+		int CheckBlock(unsigned int x, unsigned int y, unsigned int z);
 	};
 }

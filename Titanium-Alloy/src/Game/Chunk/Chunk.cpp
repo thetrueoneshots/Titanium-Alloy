@@ -46,7 +46,7 @@ void Chunk::RenderChunk(Voxel::Renderer* renderer)
 
 	if (!m_Blocks) return;
 	glm::vec3 pos = glm::vec3(m_Position.x * m_ChunkSize, m_Position.y * m_ChunkSize, m_Position.z * m_ChunkSize);
-	m_Mesh = new Voxel::Mesh();
+	m_Mesh = new Voxel::Mesh(m_ChunkSize, m_ChunkSize, m_ChunkSize);
 	m_Mesh->GetTransForm()->SetTranslation(pos);
 
 	for (unsigned char i = 0; i < m_ChunkSize; i++)
@@ -65,7 +65,7 @@ void Chunk::RenderChunk(Voxel::Renderer* renderer)
 
 				if (color.a > 0.0f)
 				{
-					m_Mesh->AddCube(glm::vec3(i, j, k), color, flag);
+					m_Mesh->AddCube(glm::vec3(i, j, k), color);
 				}
 			}
 		}

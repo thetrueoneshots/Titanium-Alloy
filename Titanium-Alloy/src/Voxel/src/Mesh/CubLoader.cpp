@@ -87,6 +87,5 @@ Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const s
 		}
 		return nullptr;
 	}
-	m->UpdateRenderFlags();
 	return m;
 }

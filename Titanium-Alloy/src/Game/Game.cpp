@@ -2,6 +2,8 @@
 
 #include "Geometry/MeshGenerator.h"
 
+#include <stdio.h>
+
 Game::Game(GLFWwindow* window)
 	:m_DeltaTime(0.0f), m_LastFrame(0.0f), 
 	m_Camera(nullptr), m_Renderer(nullptr), m_World(nullptr), m_Window(window),
@@ -49,6 +51,8 @@ void Game::Update(double currentFrame)
 	
 	m_Renderer->Update();
 	m_World->Update();
+
+	std::cout << "Update finished" << std::endl;
 }
 
 void Game::HandleKeyInput(int key, int scancode, int action, int mods)
