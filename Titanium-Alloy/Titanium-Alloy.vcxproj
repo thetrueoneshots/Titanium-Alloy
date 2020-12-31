@@ -322,6 +322,7 @@
     <None Include="src\vendor\glm\gtx\vector_angle.inl" />
     <None Include="src\vendor\glm\gtx\vector_query.inl" />
     <None Include="src\vendor\glm\gtx\wrap.inl" />
+    <None Include="src\Voxel\readme.md" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game\Chunk\ObjectMap.h" />
