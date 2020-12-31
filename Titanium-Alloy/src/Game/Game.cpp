@@ -51,8 +51,6 @@ void Game::Update(double currentFrame)
 	
 	m_Renderer->Update();
 	m_World->Update();
-
-	std::cout << "Update finished" << std::endl;
 }
 
 void Game::HandleKeyInput(int key, int scancode, int action, int mods)

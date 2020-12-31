@@ -57,9 +57,10 @@ Voxel::Mesh* MeshGenerator::GenerateMesh(MeshGeneratorType t)
 	/*case MeshGeneratorType::TREE:
 		mesh = GenerateTree();
 		break;*/
-	/*case MeshGeneratorType::FLOWER1:
+	case MeshGeneratorType::FLOWER1:
 		mesh = GenerateFlower();
 		break;
+	/*
 	case MeshGeneratorType::FLOWER2:
 		mesh = GenerateFlower(1);
 		break;
@@ -99,9 +100,9 @@ Voxel::Mesh* MeshGenerator::GenerateTree(int base, int width, int height)
 	std::vector<Voxel::Cube*> cubes;
 	
 	// Base
-	for (int i = -width / 6; i < width / 6; i++)
+	for (int i = width / 3; i < 2 * width / 3; i++)
 	{
-		for (int j = -width / 6; j < width / 6; j++)
+		for (int j = width / 3; j < 2 * width / 3; j++)
 		{
 			for (int k = 0; k < base; k++)
 			{
@@ -111,9 +112,9 @@ Voxel::Mesh* MeshGenerator::GenerateTree(int base, int width, int height)
 		}
 	}
 
-	for (int i = -width / 2; i < width / 2; i++) 
+	for (int i = 0; i < width; i++) 
 	{
-		for (int j = -width / 2; j < width / 2; j++)
+		for (int j = 0; j < width; j++)
 		{
 			for (int k = base; k < height; k++)
 			{
@@ -123,7 +124,14 @@ Voxel::Mesh* MeshGenerator::GenerateTree(int base, int width, int height)
 		}
 	}
 
-	return new Voxel::Mesh(cubes);
+	Voxel::Mesh* m = new Voxel::Mesh(width, height, width);
+	m->SetData(cubes);
+
+	for (const auto& cube : cubes)
+	{
+		delete cube;
+	}
+	return m;
 }
 
 Voxel::Mesh* MeshGenerator::GenerateFlower(unsigned int variation)
@@ -150,18 +158,24 @@ Voxel::Mesh* MeshGenerator::GenerateFlower(unsigned int variation)
 
 	std::vector<Voxel::Cube*> cubes;
 	
-	cubes.push_back(new Voxel::Cube(glm::vec3(0, 0, 0), COLOR_DARK_GREEN));
-	cubes.push_back(new Voxel::Cube(glm::vec3(0, 1, 0), COLOR_DARK_GREEN));
-	cubes.push_back(new Voxel::Cube(glm::vec3(0, 2, 0), centerColor));
-	cubes.push_back(new Voxel::Cube(glm::vec3(0, 3, 0), centerColor));
-	cubes.push_back(new Voxel::Cube(glm::vec3(1, 2, 0), leafColor));
-	cubes.push_back(new Voxel::Cube(glm::vec3(-1, 2, 0), leafColor));
+	cubes.push_back(new Voxel::Cube(glm::vec3(1, 0, 1), COLOR_DARK_GREEN));
+	cubes.push_back(new Voxel::Cube(glm::vec3(1, 1, 1), COLOR_DARK_GREEN));
+	cubes.push_back(new Voxel::Cube(glm::vec3(1, 2, 1), centerColor));
+	cubes.push_back(new Voxel::Cube(glm::vec3(1, 3, 1), centerColor));
+	cubes.push_back(new Voxel::Cube(glm::vec3(2, 2, 1), leafColor));
 	cubes.push_back(new Voxel::Cube(glm::vec3(0, 2, 1), leafColor));
-	cubes.push_back(new Voxel::Cube(glm::vec3(0, 2, -1), leafColor));
+	cubes.push_back(new Voxel::Cube(glm::vec3(1, 2, 2), leafColor));
+	cubes.push_back(new Voxel::Cube(glm::vec3(1, 2, 0), leafColor));
 
-	Voxel::Mesh* m = new Voxel::Mesh(cubes);
+	Voxel::Mesh* m = new Voxel::Mesh(1/scale, 1/scale, 1/scale);
+	m->SetData(cubes);
+
+	for (const auto& cube : cubes)
+	{
+		delete cube;
+	}
+
 	m->GetTransForm()->SetScale(scale);
-	m->GetTransForm()->Translate(glm::vec3(0.5f - scale / 2, 0.0f, 0.5f - scale / 2));
 	return m;
 }
 
@@ -195,9 +209,14 @@ Voxel::Mesh* MeshGenerator::GenerateGrass(unsigned int variation)
 			}
 	}
 
-	Voxel::Mesh* m = new Voxel::Mesh(cubes);
+	Voxel::Mesh* m = new Voxel::Mesh(1/scale, 1/scale, 1/scale);
+	m->SetData(cubes);
+	for (const auto& cube : cubes)
+	{
+		delete cube;
+	}
+
 	m->GetTransForm()->SetScale(scale);
-	m->GetTransForm()->Translate(glm::vec3(0.5f - scale / 2, 0.0f, 0.5f - scale / 2));
 	m->GetTransForm()->Rotate(glm::vec3(glm::radians(rotation.x), glm::radians(rotation.y), glm::radians(rotation.z)));
 	return m;
 }

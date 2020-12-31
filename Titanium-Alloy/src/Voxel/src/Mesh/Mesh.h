@@ -63,7 +63,6 @@ namespace Voxel
 		*/
 		Mesh(const glm::ivec3& size);
 		Mesh(unsigned int w, unsigned int h, unsigned int d);
-		Mesh(const std::vector<Cube*>& cubes);
 		~Mesh();
 
 		/*
@@ -71,6 +70,8 @@ namespace Voxel
 		*/
 		void AddCube(const glm::ivec3& position, const glm::vec4& color);
 		void AddCube(unsigned int x, unsigned int y, unsigned int z, const glm::vec4& color);
+
+		void SetData(const std::vector<Cube*>& cubes);
 
 		RenderData* GetRenderData();
 

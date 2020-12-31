@@ -2,6 +2,8 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
+#include <iostream>
+
 Voxel::Mesh::Mesh(const glm::ivec3& size)
 {
 	Init(size.x, size.y, size.z);
@@ -35,24 +37,18 @@ Voxel::Mesh::~Mesh()
 	}
 }
 
-// Todo: Write: CalculateBounds()
-Voxel::Mesh::Mesh(const std::vector<Cube*>& cubes)
+void Voxel::Mesh::SetData(const std::vector<Cube*>& cubes)
 {
-	glm::vec3 size = glm::vec3(10, 10, 10);//CalculateSize(cubes);
-	Init(size.x, size.y, size.z);
-
 	for (Cube* cube : cubes)
 	{
 		const glm::ivec3& pos = cube->GetPosition(); 
 		if (pos.x < 0 || pos.x >= m_Width || pos.y < 0 || pos.y >= m_Height|| pos.z < 0 || pos.z >= m_Depth)
 		{
-			delete cube;
+			std::cout << "Out of bounds" << std::endl;
 			continue;
 		}
-
 		const glm::vec4& color = cube->GetColor();
 		m_Cubes[pos.x][pos.y][pos.z] = Color(color);
-		delete cube;
 	}
 }
 
@@ -66,6 +62,7 @@ void Voxel::Mesh::AddCube(unsigned int x, unsigned int y, unsigned int z, const 
 {
 	if (x >= m_Width || y >= m_Height || z >= m_Depth)
 	{
+		std::cout << "Out of bounds" << std::endl;
 		return;
 	}
 
@@ -89,6 +86,12 @@ Voxel::RenderData* Voxel::Mesh::GetRenderData()
 		{
 			for (int k = 0; k < m_Depth; k++)
 			{
+				Color color = m_Cubes[i][j][k];
+				if (color.a == 0.0f)
+				{
+					continue;
+				}
+
 				glm::ivec3 cubePos = glm::ivec3(i, j, k);
 				unsigned char flags = GetConnectedBlockFlags(cubePos);
 
@@ -97,7 +100,6 @@ Voxel::RenderData* Voxel::Mesh::GetRenderData()
 					continue;
 				}
 
-				Color color = m_Cubes[i][j][k];
 				glm::vec4 cubeCol = glm::vec4(color.r, color.g, color.b, color.a);
 				
 				Cube c = Cube(cubePos, cubeCol, flags);
