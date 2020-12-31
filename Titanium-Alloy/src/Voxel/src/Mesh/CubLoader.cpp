@@ -14,8 +14,10 @@ struct Cub
 Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const std::string& path)
 {
 	char buffer[250];
+
 	std::string filepath(path.c_str());
 	filepath.append(file);
+
 	std::ifstream stream;
 
 	sprintf_s(buffer, 250, "Loading cube file: %s", filepath.c_str());
@@ -40,7 +42,7 @@ Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const s
 	sprintf_s(buffer, 250, "Cube size: %d, %d, %d", w, d, h);
 	std::cout << buffer << std::endl;
 
-	std::vector<Voxel::Cube*> cubes;
+	Mesh* m = new Mesh(w, h, d);
 
 	int counter = 0;
 	for (int i = 0; i < h; i++)
@@ -68,25 +70,15 @@ Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const s
 				}
 
 				glm::vec4 color = glm::vec4(r, g, b, 255.0f) / 255.0f;
-				glm::vec3 pos = glm::vec3(j, i, k);
-				cubes.push_back(new Cube(pos, color));
-
+				glm::ivec3 pos = glm::ivec3(k, i, j);
+				m->AddCube(pos, color);
 			}
 		}
 	}
+
 	sprintf_s(buffer, 250, "Amount of bytes read: %d", bytes);
 	std::cout << buffer << std::endl;
 	stream.close();
 
-	Mesh* m = new Mesh(cubes);
-	if (m == nullptr)
-	{
-		for (auto& item : cubes)
-		{
-			delete item;
-		}
-		return nullptr;
-	}
-	m->UpdateRenderFlags();
 	return m;
 }

@@ -2,6 +2,8 @@
 
 #include "Geometry/MeshGenerator.h"
 
+#include <stdio.h>
+
 Game::Game(GLFWwindow* window)
 	:m_DeltaTime(0.0f), m_LastFrame(0.0f), 
 	m_Camera(nullptr), m_Renderer(nullptr), m_World(nullptr), m_Window(window),
