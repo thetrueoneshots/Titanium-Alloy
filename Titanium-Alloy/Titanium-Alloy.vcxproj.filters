@@ -506,6 +506,7 @@
     </None>
     <None Include="res\shaders\Texture.shader" />
     <None Include="res\shaders\Chunk.shader" />
+    <None Include="src\Voxel\readme.md" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vendor\stb\stb_image.h">
