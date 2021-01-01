@@ -44,7 +44,7 @@ int main(void)
 
     // Camera creation
     game.camera = new Voxel::Camera(&size, 500.0f);
-    game.camera->SetPosition(glm::vec3(0, 0, 15));
+    game.camera->SetPosition(glm::vec3(5, 5, 15));
 
     // Renderer creation
     game.renderer = new Voxel::Renderer(game.camera);

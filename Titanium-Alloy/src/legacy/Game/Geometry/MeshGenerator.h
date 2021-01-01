@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../Voxel/Voxel.h"
+#include "../Voxel/Voxel.h"
 
 enum class MeshGeneratorType
 {
