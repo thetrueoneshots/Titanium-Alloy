@@ -2,7 +2,7 @@
 
 #include <map>
 
-#include "../../Voxel/Voxel.h"
+#include "../Voxel/Voxel.h"
 #include "../Geometry/MeshGenerator.h"
 
 class ObjectMap

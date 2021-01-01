@@ -54,7 +54,6 @@ namespace Voxel
 		*/
 		void Init();
 		void Update();
-		void Clear() const;
 
 		/*
 		* Rendering
