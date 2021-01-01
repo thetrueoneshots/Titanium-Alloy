@@ -52,6 +52,67 @@ void Voxel::Mesh::SetData(const std::vector<Cube*>& cubes)
 	}
 }
 
+void Voxel::Mesh::ScaleToSize(float scale, bool keepRatio)
+{
+	ScaleToSize(glm::ivec3(scale), keepRatio);
+}
+
+void Voxel::Mesh::ScaleToSize(const glm::vec3& scale, bool keepRatio)
+{
+	if (scale.x <= 0 || scale.y <= 0 || scale.z <= 0)
+	{
+		return;
+	}
+
+	glm::vec3 calcScale;
+	if (keepRatio)
+	{
+		unsigned int max = (m_Width > m_Depth) ? m_Width : m_Depth;
+		calcScale = glm::vec3(scale.x / max, scale.y / max, scale.z / max);
+	}
+	else
+	{
+		calcScale = glm::vec3(scale.x / m_Width, scale.y / m_Height, scale.z / m_Depth);
+	}
+	m_Transform->SetScale(calcScale);
+}
+
+void Voxel::Mesh::ScaleXToSize(float scale)
+{
+	if (scale <= 0)
+	{
+		return;
+	}
+
+	glm::vec3 current = m_Transform->GetScale();
+	current.x *= scale / m_Width;
+	m_Transform->SetScale(current);
+}
+
+void Voxel::Mesh::ScaleYToSize(float scale)
+{
+	if (scale <= 0)
+	{
+		return;
+	}
+
+	glm::vec3 current = m_Transform->GetScale();
+	current.y *= scale / m_Height;
+	m_Transform->SetScale(current);
+}
+
+void Voxel::Mesh::ScaleZToSize(float scale)
+{
+	if (scale <= 0)
+	{
+		return;
+	}
+
+	glm::vec3 current = m_Transform->GetScale();
+	current.z *= scale / m_Depth;
+	m_Transform->SetScale(current);
+}
+
 void Voxel::Mesh::AddCube(const glm::ivec3& position, const glm::vec4& color)
 {
 	AddCube(position.x, position.y, position.z, color);

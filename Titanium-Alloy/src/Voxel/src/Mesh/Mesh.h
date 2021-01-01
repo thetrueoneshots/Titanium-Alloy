@@ -73,6 +73,22 @@ namespace Voxel
 
 		void SetData(const std::vector<Cube*>& cubes);
 
+		
+
+		/*
+		* Scaling the mesh to a certain block size
+		* Note: With keepRatio = true, the max of x and z are considered for the scale
+		*/
+		void ScaleToSize(float scale, bool keepRatio = true);
+		void ScaleToSize(const glm::vec3& scale, bool keepRatio = true);
+
+		/*
+		* Scaling every axis to a certain size for only scaling one axis
+		*/
+		void ScaleXToSize(float scale);
+		void ScaleYToSize(float scale);
+		void ScaleZToSize(float scale);
+
 		RenderData* GetRenderData();
 
 		inline Transform* GetTransForm() const { return m_Transform; }

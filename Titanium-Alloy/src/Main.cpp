@@ -66,7 +66,30 @@ int main(void)
     }
 
     // Testing out cub files
-    Voxel::Mesh* cub = Voxel::CubLoader::LoadMeshFromFile("plants/bush.cub");
+    std::vector<std::string> files = {
+        "plants/corn.cub",
+        //"plants/cactus1.cub",  // Bugged for some reason, adding too many blocks to the mesh
+        //"plants/buckhorn.cub", // Bugged for some reason, not adding any blocks to the mesh
+        "plants/coral.cub",
+        "extra/barrel.cub",
+        "extra/eternal-ember.cub",
+        "plants/herb3.cub",
+    };
+
+    std::vector<Voxel::Mesh*> meshes;
+
+    for (int i = 0; i < files.size(); i++)
+    {
+        Voxel::Mesh* cub = Voxel::CubLoader::LoadMeshFromFile(files.at(i));
+        if (cub == nullptr)
+        {
+            continue;
+        }
+        cub->ScaleToSize(1.0f);
+        cub->GetTransForm()->Translate(glm::vec3(3 * i, 0, 0));
+        meshes.push_back(cub);
+    }
+    
 
     // Game loop
     while (!game.window->ShouldClose())
@@ -77,7 +100,11 @@ int main(void)
 
         // Render/Draw the mesh
         game.renderer->Render(m, Voxel::RenderType::VOXEL);
-        game.renderer->Render(cub, Voxel::RenderType::VOXEL);
+
+        for (const auto& mesh : meshes)
+        {
+            game.renderer->Render(mesh, Voxel::RenderType::VOXEL);
+        }
 
         // Updating the window with the drawn screen
         game.window->Update();

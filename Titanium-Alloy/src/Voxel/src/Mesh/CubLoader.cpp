@@ -66,8 +66,8 @@ Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const s
 
 				counter++;
 
-				glm::vec4 color = glm::vec4(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f);
-				glm::ivec3 pos = glm::ivec3((unsigned int)k, (unsigned int)i, (unsigned int)j);
+				glm::vec4 color = glm::vec4(r, g, b, 255.0f) / 255.0f;
+				glm::ivec3 pos = glm::ivec3(k, i, j);
 				m->AddCube(pos, color);
 			}
 		}
