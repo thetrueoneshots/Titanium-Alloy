@@ -47,7 +47,7 @@ void Game::Update(double currentFrame)
 		frames = 0;
 	}
 
-	m_Renderer->Clear();
+	//m_Renderer->Clear();
 	
 	m_Renderer->Update();
 	m_World->Update();

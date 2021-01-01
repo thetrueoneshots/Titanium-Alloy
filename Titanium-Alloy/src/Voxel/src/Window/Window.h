@@ -29,6 +29,8 @@ namespace Voxel
 		bool ShouldClose();
 		void Close();
 		double GetTime();
+
+		void Clear() const;
 		void Update();
 
 		// See glfw callbacks for the correct parameters

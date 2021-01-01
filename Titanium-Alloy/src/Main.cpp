@@ -67,8 +67,7 @@ int main(void)
     while (!game.window->ShouldClose())
     {
         // Clearing the screen and updating the renderer
-        // Todo: Move renderer->Clear() to window
-        game.renderer->Clear();
+        game.window->Clear();
         game.renderer->Update();
 
         // Render/Draw the mesh

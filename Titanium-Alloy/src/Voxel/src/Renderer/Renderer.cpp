@@ -103,8 +103,3 @@ void Voxel::Renderer::BatchRender(const std::vector<Transform*>& transforms, Mes
 		break;
 	}
 }
-
-void Voxel::Renderer::Clear() const
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}

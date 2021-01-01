@@ -28,6 +28,11 @@ double Voxel::Window::GetTime()
 	return glfwGetTime();
 }
 
+void Voxel::Window::Clear() const
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
 void Voxel::Window::Update()
 {
 	glfwSwapBuffers(m_Window);
