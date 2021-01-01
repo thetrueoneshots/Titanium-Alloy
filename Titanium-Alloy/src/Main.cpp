@@ -1,109 +1,133 @@
-#include <cstddef>
-#include <linmath.h>
+// Framework include
+#include "Voxel/Voxel.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
-
-#include "Game/Game.h"
-
+// GLM include for vectors and matrices
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+// Game structure definition, could be moved to main.h
+struct Game
+{
+    Voxel::Window* window;
+    Voxel::Camera* camera;
+    Voxel::Renderer* renderer;
+    bool first_mouse = false;
+    glm::vec2 last_mouse;
+};
+
+// Constants for the screensize
 const int WIDTH = 1280;
 const int HEIGHT = 720;
 
-static Game* game;
+// Game variable containing all variables needed to run the game
+Game game;
 
-static void error_callback(int error, const char* description);
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-static void cursor_callback(GLFWwindow* window, double xPos, double yPos);
-static void scroll_callback(GLFWwindow* window, double xOffset, double yOffset);
-GLFWwindow* InitGlfwWindow(const unsigned int width, const unsigned int height, const std::string& title);
+// Callback function definitions (needed, because otherwise we would not be able to assign them
+// with window->SetCallback )
+void error_callback(int error, const char* description);
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void cursor_callback(GLFWwindow* window, double xPos, double yPos);
+void scroll_callback(GLFWwindow* window, double xOffset, double yOffset);
 
-// Todo: Move camera.
-// Todo: Make screen resizing work.
-// Todo: Optimize mesh code.
 int main(void)
 {
-    // Create window and setup glfw context.
-    GLFWwindow* window = InitGlfwWindow(WIDTH, HEIGHT, "Engine Window");
-    game = new Game(window);
-    
-    // Game loop
-    while (!glfwWindowShouldClose(window))
-    {
-        game->Update(glfwGetTime());
+    static glm::ivec2 size = glm::ivec2(WIDTH, HEIGHT);
 
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+    // Window creation
+    game.window = new Voxel::Window(WIDTH, HEIGHT, "Engine");
+
+    // Callback functions
+    game.window->SetCallback(Voxel::Window::CallbackType::ERROR, error_callback);
+    game.window->SetCallback(Voxel::Window::CallbackType::KEY, key_callback);
+    game.window->SetCallback(Voxel::Window::CallbackType::SCROLL, scroll_callback);
+    game.window->SetCallback(Voxel::Window::CallbackType::CURSOR, cursor_callback);
+
+    // Camera creation
+    game.camera = new Voxel::Camera(&size, 500.0f);
+    game.camera->SetPosition(glm::vec3(0, 0, 15));
+
+    // Renderer creation
+    game.renderer = new Voxel::Renderer(game.camera);
+    game.renderer->Init();
+
+    // Creating a mesh to draw with the renderer
+    Voxel::Mesh* m = new Voxel::Mesh(10, 10, 10);
+    for (int i = 0; i < 10; i++)
+    {
+        for (int j = 0; j < 10; j++)
+        {
+            for (int k = 0; k < 10; k++)
+            {
+                m->AddCube(glm::ivec3(i, j, k), glm::vec4(0.1f * i, 0.1f * j, 0.1f * k, 1.0f));
+            }
+        }
     }
 
-    delete game;
+    // Game loop
+    while (!game.window->ShouldClose())
+    {
+        // Clearing the screen and updating the renderer
+        // Todo: Move renderer->Clear() to window
+        game.renderer->Clear();
+        game.renderer->Update();
+
+        // Render/Draw the mesh
+        game.renderer->Render(m, Voxel::RenderType::VOXEL);
+
+        // Updating the window with the drawn screen
+        game.window->Update();
+    }
 
     // Cleanup.
-    glfwDestroyWindow(window);
-
-    glfwTerminate();
+    delete game.camera;
+    delete game.renderer;
+    delete game.window;
     exit(EXIT_SUCCESS);
 }
 
-static void error_callback(int error, const char* description)
+void key_callback(GLFWwindow* w, int key, int scancode, int action, int mods)
 {
-    fprintf(stderr, "Error: %s\n", description);
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        game.window->Close();
+
+    float cameraSpeed = 0.1f;
+    if (key == GLFW_KEY_LEFT || key == GLFW_KEY_A)
+        game.camera->Move(Voxel::Camera::Direction::LEFT, cameraSpeed);
+    if (key == GLFW_KEY_RIGHT || key == GLFW_KEY_D)
+        game.camera->Move(Voxel::Camera::Direction::RIGHT, cameraSpeed);
+    if (key == GLFW_KEY_UP || key == GLFW_KEY_W)
+        game.camera->Move(Voxel::Camera::Direction::FORWARD, cameraSpeed);
+    if (key == GLFW_KEY_DOWN || key == GLFW_KEY_S)
+        game.camera->Move(Voxel::Camera::Direction::BACKWARD, cameraSpeed);
+    if (key == GLFW_KEY_LEFT_SHIFT)
+        game.camera->Move(Voxel::Camera::Direction::DOWN, cameraSpeed);
+    if (key == GLFW_KEY_SPACE)
+        game.camera->Move(Voxel::Camera::Direction::UP, cameraSpeed);
 }
 
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void cursor_callback(GLFWwindow* w, double xPos, double yPos)
 {
-    game->HandleKeyInput(key, scancode, action, mods);
-}
-
-static void cursor_callback(GLFWwindow* window, double xPos, double yPos)
-{
-    game->HandleCursorPosition(xPos, yPos);
-}
-
-static void scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
-{
-    game->HandleScrollInput(xOffset, yOffset);
-}
-
-GLFWwindow* InitGlfwWindow(const unsigned int width, const unsigned int height, const std::string& title)
-{
-    const static int ANTI_ALIAS_SAMPLE_SIZE = 4;
-
-    GLFWwindow* window;
-
-    glfwSetErrorCallback(error_callback);
-
-    if (!glfwInit())
-        exit(EXIT_FAILURE);
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    glfwWindowHint(GLFW_SAMPLES, ANTI_ALIAS_SAMPLE_SIZE);
-
-    window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
-    if (!window)
+    const static float s_Sensitivity = 0.1f;
+    if (game.first_mouse)
     {
-        glfwTerminate();
-        exit(EXIT_FAILURE);
+        game.last_mouse = glm::vec2(xPos, yPos);
+        game.first_mouse = false;
     }
 
-    glfwSetKeyCallback(window, key_callback);
-    glfwSetCursorPosCallback(window, cursor_callback);
-    //glfwSetCursorPosCallBack(window, cursor_callback);
-    glfwSetScrollCallback(window, scroll_callback);
+    glm::vec2 offset = glm::vec2(xPos - game.last_mouse.x, game.last_mouse.y - yPos); // Y is reversed. (Y goes from top to bottom)
+    game.last_mouse = glm::vec2(xPos, yPos);
 
-    // Maybe GLFW_CURSOR_HIDDEN?
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    offset *= s_Sensitivity;
 
-    glfwMakeContextCurrent(window);
-    gladLoadGL(glfwGetProcAddress);
-    glfwSwapInterval(1);
+    game.camera->Mouse(offset);
+}
 
-    return window;
+void scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
+{
+    game.camera->Scroll(yOffset);
+}
+
+void error_callback(int error, const char* description)
+{
+    fprintf(stderr, "Error: %s\n", description);
 }

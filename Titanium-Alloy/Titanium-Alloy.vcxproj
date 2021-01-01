@@ -181,6 +181,7 @@
     <ClCompile Include="src\Game\Chunk\Chunk.cpp" />
     <ClCompile Include="src\Game\World\World.cpp" />
     <ClCompile Include="src\Voxel\src\Renderer\Transform.cpp" />
+    <ClCompile Include="src\Voxel\src\Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
@@ -338,6 +339,7 @@
     <ClInclude Include="src\Voxel\src\Mesh\MeshStore.h" />
     <ClInclude Include="src\Voxel\src\Renderer\RenderContext.h" />
     <ClInclude Include="src\Voxel\src\Renderer\Transform.h" />
+    <ClInclude Include="src\Voxel\src\Window\Window.h" />
     <ClInclude Include="src\Voxel\Voxel.h" />
     <ClInclude Include="src\Voxel\src\Mesh\Mesh.h" />
     <ClInclude Include="src\Voxel\src\Mesh\Quad.h" />
