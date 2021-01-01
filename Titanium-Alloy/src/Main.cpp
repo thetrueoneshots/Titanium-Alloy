@@ -5,6 +5,10 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+// Constants for the screensize
+const int WIDTH = 1280;
+const int HEIGHT = 720;
+
 // Game structure definition, could be moved to main.h
 struct Game
 {
@@ -12,12 +16,9 @@ struct Game
     Voxel::Camera* camera;
     Voxel::Renderer* renderer;
     bool first_mouse = false;
-    glm::vec2 last_mouse;
+    glm::vec2 last_mouse = glm::vec2(0, 0);
 };
 
-// Constants for the screensize
-const int WIDTH = 1280;
-const int HEIGHT = 720;
 
 // Game variable containing all variables needed to run the game
 Game game;
@@ -52,6 +53,7 @@ int main(void)
 
     // Creating a mesh to draw with the renderer
     Voxel::Mesh* m = new Voxel::Mesh(10, 10, 10);
+    m->GetTransForm()->Translate(glm::vec3(-10, -10, -10));
     for (int i = 0; i < 10; i++)
     {
         for (int j = 0; j < 10; j++)
@@ -63,6 +65,9 @@ int main(void)
         }
     }
 
+    // Testing out cub files
+    Voxel::Mesh* cub = Voxel::CubLoader::LoadMeshFromFile("plants/bush.cub");
+
     // Game loop
     while (!game.window->ShouldClose())
     {
@@ -72,6 +77,7 @@ int main(void)
 
         // Render/Draw the mesh
         game.renderer->Render(m, Voxel::RenderType::VOXEL);
+        game.renderer->Render(cub, Voxel::RenderType::VOXEL);
 
         // Updating the window with the drawn screen
         game.window->Update();
