@@ -28,6 +28,9 @@ namespace Voxel
 
 		bool ShouldClose();
 		void Close();
+
+		void SetTitle(const std::string& title);
+
 		double GetTime();
 
 		void Clear() const;
