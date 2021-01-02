@@ -1,5 +1,7 @@
 #include "Window.h"
 
+#include "glm/glm.hpp"
+
 Voxel::Window::Window(int width, int height, const std::string& name)
 	: m_Window(nullptr)
 {
@@ -65,6 +67,7 @@ void Voxel::Window::SetCallback(CallbackType t, void* callback)
 void Voxel::Window::Init(int width, int height, const std::string& name)
 {
     const static int ANTI_ALIAS_SAMPLE_SIZE = 4;
+    const static glm::vec4 s_ClearColor = glm::vec4(204 / 255.0f, 204 / 255.0f, 255 / 255.0f, 1.0f);
 
     if (!glfwInit())
         exit(EXIT_FAILURE);
@@ -93,5 +96,7 @@ void Voxel::Window::Init(int width, int height, const std::string& name)
     glfwMakeContextCurrent(m_Window);
     gladLoadGL(glfwGetProcAddress);
     glfwSwapInterval(1);
+
+    glClearColor(s_ClearColor.r, s_ClearColor.g, s_ClearColor.b, s_ClearColor.a);
 }
 

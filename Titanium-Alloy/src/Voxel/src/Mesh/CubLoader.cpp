@@ -39,7 +39,7 @@ Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const s
 	stream.read((char*)&h, sizeof(h));
 	bytes += sizeof(h);
 
-	sprintf_s(buffer, 250, "Cube size: %d, %d, %d", w, d, h);
+	sprintf_s(buffer, 250, "Cube size: %d, %d, %d", w, h, d);
 	std::cout << buffer << std::endl;
 
 	Mesh* m = new Mesh(w, h, d);
@@ -52,22 +52,19 @@ Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const s
 			for (int k = 0; k < w; k++)
 			{
 				unsigned char r, g, b;
-				Color c;
-				stream.read((char*)&c.r, sizeof(c.r));
-				stream.read((char*)&c.g, sizeof(c.g));
-				stream.read((char*)&c.b, sizeof(c.b));
 
-				bytes += sizeof(c.r) + sizeof(c.g) + sizeof(c.b);
-				r = c.r;
-				g = c.g;
-				b = c.b;
-				
-				counter++;
+				stream.read((char*)&r, sizeof(r));
+				stream.read((char*)&g, sizeof(g));
+				stream.read((char*)&b, sizeof(b));
+
+				bytes += sizeof(r) + sizeof(g) + sizeof(b);
 
 				if (r == 0 && g == 0 && b == 0)
 				{
 					continue;
 				}
+
+				counter++;
 
 				glm::vec4 color = glm::vec4(r, g, b, 255.0f) / 255.0f;
 				glm::ivec3 pos = glm::ivec3(k, i, j);
@@ -75,6 +72,8 @@ Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const s
 			}
 		}
 	}
+
+	std::cout << "Blocks added to the mesh: " << counter << std::endl;
 
 	sprintf_s(buffer, 250, "Amount of bytes read: %d", bytes);
 	std::cout << buffer << std::endl;

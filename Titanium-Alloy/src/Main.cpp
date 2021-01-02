@@ -5,19 +5,20 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+// Constants for the screensize
+const int WIDTH = 1280;
+const int HEIGHT = 720;
+
 // Game structure definition, could be moved to main.h
 struct Game
 {
     Voxel::Window* window;
     Voxel::Camera* camera;
     Voxel::Renderer* renderer;
-    bool first_mouse = false;
-    glm::vec2 last_mouse;
+    bool first_mouse = true;
+    glm::vec2 last_mouse = glm::vec2(0, 0);
 };
 
-// Constants for the screensize
-const int WIDTH = 1280;
-const int HEIGHT = 720;
 
 // Game variable containing all variables needed to run the game
 Game game;
@@ -52,6 +53,7 @@ int main(void)
 
     // Creating a mesh to draw with the renderer
     Voxel::Mesh* m = new Voxel::Mesh(10, 10, 10);
+    m->GetTransForm()->Translate(glm::vec3(-10, -10, -10));
     for (int i = 0; i < 10; i++)
     {
         for (int j = 0; j < 10; j++)
@@ -63,6 +65,35 @@ int main(void)
         }
     }
 
+    // Testing out cub files
+    std::vector<std::string> files = {
+        "plants/corn.cub",
+        "plants/cactus1.cub",  // Bugged for some reason, adding too many blocks to the mesh
+        "test_extre_width.cub",
+        "test_extre_height.cub",
+        "test_extre_depth.cub",
+        "plants/buckhorn.cub", // Bugged for some reason, not adding any blocks to the mesh
+        "plants/flower1.cub",
+        "extra/barrel.cub",
+        "extra/eternal-ember.cub",
+        "plants/herb3.cub",
+    };
+
+    std::vector<Voxel::Mesh*> meshes;
+
+    for (int i = 0; i < files.size(); i++)
+    {
+        Voxel::Mesh* cub = Voxel::CubLoader::LoadMeshFromFile(files.at(i));
+        if (cub == nullptr)
+        {
+            continue;
+        }
+        cub->ScaleToSize(1.0f);
+        cub->GetTransForm()->Translate(glm::vec3(3 * i, 0, 0));
+        meshes.push_back(cub);
+    }
+    
+
     // Game loop
     while (!game.window->ShouldClose())
     {
@@ -73,11 +104,23 @@ int main(void)
         // Render/Draw the mesh
         game.renderer->Render(m, Voxel::RenderType::VOXEL);
 
+        for (const auto& mesh : meshes)
+        {
+            game.renderer->Render(mesh, Voxel::RenderType::VOXEL);
+        }
+
         // Updating the window with the drawn screen
         game.window->Update();
     }
 
-    // Cleanup.
+    // Cleanup meshes
+    delete m;
+    for (const auto& mesh : meshes)
+    {
+        delete mesh;
+    }
+
+    // Cleanup framework
     delete game.camera;
     delete game.renderer;
     delete game.window;
