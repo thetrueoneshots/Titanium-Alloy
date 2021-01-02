@@ -25,6 +25,11 @@ void Voxel::Window::Close()
     glfwSetWindowShouldClose(m_Window, GLFW_TRUE);
 }
 
+void Voxel::Window::SetTitle(const std::string& title)
+{
+    glfwSetWindowTitle(m_Window, title.c_str());
+}
+
 double Voxel::Window::GetTime()
 {
 	return glfwGetTime();

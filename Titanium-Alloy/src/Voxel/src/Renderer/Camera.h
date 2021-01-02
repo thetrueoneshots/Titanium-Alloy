@@ -35,6 +35,7 @@ namespace Voxel
         * Getters
         */
         inline glm::vec3 GetPosition() const { return m_Position; }
+        inline glm::vec3 GetNormal() const { return m_Normal; }
 
         /*
         * Setters

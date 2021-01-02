@@ -8,14 +8,16 @@
 // Constants for the screensize
 const int WIDTH = 1280;
 const int HEIGHT = 720;
+const char* title = "Engine window";
 
 // Game structure definition, could be moved to main.h
 struct Game
 {
-    Voxel::Window* window;
-    Voxel::Camera* camera;
-    Voxel::Renderer* renderer;
+    Voxel::Window* window = nullptr;
+    Voxel::Camera* camera = nullptr;
+    Voxel::Renderer* renderer = nullptr;
     bool first_mouse = true;
+    double last_time = 0.0f;
     glm::vec2 last_mouse = glm::vec2(0, 0);
 };
 
@@ -35,7 +37,7 @@ int main(void)
     static glm::ivec2 size = glm::ivec2(WIDTH, HEIGHT);
 
     // Window creation
-    game.window = new Voxel::Window(WIDTH, HEIGHT, "Engine");
+    game.window = new Voxel::Window(WIDTH, HEIGHT, title);
 
     // Callback functions
     game.window->SetCallback(Voxel::Window::CallbackType::ERROR, error_callback);
@@ -92,11 +94,33 @@ int main(void)
         cub->GetTransForm()->Translate(glm::vec3(3 * i, 0, 0));
         meshes.push_back(cub);
     }
-    
 
     // Game loop
     while (!game.window->ShouldClose())
     {
+        // Frametime and fps calculation
+        static int count = 0;
+        static double time = 0.0f;
+
+        double curr_time = game.window->GetTime();
+        double frametime = curr_time - game.last_time;
+        game.last_time = curr_time;
+
+        time += frametime;
+        count++;
+    
+        if (time > 1.0f)
+        {
+            // Showing fps on the screen
+            char buffer[250];
+            sprintf_s(buffer, 250, "%s, Fps: %d", title, count);
+            game.window->SetTitle(buffer);
+
+            time = 0.0f;
+            count = 0;
+        }
+        
+
         // Clearing the screen and updating the renderer
         game.window->Clear();
         game.renderer->Update();
