@@ -238,5 +238,5 @@ int Voxel::Mesh::CheckBlock(unsigned int x, unsigned int y, unsigned int z)
 		return 0;
 	}
 
-	return m_Cubes[x][y][z].a == 255 ? 1 : 0;
+	return m_Cubes[x][y][z].a == 1.0f ? 1 : 0;
 }

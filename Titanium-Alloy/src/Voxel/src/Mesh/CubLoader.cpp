@@ -39,7 +39,7 @@ Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const s
 	stream.read((char*)&h, sizeof(h));
 	bytes += sizeof(h);
 
-	sprintf_s(buffer, 250, "Cube size: %d, %d, %d", w, d, h);
+	sprintf_s(buffer, 250, "Cube size: %d, %d, %d", w, h, d);
 	std::cout << buffer << std::endl;
 
 	Mesh* m = new Mesh(w, h, d);

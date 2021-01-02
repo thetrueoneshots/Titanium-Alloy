@@ -15,7 +15,7 @@ struct Game
     Voxel::Window* window;
     Voxel::Camera* camera;
     Voxel::Renderer* renderer;
-    bool first_mouse = false;
+    bool first_mouse = true;
     glm::vec2 last_mouse = glm::vec2(0, 0);
 };
 
@@ -68,9 +68,12 @@ int main(void)
     // Testing out cub files
     std::vector<std::string> files = {
         "plants/corn.cub",
-        //"plants/cactus1.cub",  // Bugged for some reason, adding too many blocks to the mesh
-        //"plants/buckhorn.cub", // Bugged for some reason, not adding any blocks to the mesh
-        "plants/coral.cub",
+        "plants/cactus1.cub",  // Bugged for some reason, adding too many blocks to the mesh
+        "test_extre_width.cub",
+        "test_extre_height.cub",
+        "test_extre_depth.cub",
+        "plants/buckhorn.cub", // Bugged for some reason, not adding any blocks to the mesh
+        "plants/flower1.cub",
         "extra/barrel.cub",
         "extra/eternal-ember.cub",
         "plants/herb3.cub",
@@ -110,7 +113,14 @@ int main(void)
         game.window->Update();
     }
 
-    // Cleanup.
+    // Cleanup meshes
+    delete m;
+    for (const auto& mesh : meshes)
+    {
+        delete mesh;
+    }
+
+    // Cleanup framework
     delete game.camera;
     delete game.renderer;
     delete game.window;
