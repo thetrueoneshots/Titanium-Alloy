@@ -67,22 +67,27 @@ int main(void)
         }
     }
 
-    Voxel::Animation a(*m->GetTransForm(), 10.0f);
+    Voxel::Animation a(*m->GetTransForm(), 5.0f);
     Voxel::Transform temp = *m->GetTransForm();
     temp.Translate(glm::vec3(0, 10, 0));
     temp.SetScale(0.01f);
-    temp.SetRotation(glm::vec3(glm::radians(45.0f), 0, 0));
-    a.InsertFrame({ 5.0f, temp });
+    temp.SetRotation(glm::vec3(glm::radians(180.0f), glm::radians(90.0f), glm::radians(360.0f)));
+    a.InsertFrame({ 1.0f, temp });
+
+    temp.Translate(glm::vec3(10, 0, 10));
+    temp.SetScale(0.05f);
+    temp.SetRotation(glm::vec3(0, 0, 0));
+    a.InsertFrame({ 2.0f, temp });
+
+    temp.Translate(glm::vec3(-10, 10, 10));
+    a.InsertFrame({ 3.0f, temp });
     a.Play();
 
     // Testing out cub files
     std::vector<std::string> files = {
         "plants/corn.cub",
-        "plants/cactus1.cub",  // Bugged for some reason, adding too many blocks to the mesh
-        "test_extre_width.cub",
-        "test_extre_height.cub",
-        "test_extre_depth.cub",
-        "plants/buckhorn.cub", // Bugged for some reason, not adding any blocks to the mesh
+        //"plants/cactus1.cub",  // Bugged for some reason, adding too many blocks to the mesh
+        //"plants/buckhorn.cub", // Bugged for some reason, not adding any blocks to the mesh
         "plants/flower1.cub",
         "extra/barrel.cub",
         "extra/eternal-ember.cub",

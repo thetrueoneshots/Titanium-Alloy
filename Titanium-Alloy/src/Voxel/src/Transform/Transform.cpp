@@ -17,9 +17,9 @@ Voxel::Transform Voxel::Transform::Interpolate(const Transform& t, float percent
 {
 	Transform tt;
 
-	glm::vec3 trans = percentage * t.GetTranslation() + (1 - percentage) * m_Translation;
-	glm::vec3 rot = percentage * t.GetRotation() + (1 - percentage) * m_Rotation;
-	glm::vec3 scale = percentage * t.GetScale() + (1 - percentage) * m_Scale;
+	glm::vec3 trans = (1 - percentage) * t.GetTranslation() + percentage * m_Translation;
+	glm::vec3 rot = (1 - percentage) * t.GetRotation() + percentage * m_Rotation;
+	glm::vec3 scale = (1 - percentage) * t.GetScale() + percentage * m_Scale;
 
 	tt.SetTranslation(trans);
 	tt.SetRotation(rot);
