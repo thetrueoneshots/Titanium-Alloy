@@ -127,8 +127,8 @@ int main(void)
             time = 0.0f;
             count = 0;
         }
-        
-        Voxel::Transform t = a.GetTransform(frametime);
+        a.UpdateTime(frametime);
+        Voxel::Transform t = a.GetTransform();
         m->GetTransForm()->SetRotation(t.GetRotation());
         m->GetTransForm()->SetTranslation(t.GetTranslation());
         m->GetTransForm()->SetScale(t.GetScale());
@@ -138,11 +138,11 @@ int main(void)
         g_Game.renderer->Update();
 
         // Render/Draw the mesh
-        g_Game.renderer->Render(m, Voxel::RenderType::VOXEL);
+        g_Game.renderer->Render(m);
 
         for (const auto& mesh : meshes)
         {
-            g_Game.renderer->Render(mesh, Voxel::RenderType::VOXEL);
+            g_Game.renderer->Render(mesh);
         }
 
         // Updating the window with the drawn screen

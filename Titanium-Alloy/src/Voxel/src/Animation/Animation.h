@@ -28,7 +28,8 @@ namespace Voxel
 
 		void InsertFrame(const AnimationFrame& frame);
 
-		Transform GetTransform(double timeElapsed);
+		void UpdateTime(double timeElapsed);
+		Transform GetTransform();
 		void Play();
 		void Pause();
 		void Reset();

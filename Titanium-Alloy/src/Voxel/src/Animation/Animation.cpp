@@ -28,29 +28,30 @@ void Voxel::Animation::InsertFrame(const AnimationFrame& frame)
 	m_Frames.push_back(frame);
 }
 
-Voxel::Transform Voxel::Animation::GetTransform(double timeElapsed)
+void Voxel::Animation::UpdateTime(double timeElapsed)
+{
+	if (m_Active)
+	{
+		m_Time += timeElapsed;
+	}
+
+	while (m_Time >= m_MaxTime && m_MaxTime > 0.0f)
+	{
+		m_Time -= m_MaxTime;
+	}
+}
+
+Voxel::Transform Voxel::Animation::GetTransform()
 {
 	if (m_Frames.size() == 0)
 	{
 		return m_Original;
 	}
 
-	
-	if (m_Active)
-	{
-		m_Time += timeElapsed;
-	}
-
-	double time = m_Time;
-	while (m_Time >= m_MaxTime)
-	{
-		m_Time -= m_MaxTime;
-	}
-
 	unsigned int currentIndex = 0;
 	for (int i = 0; i < m_Frames.size(); i++)
 	{
-		if (m_Frames.at(i).time >= time)
+		if (m_Frames.at(i).time >= m_Time)
 		{
 			break;
 		}
@@ -85,7 +86,7 @@ Voxel::Transform Voxel::Animation::GetTransform(double timeElapsed)
 	}
 	else
 	{
-		elapsed = (a2.time - time) / (a2.time - a1.time);
+		elapsed = (a2.time - m_Time) / (a2.time - a1.time);
 	}
 
 	return a1.t.Interpolate(a2.t, elapsed);
