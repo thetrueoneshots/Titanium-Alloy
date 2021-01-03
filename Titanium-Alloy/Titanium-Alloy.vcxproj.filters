@@ -69,9 +69,6 @@
     <ClCompile Include="src\Voxel\src\Mesh\Quad.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Voxel\src\Renderer\Transform.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Voxel\src\Renderer\RenderContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -82,6 +79,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Voxel\src\Mesh\MeshData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Voxel\src\Transform\Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1394,9 +1394,6 @@
     <ClInclude Include="src\Voxel\src\Mesh\Quad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Voxel\src\Renderer\Transform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Voxel\src\Mesh\DataTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1410,6 +1407,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Voxel\src\Mesh\MeshData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Voxel\src\Transform\Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

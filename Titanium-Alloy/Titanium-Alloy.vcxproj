@@ -176,7 +176,7 @@
     <ClCompile Include="src\vendor\stb\stb_image.cpp" />
     <ClCompile Include="src\Voxel\src\OpenGL\VertexArray.cpp" />
     <ClCompile Include="src\Voxel\src\OpenGL\VertexBuffer.cpp" />
-    <ClCompile Include="src\Voxel\src\Renderer\Transform.cpp" />
+    <ClCompile Include="src\Voxel\src\Transform\Transform.cpp" />
     <ClCompile Include="src\Voxel\src\Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -331,7 +331,7 @@
     <ClInclude Include="src\Voxel\src\Renderer\Frustum.h" />
     <ClInclude Include="src\Voxel\src\Mesh\MeshStore.h" />
     <ClInclude Include="src\Voxel\src\Renderer\RenderContext.h" />
-    <ClInclude Include="src\Voxel\src\Renderer\Transform.h" />
+    <ClInclude Include="src\Voxel\src\Transform\Transform.h" />
     <ClInclude Include="src\Voxel\src\Window\Window.h" />
     <ClInclude Include="src\Voxel\Voxel.h" />
     <ClInclude Include="src\Voxel\src\Mesh\Mesh.h" />
