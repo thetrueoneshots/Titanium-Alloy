@@ -6,9 +6,9 @@
 #include "glm/gtc/matrix_transform.hpp"
 
 // Constants for the screensize
-const int WIDTH = 1280;
-const int HEIGHT = 720;
-const char* title = "Engine window";
+const int g_Width = 1280;
+const int g_Height = 720;
+const char* g_Title = "Engine window";
 
 // Game structure definition, could be moved to main.h
 struct Game
@@ -23,7 +23,7 @@ struct Game
 
 
 // Game variable containing all variables needed to run the game
-Game game;
+Game g_Game;
 
 // Callback function definitions (needed, because otherwise we would not be able to assign them
 // with window->SetCallback )
@@ -34,24 +34,24 @@ void scroll_callback(GLFWwindow* window, double xOffset, double yOffset);
 
 int main(void)
 {
-    static glm::ivec2 size = glm::ivec2(WIDTH, HEIGHT);
+    static glm::ivec2 size = glm::ivec2(g_Width, g_Height);
 
     // Window creation
-    game.window = new Voxel::Window(WIDTH, HEIGHT, title);
+    g_Game.window = new Voxel::Window(g_Width, g_Height, g_Title);
 
     // Callback functions
-    game.window->SetCallback(Voxel::Window::CallbackType::ERROR, error_callback);
-    game.window->SetCallback(Voxel::Window::CallbackType::KEY, key_callback);
-    game.window->SetCallback(Voxel::Window::CallbackType::SCROLL, scroll_callback);
-    game.window->SetCallback(Voxel::Window::CallbackType::CURSOR, cursor_callback);
+    g_Game.window->SetCallback(Voxel::Window::CallbackType::ERROR, error_callback);
+    g_Game.window->SetCallback(Voxel::Window::CallbackType::KEY, key_callback);
+    g_Game.window->SetCallback(Voxel::Window::CallbackType::SCROLL, scroll_callback);
+    g_Game.window->SetCallback(Voxel::Window::CallbackType::CURSOR, cursor_callback);
 
     // Camera creation
-    game.camera = new Voxel::Camera(&size, 500.0f);
-    game.camera->SetPosition(glm::vec3(5, 5, 15));
+    g_Game.camera = new Voxel::Camera(&size, 500.0f);
+    g_Game.camera->SetPosition(glm::vec3(5, 5, 15));
 
     // Renderer creation
-    game.renderer = new Voxel::Renderer(game.camera);
-    game.renderer->Init();
+    g_Game.renderer = new Voxel::Renderer(g_Game.camera);
+    g_Game.renderer->Init();
 
     // Creating a mesh to draw with the renderer
     Voxel::Mesh* m = new Voxel::Mesh(10, 10, 10);
@@ -104,15 +104,15 @@ int main(void)
     }
 
     // Game loop
-    while (!game.window->ShouldClose())
+    while (!g_Game.window->ShouldClose())
     {
         // Frametime and fps calculation
         static int count = 0;
         static double time = 0.0f;
 
-        double curr_time = game.window->GetTime();
-        double frametime = curr_time - game.last_time;
-        game.last_time = curr_time;
+        double curr_time = g_Game.window->GetTime();
+        double frametime = curr_time - g_Game.last_time;
+        g_Game.last_time = curr_time;
 
         time += frametime;
         count++;
@@ -121,8 +121,8 @@ int main(void)
         {
             // Showing fps on the screen
             char buffer[250];
-            sprintf_s(buffer, 250, "%s, Fps: %d", title, count);
-            game.window->SetTitle(buffer);
+            sprintf_s(buffer, 250, "%s, Fps: %d", g_Title, count);
+            g_Game.window->SetTitle(buffer);
 
             time = 0.0f;
             count = 0;
@@ -134,19 +134,19 @@ int main(void)
         m->GetTransForm()->SetScale(t.GetScale());
 
         // Clearing the screen and updating the renderer
-        game.window->Clear();
-        game.renderer->Update();
+        g_Game.window->Clear();
+        g_Game.renderer->Update();
 
         // Render/Draw the mesh
-        game.renderer->Render(m, Voxel::RenderType::VOXEL);
+        g_Game.renderer->Render(m, Voxel::RenderType::VOXEL);
 
         for (const auto& mesh : meshes)
         {
-            game.renderer->Render(mesh, Voxel::RenderType::VOXEL);
+            g_Game.renderer->Render(mesh, Voxel::RenderType::VOXEL);
         }
 
         // Updating the window with the drawn screen
-        game.window->Update();
+        g_Game.window->Update();
     }
 
     // Cleanup meshes
@@ -157,52 +157,52 @@ int main(void)
     }
 
     // Cleanup framework
-    delete game.camera;
-    delete game.renderer;
-    delete game.window;
+    delete g_Game.camera;
+    delete g_Game.renderer;
+    delete g_Game.window;
     exit(EXIT_SUCCESS);
 }
 
 void key_callback(GLFWwindow* w, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        game.window->Close();
+        g_Game.window->Close();
 
     float cameraSpeed = 0.1f;
     if (key == GLFW_KEY_LEFT || key == GLFW_KEY_A)
-        game.camera->Move(Voxel::Camera::Direction::LEFT, cameraSpeed);
+        g_Game.camera->Move(Voxel::Camera::Direction::LEFT, cameraSpeed);
     if (key == GLFW_KEY_RIGHT || key == GLFW_KEY_D)
-        game.camera->Move(Voxel::Camera::Direction::RIGHT, cameraSpeed);
+        g_Game.camera->Move(Voxel::Camera::Direction::RIGHT, cameraSpeed);
     if (key == GLFW_KEY_UP || key == GLFW_KEY_W)
-        game.camera->Move(Voxel::Camera::Direction::FORWARD, cameraSpeed);
+        g_Game.camera->Move(Voxel::Camera::Direction::FORWARD, cameraSpeed);
     if (key == GLFW_KEY_DOWN || key == GLFW_KEY_S)
-        game.camera->Move(Voxel::Camera::Direction::BACKWARD, cameraSpeed);
+        g_Game.camera->Move(Voxel::Camera::Direction::BACKWARD, cameraSpeed);
     if (key == GLFW_KEY_LEFT_SHIFT)
-        game.camera->Move(Voxel::Camera::Direction::DOWN, cameraSpeed);
+        g_Game.camera->Move(Voxel::Camera::Direction::DOWN, cameraSpeed);
     if (key == GLFW_KEY_SPACE)
-        game.camera->Move(Voxel::Camera::Direction::UP, cameraSpeed);
+        g_Game.camera->Move(Voxel::Camera::Direction::UP, cameraSpeed);
 }
 
 void cursor_callback(GLFWwindow* w, double xPos, double yPos)
 {
     const static float s_Sensitivity = 0.1f;
-    if (game.first_mouse)
+    if (g_Game.first_mouse)
     {
-        game.last_mouse = glm::vec2(xPos, yPos);
-        game.first_mouse = false;
+        g_Game.last_mouse = glm::vec2(xPos, yPos);
+        g_Game.first_mouse = false;
     }
 
-    glm::vec2 offset = glm::vec2(xPos - game.last_mouse.x, game.last_mouse.y - yPos); // Y is reversed. (Y goes from top to bottom)
-    game.last_mouse = glm::vec2(xPos, yPos);
+    glm::vec2 offset = glm::vec2(xPos - g_Game.last_mouse.x, g_Game.last_mouse.y - yPos); // Y is reversed. (Y goes from top to bottom)
+    g_Game.last_mouse = glm::vec2(xPos, yPos);
 
     offset *= s_Sensitivity;
 
-    game.camera->Mouse(offset);
+    g_Game.camera->Mouse(offset);
 }
 
 void scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
 {
-    game.camera->Scroll(yOffset);
+    g_Game.camera->Scroll(yOffset);
 }
 
 void error_callback(int error, const char* description)
