@@ -67,21 +67,18 @@ int main(void)
         }
     }
 
-    Voxel::Animation a(Voxel::Transform(), 5.0f);
-    Voxel::Transform temp;// = *m->GetTransForm();
-    temp.Translate(glm::vec3(0, 10, 0));
-    temp.SetScale(0.01f);
-    temp.SetRotation(glm::vec3(glm::radians(180.0f), glm::radians(90.0f), glm::radians(360.0f)));
-    a.InsertFrame({ 1.0f, temp });
+    Voxel::Animation animation(5.0f);
 
-    temp.Translate(glm::vec3(10, 0, 10));
-    temp.SetScale(0.05f);
-    temp.SetRotation(glm::vec3(0, 0, 0));
-    a.InsertFrame({ 2.0f, temp });
+    Voxel::Transform temp;
 
-    temp.Translate(glm::vec3(-10, 10, 10));
-    a.InsertFrame({ 3.0f, temp });
-    a.Play();
+    temp.SetScale(0.1f);
+    temp.SetRotation(glm::vec3(0, glm::radians(360.0f), 0));
+    animation.InsertFrame({ 2.0f, temp });
+
+    temp.SetRotation(glm::vec3(glm::radians(360.0f), glm::radians(360.0f), 0));
+    animation.InsertFrame({ 3.0f, temp });
+
+    animation.Play();
 
     // Testing out cub files
     std::vector<std::string> files = {
@@ -133,26 +130,18 @@ int main(void)
             count = 0;
         }
 
-        a.UpdateTime(frametime);
+        animation.UpdateTime(frametime);
 
         // Clearing the screen and updating the renderer
         g_Game.window->Clear();
         g_Game.renderer->Update();
 
         // Render/Draw the mesh
-        //g_Game.renderer->AnimatedRender(m, &a);
-        Voxel::Transform t = m->GetTransForm()->Combine(a.GetTransform());
-
-        Voxel::Mesh mesh = Voxel::Mesh(m->GetMeshData());
-        mesh.GetTransForm()->SetRotation(t.GetRotation());
-        mesh.GetTransForm()->SetScale(t.GetScale());
-        mesh.GetTransForm()->SetTranslation(t.GetTranslation());
-
-        g_Game.renderer->Render(&mesh);
+        g_Game.renderer->AnimatedRender(m, &animation);
 
         for (const auto& mesh : meshes)
         {
-            g_Game.renderer->Render(mesh);
+            g_Game.renderer->AnimatedRender(mesh, &animation);
         }
 
         // Updating the window with the drawn screen

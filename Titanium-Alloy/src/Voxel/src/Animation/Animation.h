@@ -23,7 +23,7 @@ namespace Voxel
 		bool m_Active;
 		int m_Index;
 	public:
-		Animation(Transform original, double maxTime);
+		Animation(double maxTime);
 		~Animation();
 
 		void InsertFrame(const AnimationFrame& frame);

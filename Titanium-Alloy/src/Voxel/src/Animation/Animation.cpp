@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-Voxel::Animation::Animation(Transform original, double maxTime)
-	: m_MaxTime(maxTime), m_Time(0.0f), m_Original(original), m_Active(false), m_Index(0)
+Voxel::Animation::Animation(double maxTime)
+	: m_MaxTime(maxTime), m_Time(0.0f), m_Original(Transform()), m_Active(false), m_Index(0)
 {
 	InsertFrame({ 0.0f, m_Original });
 	InsertFrame({ maxTime, m_Original });

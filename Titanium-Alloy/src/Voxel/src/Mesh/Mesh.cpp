@@ -9,7 +9,7 @@ Voxel::Mesh::Mesh(const glm::ivec3& size, Transform* transform)
 	m_SharedData = false;
 	m_MeshData = new MeshData(size.x, size.y, size.z);
 
-	if (m_Transform != nullptr)
+	if (transform != nullptr)
 	{
 		m_SharedTransform = true;
 		m_Transform = transform;
@@ -26,7 +26,7 @@ Voxel::Mesh::Mesh(unsigned int w, unsigned int h, unsigned int d, Transform* tra
 	m_SharedData = false;
 	m_MeshData = new MeshData(w, h, d);
 
-	if (m_Transform != nullptr)
+	if (transform != nullptr)
 	{
 		m_SharedTransform = true;
 		m_Transform = transform;
@@ -51,7 +51,7 @@ Voxel::Mesh::Mesh(MeshData* data, Transform* transform)
 		m_MeshData = new MeshData(0, 0, 0);
 	}
 
-	if (m_Transform != nullptr)
+	if (transform != nullptr)
 	{
 		m_SharedTransform = true;
 		m_Transform = transform;
