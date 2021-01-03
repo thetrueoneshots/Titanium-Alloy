@@ -13,12 +13,34 @@ Voxel::Transform::~Transform()
 {
 }
 
-Voxel::Transform Voxel::Transform::Interpolate(const Transform& t, float percentage)
+/*
+* Interpolates both transforms based on the percentage.
+* Note: If fullRotations is disabled, a rotation of 360 degrees or more is capped back to a single rotation.
+*/
+Voxel::Transform Voxel::Transform::Interpolate(const Transform& t, float percentage, bool fullRotations)
 {
 	Transform tt;
 
 	glm::vec3 trans = (1 - percentage) * t.GetTranslation() + percentage * m_Translation;
-	glm::vec3 rot = (1 - percentage) * t.GetRotation() + percentage * m_Rotation;
+
+	glm::vec3 rot;
+
+	if (!fullRotations)
+	{
+		float twoPi = 6.28f;
+		glm::vec3 moduloOldRotation = glm::vec3(
+			std::fmod(m_Rotation.x, twoPi),
+			std::fmod(m_Rotation.y, twoPi),
+			std::fmod(m_Rotation.z, twoPi)
+		);
+
+		rot = (1 - percentage) * t.GetRotation() + percentage * moduloOldRotation;
+	}
+	else
+	{
+		rot = (1 - percentage) * t.GetRotation() + percentage * m_Rotation;
+	}
+	
 	glm::vec3 scale = (1 - percentage) * t.GetScale() + percentage * m_Scale;
 
 	tt.SetTranslation(trans);
@@ -28,9 +50,9 @@ Voxel::Transform Voxel::Transform::Interpolate(const Transform& t, float percent
 	return tt;
 }
 
-Voxel::Transform Voxel::Transform::Interpolate(Transform* t, float percentage)
+Voxel::Transform Voxel::Transform::Interpolate(Transform* t, float percentage, bool fullRotations)
 {
-	return Interpolate(*t, percentage);
+	return Interpolate(*t, percentage, fullRotations);
 }
 
 Voxel::Transform Voxel::Transform::Combine(const Transform& t)

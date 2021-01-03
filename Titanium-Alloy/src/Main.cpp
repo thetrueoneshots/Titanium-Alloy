@@ -67,16 +67,20 @@ int main(void)
         }
     }
 
-    Voxel::Animation animation(5.0f);
+    Voxel::Animation animation(6.0f);
 
     Voxel::Transform temp;
 
-    temp.SetScale(0.1f);
-    temp.SetRotation(glm::vec3(0, glm::radians(360.0f), 0));
+    temp.SetScale(0.5f);
+    temp.SetRotation(glm::vec3(0, glm::radians(360.0f), -glm::radians(45.0f)));
     animation.InsertFrame({ 2.0f, temp });
 
-    temp.SetRotation(glm::vec3(glm::radians(360.0f), glm::radians(360.0f), 0));
+    temp.SetScale(1.0f);
     animation.InsertFrame({ 3.0f, temp });
+
+    temp.SetScale(0.5f);
+    temp.SetRotation(glm::vec3(0, -glm::radians(360.0f), glm::radians(45.0f)));
+    animation.InsertFrame({ 4.0f, temp });
 
     animation.Play();
 

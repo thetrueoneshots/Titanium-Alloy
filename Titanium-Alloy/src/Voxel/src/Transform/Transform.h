@@ -43,8 +43,8 @@ namespace Voxel
 		/*
 		* Logic
 		*/
-		Transform Interpolate(const Transform& t, float percentage);
-		Transform Interpolate(Transform* t, float percentage);
+		Transform Interpolate(const Transform& t, float percentage, bool fullRotations = false);
+		Transform Interpolate(Transform* t, float percentage, bool fullRotations = false);
 		Transform Combine(const Transform& t);
 		Transform Combine(Transform* t);
 		glm::mat4 CalculateModelMatrix();
