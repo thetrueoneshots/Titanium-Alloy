@@ -41,7 +41,7 @@ void Voxel::Renderer::Update()
 
 void Voxel::Renderer::Render(Mesh* mesh, RenderContext* context) const
 {
-	RenderData* data = mesh->GetRenderData();
+	RenderData* data = mesh->GetMeshData()->CalculateRenderData();
 	context->SetData(data);
 
 	Shader* s = context->GetShader();
@@ -68,7 +68,7 @@ void Voxel::Renderer::Render(Mesh* mesh, RenderType t) const
 
 void Voxel::Renderer::BatchRender(const std::vector<Transform*>& transforms, Mesh* mesh, RenderContext* context) const
 {
-	RenderData* data = mesh->GetRenderData();
+	RenderData* data = mesh->GetMeshData()->CalculateRenderData();
 	context->SetData(data);
 
 	Shader* s = context->GetShader();

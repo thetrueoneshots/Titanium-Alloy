@@ -62,7 +62,7 @@ int main(void)
         {
             for (int k = 0; k < 10; k++)
             {
-                m->AddCube(glm::ivec3(i, j, k), glm::vec4(0.1f * i, 0.1f * j, 0.1f * k, 1.0f));
+                m->GetMeshData()->AddCube(glm::ivec3(i, j, k), glm::vec4(0.1f * i, 0.1f * j, 0.1f * k, 1.0f));
             }
         }
     }
