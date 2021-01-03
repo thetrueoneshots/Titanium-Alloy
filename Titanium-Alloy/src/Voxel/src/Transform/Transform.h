@@ -29,7 +29,7 @@ namespace Voxel
 		inline void SetScale(float scale) { SetScale(glm::vec3(scale)); }
 		inline void SetScale(const glm::vec3& scale) { m_Scale = scale; m_Updated = true; }
 		inline void Scale(float scale) { Scale(glm::vec3(scale)); }
-		inline void Scale(const glm::vec3& scale) { m_Scale += scale; m_Updated = true; }
+		inline void Scale(const glm::vec3& scale) { m_Scale *= scale; m_Updated = true; }
 		inline void SetRotation(const glm::vec3& rotation) { m_Rotation = rotation; m_Updated = true; }		// Rotation is radians!
 		inline void Rotate(const glm::vec3& rotation) { m_Rotation += rotation; m_Updated = true; }			// Rotation is radians!
 

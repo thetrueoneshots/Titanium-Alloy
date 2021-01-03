@@ -25,15 +25,15 @@ namespace Voxel
 		MeshData* m_MeshData;
 		bool m_SharedData;
 		Transform* m_Transform;
-		Animation* m_Animation;
+		bool m_SharedTransform;
 	public:
 		/*
 		* Constructors and deconstructor
 		* Todo: Constructor with MeshData
 		*/
-		Mesh(const glm::ivec3& size, Transform* transform = new Transform);
-		Mesh(unsigned int w, unsigned int h, unsigned int d, Transform* transform = new Transform);
-		Mesh(MeshData* data, Transform* transform = new Transform);
+		Mesh(const glm::ivec3& size, Transform* transform = nullptr);
+		Mesh(unsigned int w, unsigned int h, unsigned int d, Transform* transform = nullptr);
+		Mesh(MeshData* data, Transform* transform = nullptr);
 		~Mesh();
 
 		/*
@@ -41,15 +41,12 @@ namespace Voxel
 		*/
 		inline Transform* GetTransForm() const { return m_Transform; }
 		inline MeshData* GetMeshData() const { return m_MeshData; }
-		inline Animation* GetAnimation() const { return m_Animation; }
 
 		/*
 		* Setters
 		*/
 		inline void SetTransform(Transform* transform, bool cleanup = true) { if (cleanup) delete m_Transform; m_Transform = transform; }
 		inline void SetMeshData(MeshData* data, bool cleanup = true) { if (cleanup) delete m_MeshData; m_MeshData = data; }
-		// The extra check for the existence of m_Animation is because not every mesh has an animation.
-		inline void SetAnimation(Animation* animation, bool cleanup = true) { if (cleanup && m_Animation) delete m_Animation; m_Animation = animation; }
 
 		/*
 		* Scaling the mesh to a certain block size

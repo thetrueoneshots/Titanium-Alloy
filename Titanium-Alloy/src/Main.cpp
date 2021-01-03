@@ -67,8 +67,8 @@ int main(void)
         }
     }
 
-    Voxel::Animation a(*m->GetTransForm(), 5.0f);
-    Voxel::Transform temp = *m->GetTransForm();
+    Voxel::Animation a(Voxel::Transform(), 5.0f);
+    Voxel::Transform temp;// = *m->GetTransForm();
     temp.Translate(glm::vec3(0, 10, 0));
     temp.SetScale(0.01f);
     temp.SetRotation(glm::vec3(glm::radians(180.0f), glm::radians(90.0f), glm::radians(360.0f)));
@@ -132,18 +132,23 @@ int main(void)
             time = 0.0f;
             count = 0;
         }
+
         a.UpdateTime(frametime);
-        Voxel::Transform t = a.GetTransform();
-        m->GetTransForm()->SetRotation(t.GetRotation());
-        m->GetTransForm()->SetTranslation(t.GetTranslation());
-        m->GetTransForm()->SetScale(t.GetScale());
 
         // Clearing the screen and updating the renderer
         g_Game.window->Clear();
         g_Game.renderer->Update();
 
         // Render/Draw the mesh
-        g_Game.renderer->Render(m);
+        //g_Game.renderer->AnimatedRender(m, &a);
+        Voxel::Transform t = m->GetTransForm()->Combine(a.GetTransform());
+
+        Voxel::Mesh mesh = Voxel::Mesh(m->GetMeshData());
+        mesh.GetTransForm()->SetRotation(t.GetRotation());
+        mesh.GetTransForm()->SetScale(t.GetScale());
+        mesh.GetTransForm()->SetTranslation(t.GetTranslation());
+
+        g_Game.renderer->Render(&mesh);
 
         for (const auto& mesh : meshes)
         {

@@ -9,9 +9,16 @@ Voxel::Mesh::Mesh(const glm::ivec3& size, Transform* transform)
 	m_SharedData = false;
 	m_MeshData = new MeshData(size.x, size.y, size.z);
 
-	m_Transform = transform;
-
-	m_Animation = nullptr;
+	if (m_Transform != nullptr)
+	{
+		m_SharedTransform = true;
+		m_Transform = transform;
+	}
+	else
+	{
+		m_SharedTransform = false;
+		m_Transform = new Transform;
+	}
 }
 
 Voxel::Mesh::Mesh(unsigned int w, unsigned int h, unsigned int d, Transform* transform)
@@ -19,9 +26,16 @@ Voxel::Mesh::Mesh(unsigned int w, unsigned int h, unsigned int d, Transform* tra
 	m_SharedData = false;
 	m_MeshData = new MeshData(w, h, d);
 
-	m_Transform = transform;
-
-	m_Animation = nullptr;
+	if (m_Transform != nullptr)
+	{
+		m_SharedTransform = true;
+		m_Transform = transform;
+	}
+	else
+	{
+		m_SharedTransform = false;
+		m_Transform = new Transform;
+	}
 }
 
 Voxel::Mesh::Mesh(MeshData* data, Transform* transform)
@@ -39,20 +53,27 @@ Voxel::Mesh::Mesh(MeshData* data, Transform* transform)
 
 	if (m_Transform != nullptr)
 	{
+		m_SharedTransform = true;
 		m_Transform = transform;
 	}
 	else
 	{
+		m_SharedTransform = false;
 		m_Transform = new Transform;
 	}
-
-	m_Animation = nullptr;
 }
 
 Voxel::Mesh::~Mesh()
 {
-	delete m_Transform;
-	delete m_MeshData;
+	if (!m_SharedTransform)
+	{
+		delete m_Transform;
+	}
+	
+	if (!m_SharedData)
+	{
+		delete m_MeshData;
+	}
 }
 
 void Voxel::Mesh::ScaleToSize(float scale, bool keepRatio)

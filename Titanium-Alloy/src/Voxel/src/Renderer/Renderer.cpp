@@ -103,3 +103,23 @@ void Voxel::Renderer::BatchRender(const std::vector<Transform*>& transforms, Mes
 		break;
 	}
 }
+
+void Voxel::Renderer::AnimatedRender(Mesh* mesh, Animation* animation, RenderContext* context) const
+{
+	Transform t = mesh->GetTransForm()->Combine(animation->GetTransform());
+	Mesh m = Mesh(mesh->GetMeshData(), &t);
+	Render(&m, context);
+}
+
+void Voxel::Renderer::AnimatedRender(Mesh* mesh, Animation* animation, RenderType t) const
+{
+	switch (t)
+	{
+	case RenderType::VOXEL:
+		AnimatedRender(mesh, animation, m_VoxelContext);
+		break;
+	default:
+		AnimatedRender(mesh, animation, m_VoxelContext);
+		break;
+	}
+}

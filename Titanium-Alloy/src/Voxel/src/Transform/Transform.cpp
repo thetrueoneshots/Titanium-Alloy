@@ -38,7 +38,7 @@ Voxel::Transform Voxel::Transform::Combine(const Transform& t)
 	Transform tt;
 	tt.SetRotation(m_Rotation + t.GetRotation());
 	tt.SetTranslation(m_Translation + t.GetTranslation());
-	tt.SetScale(m_Scale + t.GetScale());
+	tt.SetScale(m_Scale * t.GetScale());
 
 	return tt;
 }
