@@ -8,6 +8,8 @@
 * use the framework.
 */
 
+#include "src/Animation/Animation.h"
+
 #include "src/Mesh/CubLoader.h"
 #include "src/Mesh/Mesh.h"
 

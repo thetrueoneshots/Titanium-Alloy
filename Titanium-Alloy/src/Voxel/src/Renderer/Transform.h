@@ -43,6 +43,8 @@ namespace Voxel
 		/*
 		* Logic
 		*/
+		Transform Interpolate(const Transform& t, float percentage);
+		Transform Interpolate(Transform* t, float percentage);
 		glm::mat4 CalculateModelMatrix();
 
 		// Todo: [ glm::vec3 CalculateNormal() ]

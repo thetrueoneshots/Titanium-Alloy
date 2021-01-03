@@ -13,6 +13,26 @@ Voxel::Transform::~Transform()
 {
 }
 
+Voxel::Transform Voxel::Transform::Interpolate(const Transform& t, float percentage)
+{
+	Transform tt;
+
+	glm::vec3 trans = percentage * t.GetTranslation() + (1 - percentage) * m_Translation;
+	glm::vec3 rot = percentage * t.GetRotation() + (1 - percentage) * m_Rotation;
+	glm::vec3 scale = percentage * t.GetScale() + (1 - percentage) * m_Scale;
+
+	tt.SetTranslation(trans);
+	tt.SetRotation(rot);
+	tt.SetScale(scale);
+
+	return tt;
+}
+
+Voxel::Transform Voxel::Transform::Interpolate(Transform* t, float percentage)
+{
+	return Interpolate(*t, percentage);
+}
+
 glm::mat4 Voxel::Transform::CalculateModelMatrix()
 {
 	if (!m_Updated)

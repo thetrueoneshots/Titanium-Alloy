@@ -67,6 +67,14 @@ int main(void)
         }
     }
 
+    Voxel::Animation a(*m->GetTransForm(), 10.0f);
+    Voxel::Transform temp = *m->GetTransForm();
+    temp.Translate(glm::vec3(0, 10, 0));
+    temp.SetScale(0.01f);
+    temp.SetRotation(glm::vec3(glm::radians(45.0f), 0, 0));
+    a.InsertFrame({ 5.0f, temp });
+    a.Play();
+
     // Testing out cub files
     std::vector<std::string> files = {
         "plants/corn.cub",
@@ -120,6 +128,10 @@ int main(void)
             count = 0;
         }
         
+        Voxel::Transform t = a.GetTransform(frametime);
+        m->GetTransForm()->SetRotation(t.GetRotation());
+        m->GetTransForm()->SetTranslation(t.GetTranslation());
+        m->GetTransForm()->SetScale(t.GetScale());
 
         // Clearing the screen and updating the renderer
         game.window->Clear();

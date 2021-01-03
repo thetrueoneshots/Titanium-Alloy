@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClCompile Include="..\Dependencies\glad\src\gl.c" />
     <ClCompile Include="src\legacy\Game\Chunk\ObjectMap.cpp" />
+    <ClCompile Include="src\Voxel\src\Animation\Animation.cpp" />
     <ClCompile Include="src\Voxel\src\Renderer\Camera.cpp" />
     <ClCompile Include="src\legacy\Game\Game.cpp" />
     <ClCompile Include="src\legacy\Game\World\WorldGenerator.cpp" />
@@ -327,6 +328,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\legacy\Game\Chunk\ObjectMap.h" />
+    <ClInclude Include="src\Voxel\src\Animation\Animation.h" />
     <ClInclude Include="src\Voxel\src\Mesh\DataTypes.h" />
     <ClInclude Include="src\Voxel\src\Renderer\Camera.h" />
     <ClInclude Include="src\legacy\Game\Game.h" />
