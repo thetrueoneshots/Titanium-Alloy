@@ -33,6 +33,21 @@ Voxel::Transform Voxel::Transform::Interpolate(Transform* t, float percentage)
 	return Interpolate(*t, percentage);
 }
 
+Voxel::Transform Voxel::Transform::Combine(const Transform& t)
+{
+	Transform tt;
+	tt.SetRotation(m_Rotation + t.GetRotation());
+	tt.SetTranslation(m_Translation + t.GetTranslation());
+	tt.SetScale(m_Scale + t.GetScale());
+
+	return tt;
+}
+
+Voxel::Transform Voxel::Transform::Combine(Transform* t)
+{
+	return Combine(*t);
+}
+
 glm::mat4 Voxel::Transform::CalculateModelMatrix()
 {
 	if (!m_Updated)
