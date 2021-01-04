@@ -23,7 +23,8 @@ namespace Voxel
 			ERROR,
 			KEY,
 			CURSOR,
-			SCROLL
+			SCROLL,
+			MOUSE_BUTTON,
 		};
 
 		bool ShouldClose();
@@ -32,6 +33,8 @@ namespace Voxel
 		void SetTitle(const std::string& title);
 
 		double GetTime();
+
+		inline GLFWwindow* GetGlfwWindow() { return m_Window; }
 
 		void Clear() const;
 		void Update();

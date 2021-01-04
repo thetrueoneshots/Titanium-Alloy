@@ -84,6 +84,12 @@
     <ClCompile Include="src\Voxel\src\Transform\Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Voxel\src\Collision\Box.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Voxel\src\Collision\Line.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Basic.shader" />
@@ -1410,6 +1416,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Voxel\src\Transform\Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Voxel\src\Collision\Box.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Voxel\src\Collision\Collider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Voxel\src\Collision\RayCast.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Voxel\src\Collision\Line.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -10,6 +10,8 @@ const int g_Width = 1280;
 const int g_Height = 720;
 const char* g_Title = "Engine window";
 
+int g_Counter = 0;
+
 // Game structure definition, could be moved to main.h
 struct Game
 {
@@ -30,6 +32,7 @@ Game g_Game;
 void error_callback(int error, const char* description);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void cursor_callback(GLFWwindow* window, double xPos, double yPos);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xOffset, double yOffset);
 
 int main(void)
@@ -44,6 +47,7 @@ int main(void)
     g_Game.window->SetCallback(Voxel::Window::CallbackType::KEY, key_callback);
     g_Game.window->SetCallback(Voxel::Window::CallbackType::SCROLL, scroll_callback);
     g_Game.window->SetCallback(Voxel::Window::CallbackType::CURSOR, cursor_callback);
+    g_Game.window->SetCallback(Voxel::Window::CallbackType::MOUSE_BUTTON, mouse_button_callback);
 
     // Camera creation
     g_Game.camera = new Voxel::Camera(&size, 500.0f);
@@ -67,6 +71,8 @@ int main(void)
         }
     }
 
+    
+    // Test animations
     Voxel::Animation animation(6.0f);
 
     Voxel::Transform temp;
@@ -82,7 +88,7 @@ int main(void)
     temp.SetRotation(glm::vec3(0, -glm::radians(360.0f), glm::radians(45.0f)));
     animation.InsertFrame({ 4.0f, temp });
 
-    animation.Play();
+    //animation.Play();
 
     // Testing out cub files
     std::vector<std::string> files = {
@@ -107,6 +113,21 @@ int main(void)
         cub->ScaleToSize(1.0f);
         cub->GetTransForm()->Translate(glm::vec3(3 * i, 0, 0));
         meshes.push_back(cub);
+    }
+
+    Voxel::Box box1(0, 0, 0, 10, 10, 10);
+    Voxel::Box box2(9.9f, 9.9f, 9.9f, 15, 15, 15);
+
+    if (Voxel::Collider::Collision(box1, box2))
+    {
+        std::cout << "Box Collision!" << std::endl;
+    }
+
+    Voxel::Line line1(glm::vec3(-1, -1, -1), glm::vec3(1, 1, 1));
+    
+    if (Voxel::Collider::Collision(line1, box1))
+    {
+        std::cout << "Line Box Collision" << std::endl;
     }
 
     // Game loop
@@ -201,7 +222,24 @@ void cursor_callback(GLFWwindow* w, double xPos, double yPos)
     offset *= s_Sensitivity;
 
     g_Game.camera->Mouse(offset);
+
+    
 }
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+    {
+        Voxel::Line l(g_Game.camera->GetPosition(), g_Game.camera->GetNormal());
+        Voxel::Box b(-10, -10, -10, 0, 0, 0);
+
+        if (Voxel::Collider::Collision(l, b))
+        {
+            std::cout << g_Counter++ << " ## Collision ##" << std::endl << std::endl;
+        }
+    }
+}
+
 
 void scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
 {
