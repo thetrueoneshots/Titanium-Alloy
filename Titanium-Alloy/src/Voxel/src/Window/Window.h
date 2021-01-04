@@ -23,7 +23,8 @@ namespace Voxel
 			ERROR,
 			KEY,
 			CURSOR,
-			SCROLL
+			SCROLL,
+			MOUSE_BUTTON,
 		};
 
 		bool ShouldClose();

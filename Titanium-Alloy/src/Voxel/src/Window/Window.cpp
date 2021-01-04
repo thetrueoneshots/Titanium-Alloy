@@ -66,6 +66,8 @@ void Voxel::Window::SetCallback(CallbackType t, void* callback)
     case CallbackType::SCROLL:
         glfwSetScrollCallback(m_Window, (GLFWscrollfun)callback);
         break;
+    case CallbackType::MOUSE_BUTTON:
+        glfwSetMouseButtonCallback(m_Window, (GLFWmousebuttonfun)callback);
     }
 }
 

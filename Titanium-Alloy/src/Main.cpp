@@ -47,9 +47,7 @@ int main(void)
     g_Game.window->SetCallback(Voxel::Window::CallbackType::KEY, key_callback);
     g_Game.window->SetCallback(Voxel::Window::CallbackType::SCROLL, scroll_callback);
     g_Game.window->SetCallback(Voxel::Window::CallbackType::CURSOR, cursor_callback);
-
-    // Todo: Add to a callbacktype
-    glfwSetMouseButtonCallback(g_Game.window->GetGlfwWindow(), mouse_button_callback);
+    g_Game.window->SetCallback(Voxel::Window::CallbackType::MOUSE_BUTTON, mouse_button_callback);
 
     // Camera creation
     g_Game.camera = new Voxel::Camera(&size, 500.0f);
