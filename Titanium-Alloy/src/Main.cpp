@@ -32,6 +32,7 @@ Game g_Game;
 void error_callback(int error, const char* description);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void cursor_callback(GLFWwindow* window, double xPos, double yPos);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xOffset, double yOffset);
 
 int main(void)
@@ -46,6 +47,9 @@ int main(void)
     g_Game.window->SetCallback(Voxel::Window::CallbackType::KEY, key_callback);
     g_Game.window->SetCallback(Voxel::Window::CallbackType::SCROLL, scroll_callback);
     g_Game.window->SetCallback(Voxel::Window::CallbackType::CURSOR, cursor_callback);
+
+    // Todo: Add to a callbacktype
+    glfwSetMouseButtonCallback(g_Game.window->GetGlfwWindow(), mouse_button_callback);
 
     // Camera creation
     g_Game.camera = new Voxel::Camera(&size, 500.0f);
@@ -221,14 +225,23 @@ void cursor_callback(GLFWwindow* w, double xPos, double yPos)
 
     g_Game.camera->Mouse(offset);
 
-    Voxel::Line l(g_Game.camera->GetPosition(), g_Game.camera->GetNormal());
-    Voxel::Box b(-10, -10, -10, 0, 0, 0);
+    
+}
 
-    if (Voxel::Collider::Collision(l, b))
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
     {
-        std::cout << g_Counter++ << " ## Collision ##" << std::endl << std::endl;
+        Voxel::Line l(g_Game.camera->GetPosition(), g_Game.camera->GetNormal());
+        Voxel::Box b(-10, -10, -10, 0, 0, 0);
+
+        if (Voxel::Collider::Collision(l, b))
+        {
+            std::cout << g_Counter++ << " ## Collision ##" << std::endl << std::endl;
+        }
     }
 }
+
 
 void scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
 {

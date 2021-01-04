@@ -33,6 +33,8 @@ namespace Voxel
 
 		double GetTime();
 
+		inline GLFWwindow* GetGlfwWindow() { return m_Window; }
+
 		void Clear() const;
 		void Update();
 
