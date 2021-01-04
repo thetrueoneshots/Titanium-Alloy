@@ -10,6 +10,8 @@
 
 #include "src/Animation/Animation.h"
 
+#include "src/Collision/Collider.h"
+
 #include "src/Mesh/CubLoader.h"
 #include "src/Mesh/Mesh.h"
 

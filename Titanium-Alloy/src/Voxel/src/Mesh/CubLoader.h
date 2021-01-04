@@ -17,5 +17,8 @@ namespace Voxel
 	{
 	public:
 		static Voxel::Mesh* LoadMeshFromFile(const std::string& file, const std::string& path = "res/cub/");
+	private:
+		CubLoader() {}
+		~CubLoader() {}
 	};
 }

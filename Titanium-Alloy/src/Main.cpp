@@ -67,6 +67,8 @@ int main(void)
         }
     }
 
+    
+    // Test animations
     Voxel::Animation animation(6.0f);
 
     Voxel::Transform temp;
@@ -107,6 +109,14 @@ int main(void)
         cub->ScaleToSize(1.0f);
         cub->GetTransForm()->Translate(glm::vec3(3 * i, 0, 0));
         meshes.push_back(cub);
+    }
+
+    Voxel::Box box1(0, 0, 0, 10, 10, 10);
+    Voxel::Box box2(9.9f, 9.9f, 9.9f, 15, 15, 15);
+
+    if (Voxel::Collider::Collision(box1, box2))
+    {
+        std::cout << "Collision!" << std::endl;
     }
 
     // Game loop
