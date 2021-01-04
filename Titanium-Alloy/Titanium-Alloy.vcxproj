@@ -158,6 +158,7 @@
     <ClCompile Include="..\Dependencies\glad\src\gl.c" />
     <ClCompile Include="src\Voxel\src\Animation\Animation.cpp" />
     <ClCompile Include="src\Voxel\src\Collision\Box.cpp" />
+    <ClCompile Include="src\Voxel\src\Collision\Line.cpp" />
     <ClCompile Include="src\Voxel\src\Mesh\MeshData.cpp" />
     <ClCompile Include="src\Voxel\src\Renderer\Camera.cpp" />
     <ClCompile Include="src\Voxel\src\Mesh\Cube.cpp" />
@@ -326,6 +327,7 @@
     <ClInclude Include="src\Voxel\src\Animation\Animation.h" />
     <ClInclude Include="src\Voxel\src\Collision\Box.h" />
     <ClInclude Include="src\Voxel\src\Collision\Collider.h" />
+    <ClInclude Include="src\Voxel\src\Collision\Line.h" />
     <ClInclude Include="src\Voxel\src\Collision\RayCast.h" />
     <ClInclude Include="src\Voxel\src\Mesh\DataTypes.h" />
     <ClInclude Include="src\Voxel\src\Mesh\MeshData.h" />

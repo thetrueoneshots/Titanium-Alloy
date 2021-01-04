@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Box.h"
+#include "Line.h"
 
 namespace Voxel
 {
@@ -39,4 +40,17 @@ namespace Voxel
 	{
 		return t1.CollidesWith(t2);
 	}
+
+	template <>
+	inline bool Collider::Collision(Line t1, Box t2)
+	{
+		return t1.CollidesWith(t2);
+	}
+
+	template <>
+	inline bool Collider::Collision(Box t1, Line t2)
+	{
+		return t2.CollidesWith(t1);
+	}
+
 }

@@ -10,6 +10,8 @@ const int g_Width = 1280;
 const int g_Height = 720;
 const char* g_Title = "Engine window";
 
+int g_Counter = 0;
+
 // Game structure definition, could be moved to main.h
 struct Game
 {
@@ -84,7 +86,7 @@ int main(void)
     temp.SetRotation(glm::vec3(0, -glm::radians(360.0f), glm::radians(45.0f)));
     animation.InsertFrame({ 4.0f, temp });
 
-    animation.Play();
+    //animation.Play();
 
     // Testing out cub files
     std::vector<std::string> files = {
@@ -116,7 +118,14 @@ int main(void)
 
     if (Voxel::Collider::Collision(box1, box2))
     {
-        std::cout << "Collision!" << std::endl;
+        std::cout << "Box Collision!" << std::endl;
+    }
+
+    Voxel::Line line1(glm::vec3(-1, -1, -1), glm::vec3(1, 1, 1));
+    
+    if (Voxel::Collider::Collision(line1, box1))
+    {
+        std::cout << "Line Box Collision" << std::endl;
     }
 
     // Game loop
@@ -211,6 +220,14 @@ void cursor_callback(GLFWwindow* w, double xPos, double yPos)
     offset *= s_Sensitivity;
 
     g_Game.camera->Mouse(offset);
+
+    Voxel::Line l(g_Game.camera->GetPosition(), g_Game.camera->GetNormal());
+    Voxel::Box b(-10, -10, -10, 0, 0, 0);
+
+    if (Voxel::Collider::Collision(l, b))
+    {
+        std::cout << g_Counter++ << " ## Collision ##" << std::endl << std::endl;
+    }
 }
 
 void scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
