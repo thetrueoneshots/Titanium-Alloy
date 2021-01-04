@@ -59,8 +59,12 @@ namespace Voxel
 		* Rendering
 		*/
 		void Render(Mesh* mesh, RenderContext* context) const;
-		void Render(Mesh* mesh, RenderType t) const;
+		void Render(Mesh* mesh, RenderType t = RenderType::VOXEL) const;
+
 		void BatchRender(const std::vector<Transform*>& transforms, Mesh* mesh, RenderContext* context) const;
-		void BatchRender(const std::vector<Transform*>& transforms, Mesh* mesh, RenderType t) const;
+		void BatchRender(const std::vector<Transform*>& transforms, Mesh* mesh, RenderType t = RenderType::VOXEL) const;
+
+		void AnimatedRender(Mesh* mesh, Animation* animation, RenderContext* context) const;
+		void AnimatedRender(Mesh* mesh, Animation* animation, RenderType t = RenderType::VOXEL) const;
 	};
 }

@@ -8,11 +8,14 @@
 * use the framework.
 */
 
+#include "src/Animation/Animation.h"
+
 #include "src/Mesh/CubLoader.h"
 #include "src/Mesh/Mesh.h"
 
 #include "src/Renderer/Renderer.h"
 #include "src/Renderer/Camera.h"
-#include "src/Renderer/Transform.h"
+
+#include "src/Transform/Transform.h"
 
 #include "src/Window/Window.h"

@@ -1,16 +1,9 @@
 #include "CubLoader.h"
 
-struct Color
-{
-	char r, g, b;
-};
-
-struct Cub
-{
-	int width, depth, height;
-	Color* blocks; //Size = width * depth * height
-};
-
+/*
+* Creates a Mesh* from the '.cub' file specified.
+* Todo: Only output data in debug mode
+*/
 Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const std::string& path)
 {
 	char buffer[250];
@@ -68,7 +61,7 @@ Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const s
 
 				glm::vec4 color = glm::vec4(r, g, b, 255.0f) / 255.0f;
 				glm::ivec3 pos = glm::ivec3(k, i, j);
-				m->AddCube(pos, color);
+				m->GetMeshData()->AddCube(pos, color);
 			}
 		}
 	}

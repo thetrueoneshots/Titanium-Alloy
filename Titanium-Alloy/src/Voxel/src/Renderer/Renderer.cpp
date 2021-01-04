@@ -41,7 +41,7 @@ void Voxel::Renderer::Update()
 
 void Voxel::Renderer::Render(Mesh* mesh, RenderContext* context) const
 {
-	RenderData* data = mesh->GetRenderData();
+	RenderData* data = mesh->GetMeshData()->CalculateRenderData();
 	context->SetData(data);
 
 	Shader* s = context->GetShader();
@@ -68,7 +68,7 @@ void Voxel::Renderer::Render(Mesh* mesh, RenderType t) const
 
 void Voxel::Renderer::BatchRender(const std::vector<Transform*>& transforms, Mesh* mesh, RenderContext* context) const
 {
-	RenderData* data = mesh->GetRenderData();
+	RenderData* data = mesh->GetMeshData()->CalculateRenderData();
 	context->SetData(data);
 
 	Shader* s = context->GetShader();
@@ -100,6 +100,26 @@ void Voxel::Renderer::BatchRender(const std::vector<Transform*>& transforms, Mes
 		break;
 	default:
 		BatchRender(transforms, mesh, m_VoxelContext);
+		break;
+	}
+}
+
+void Voxel::Renderer::AnimatedRender(Mesh* mesh, Animation* animation, RenderContext* context) const
+{
+	Transform t = mesh->GetTransForm()->Combine(animation->GetTransform());
+	Mesh m = Mesh(mesh->GetMeshData(), &t);
+	Render(&m, context);
+}
+
+void Voxel::Renderer::AnimatedRender(Mesh* mesh, Animation* animation, RenderType t) const
+{
+	switch (t)
+	{
+	case RenderType::VOXEL:
+		AnimatedRender(mesh, animation, m_VoxelContext);
+		break;
+	default:
+		AnimatedRender(mesh, animation, m_VoxelContext);
 		break;
 	}
 }
