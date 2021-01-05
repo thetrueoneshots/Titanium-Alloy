@@ -24,9 +24,9 @@ bool Voxel::Box::CollidesWith(Box b)
 	const glm::vec3 max = b.GetMax();
 	const glm::vec3 min = b.GetMin();
 
-	if (m_Max.x <= min.x || m_Min.x >= max.x) return false;
-	if (m_Max.y <= min.y || m_Min.y >= max.y) return false;
-	if (m_Max.z <= min.z || m_Min.z >= max.z) return false;
+	if (m_Max.x <= min.x || m_Min.x > max.x) return false;
+	if (m_Max.y <= min.y || m_Min.y > max.y) return false;
+	if (m_Max.z <= min.z || m_Min.z > max.z) return false;
 
 	return true;
 }

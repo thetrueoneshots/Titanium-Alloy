@@ -12,7 +12,7 @@ namespace Voxel
     private:
         glm::vec3 m_Position, m_Normal, m_ViewRotation;
         float m_Yaw, m_Pitch, m_Fov, m_RenderDistance;
-        glm::ivec2* m_ScreenSize;
+        glm::ivec2 m_ScreenSize;
         CameraFrustum* m_Frustum;
 
         // Todo: Cache view / projection matrix and update on variable updates
@@ -28,7 +28,7 @@ namespace Voxel
             DOWN,
         };
 
-        Camera(glm::ivec2* screenSize, float renderDistance = 100.0f);
+        Camera(glm::ivec2 screenSize = glm::ivec2(600, 400), float renderDistance = 100.0f);
         ~Camera();
 
         /*
@@ -40,6 +40,8 @@ namespace Voxel
         /*
         * Setters
         */
+
+        inline void SetPitch(float pitch) { m_Pitch = pitch; }
         // Todo: Rename to [ SetTranslation(const glm::vec3& translation) ]
         void SetPosition(glm::vec3 position);
         // Todo: Rename to [ Translate(Direction direction, float speed) ]

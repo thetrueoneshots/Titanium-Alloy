@@ -2,6 +2,11 @@
 
 #include "glm/glm.hpp"
 
+Voxel::Window::Window()
+    : m_Window(nullptr)
+{
+}
+
 Voxel::Window::Window(int width, int height, const std::string& name)
 	: m_Window(nullptr)
 {
@@ -10,9 +15,12 @@ Voxel::Window::Window(int width, int height, const std::string& name)
 
 Voxel::Window::~Window()
 {
-	glfwDestroyWindow(m_Window);
+    if (m_Window)
+    {
+        glfwDestroyWindow(m_Window);
 
-	glfwTerminate();
+        glfwTerminate();
+    }
 }
 
 bool Voxel::Window::ShouldClose()

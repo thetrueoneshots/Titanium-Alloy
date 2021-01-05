@@ -13,8 +13,8 @@ namespace Voxel
 	{
 	private:
 		GLFWwindow* m_Window;
-		int m_AntiAliasSampleSize;
 	public:
+		Window();
 		Window(int width, int height, const std::string& name);
 		~Window();
 
