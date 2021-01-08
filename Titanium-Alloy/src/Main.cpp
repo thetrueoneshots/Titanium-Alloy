@@ -1,7 +1,7 @@
 // Framework include
 #include "Voxel/Voxel.h"
 
-#include "games/tic_tac_toe/TicTacToe.h"
+#include "games/test/Test.h"
 
 // GLM include for vectors and matrices
 #include "glm/glm.hpp"
@@ -24,7 +24,7 @@ void scroll_callback(GLFWwindow* window, double xOffset, double yOffset);
 
 int main(void)
 {
-    g_Game = new TicTacToe(g_Width, g_Height, g_Title);
+    g_Game = new Test(g_Width, g_Height, g_Title);
     g_Game->SetCallback(Voxel::Window::CallbackType::ERROR, error_callback);
     g_Game->SetCallback(Voxel::Window::CallbackType::KEY, key_callback);
     g_Game->SetCallback(Voxel::Window::CallbackType::SCROLL, scroll_callback);

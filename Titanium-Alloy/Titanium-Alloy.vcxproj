@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Dependencies\glad\src\gl.c" />
+    <ClCompile Include="src\games\test\Test.cpp" />
     <ClCompile Include="src\games\tic_tac_toe\TicTacToe.cpp" />
     <ClCompile Include="src\Voxel\src\Animation\Animation.cpp" />
     <ClCompile Include="src\Voxel\src\Collision\Box.cpp" />
@@ -326,6 +327,7 @@
     <None Include="src\Voxel\readme.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\games\test\Test.h" />
     <ClInclude Include="src\games\tic_tac_toe\TicTacToe.h" />
     <ClInclude Include="src\Voxel\src\Animation\Animation.h" />
     <ClInclude Include="src\Voxel\src\Collision\Box.h" />

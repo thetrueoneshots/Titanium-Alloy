@@ -5,7 +5,6 @@
 
 namespace Voxel
 {
-
 	class Game
 	{
 	// Protected, because the derived class needs to be able to access them as well.
@@ -13,6 +12,10 @@ namespace Voxel
 		Window* m_Window;
 		Camera* m_Camera;
 		Renderer* m_Renderer;
+		double m_FrameTime;
+		int m_FPS;
+		std::string m_Title;
+
 	public:
 		Game(const unsigned int width, const unsigned int height, const std::string& title);
 		~Game();

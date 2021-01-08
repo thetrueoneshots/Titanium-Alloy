@@ -6,6 +6,7 @@
 * Should not be overridden! Use `init` if you want to add variables to the game.
 */
 Voxel::Game::Game(unsigned int width, unsigned int height, const std::string& title)
+	: m_FPS(0), m_FrameTime(0.0f), m_Title(title)
 {
 	m_Window = new Window(width, height, title);
 	m_Camera = new Camera(glm::ivec2(width, height));
@@ -49,6 +50,25 @@ void Voxel::Game::Render()
 {
 	m_Window->Clear();
 	m_Renderer->Update();
+
+	static int count = 0;
+	static double time = 0.0f;
+	static double last_time = 0.0f;
+
+	double curr_time = m_Window->GetTime();
+	m_FrameTime = curr_time - last_time;
+	last_time = curr_time;
+
+	time += m_FrameTime;
+	count++;
+
+	if (time > 1.0f)
+	{
+		m_FPS = count;
+
+		time = 0.0f;
+		count = 0;
+	}
 
 	Update();
 
