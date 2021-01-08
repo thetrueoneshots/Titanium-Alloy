@@ -1,6 +1,8 @@
 // Framework include
 #include "Voxel/Voxel.h"
 
+#include "games/test/Test.h"
+
 // GLM include for vectors and matrices
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -10,22 +12,7 @@ const int g_Width = 1280;
 const int g_Height = 720;
 const char* g_Title = "Engine window";
 
-int g_Counter = 0;
-
-// Game structure definition, could be moved to main.h
-struct Game
-{
-    Voxel::Window* window = nullptr;
-    Voxel::Camera* camera = nullptr;
-    Voxel::Renderer* renderer = nullptr;
-    bool first_mouse = true;
-    double last_time = 0.0f;
-    glm::vec2 last_mouse = glm::vec2(0, 0);
-};
-
-
-// Game variable containing all variables needed to run the game
-Game g_Game;
+Voxel::Game* g_Game;
 
 // Callback function definitions (needed, because otherwise we would not be able to assign them
 // with window->SetCallback )
@@ -37,102 +24,17 @@ void scroll_callback(GLFWwindow* window, double xOffset, double yOffset);
 
 int main(void)
 {
-    static glm::ivec2 size = glm::ivec2(g_Width, g_Height);
-
-    // Window creation
-    g_Game.window = new Voxel::Window(g_Width, g_Height, g_Title);
-
-    // Callback functions
-    g_Game.window->SetCallback(Voxel::Window::CallbackType::ERROR, error_callback);
-    g_Game.window->SetCallback(Voxel::Window::CallbackType::KEY, key_callback);
-    g_Game.window->SetCallback(Voxel::Window::CallbackType::SCROLL, scroll_callback);
-    g_Game.window->SetCallback(Voxel::Window::CallbackType::CURSOR, cursor_callback);
-    g_Game.window->SetCallback(Voxel::Window::CallbackType::MOUSE_BUTTON, mouse_button_callback);
-
-    // Camera creation
-    g_Game.camera = new Voxel::Camera(&size, 500.0f);
-    g_Game.camera->SetPosition(glm::vec3(5, 5, 15));
-
-    // Renderer creation
-    g_Game.renderer = new Voxel::Renderer(g_Game.camera);
-    g_Game.renderer->Init();
-
-    // Creating a mesh to draw with the renderer
-    Voxel::Mesh* m = new Voxel::Mesh(10, 10, 10);
-    m->GetTransForm()->Translate(glm::vec3(-10, -10, -10));
-    for (int i = 0; i < 10; i++)
-    {
-        for (int j = 0; j < 10; j++)
-        {
-            for (int k = 0; k < 10; k++)
-            {
-                m->GetMeshData()->AddCube(glm::ivec3(i, j, k), glm::vec4(0.1f * i, 0.1f * j, 0.1f * k, 1.0f));
-            }
-        }
-    }
-
-    
-    // Test animations
-    Voxel::Animation animation(6.0f);
-
-    Voxel::Transform temp;
-
-    temp.SetScale(0.5f);
-    temp.SetRotation(glm::vec3(0, glm::radians(360.0f), -glm::radians(45.0f)));
-    animation.InsertFrame({ 2.0f, temp });
-
-    temp.SetScale(1.0f);
-    animation.InsertFrame({ 3.0f, temp });
-
-    temp.SetScale(0.5f);
-    temp.SetRotation(glm::vec3(0, -glm::radians(360.0f), glm::radians(45.0f)));
-    animation.InsertFrame({ 4.0f, temp });
-
-    //animation.Play();
-
-    // Testing out cub files
-    std::vector<std::string> files = {
-        "plants/corn.cub",
-        //"plants/cactus1.cub",  // Bugged for some reason, adding too many blocks to the mesh
-        //"plants/buckhorn.cub", // Bugged for some reason, not adding any blocks to the mesh
-        "plants/flower1.cub",
-        "extra/barrel.cub",
-        "extra/eternal-ember.cub",
-        "plants/herb3.cub",
-    };
-
-    std::vector<Voxel::Mesh*> meshes;
-
-    for (int i = 0; i < files.size(); i++)
-    {
-        Voxel::Mesh* cub = Voxel::CubLoader::LoadMeshFromFile(files.at(i));
-        if (cub == nullptr)
-        {
-            continue;
-        }
-        cub->ScaleToSize(1.0f);
-        cub->GetTransForm()->Translate(glm::vec3(3 * i, 0, 0));
-        meshes.push_back(cub);
-    }
-
-    Voxel::Box box1(0, 0, 0, 10, 10, 10);
-    Voxel::Box box2(9.9f, 9.9f, 9.9f, 15, 15, 15);
-
-    if (Voxel::Collider::Collision(box1, box2))
-    {
-        std::cout << "Box Collision!" << std::endl;
-    }
-
-    Voxel::Line line1(glm::vec3(-1, -1, -1), glm::vec3(1, 1, 1));
-    
-    if (Voxel::Collider::Collision(line1, box1))
-    {
-        std::cout << "Line Box Collision" << std::endl;
-    }
+    g_Game = new Test(g_Width, g_Height, g_Title);
+    g_Game->SetCallback(Voxel::Window::CallbackType::ERROR, error_callback);
+    g_Game->SetCallback(Voxel::Window::CallbackType::KEY, key_callback);
+    g_Game->SetCallback(Voxel::Window::CallbackType::SCROLL, scroll_callback);
+    g_Game->SetCallback(Voxel::Window::CallbackType::CURSOR, cursor_callback);
+    g_Game->SetCallback(Voxel::Window::CallbackType::MOUSE_BUTTON, mouse_button_callback);
 
     // Game loop
-    while (!g_Game.window->ShouldClose())
+    while (!g_Game->ShouldClose())
     {
+        /*
         // Frametime and fps calculation
         static int count = 0;
         static double time = 0.0f;
@@ -143,7 +45,7 @@ int main(void)
 
         time += frametime;
         count++;
-    
+
         if (time > 1.0f)
         {
             // Showing fps on the screen
@@ -154,99 +56,38 @@ int main(void)
             time = 0.0f;
             count = 0;
         }
+        */
 
-        animation.UpdateTime(frametime);
-
-        // Clearing the screen and updating the renderer
-        g_Game.window->Clear();
-        g_Game.renderer->Update();
-
-        // Render/Draw the mesh
-        g_Game.renderer->AnimatedRender(m, &animation);
-
-        for (const auto& mesh : meshes)
-        {
-            g_Game.renderer->AnimatedRender(mesh, &animation);
-        }
-
-        // Updating the window with the drawn screen
-        g_Game.window->Update();
+        g_Game->Update();
+        g_Game->Render();
     }
 
-    // Cleanup meshes
-    delete m;
-    for (const auto& mesh : meshes)
-    {
-        delete mesh;
-    }
-
-    // Cleanup framework
-    delete g_Game.camera;
-    delete g_Game.renderer;
-    delete g_Game.window;
+    g_Game->Cleanup();
+    delete g_Game;
     exit(EXIT_SUCCESS);
 }
 
 void key_callback(GLFWwindow* w, int key, int scancode, int action, int mods)
 {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        g_Game.window->Close();
-
-    float cameraSpeed = 0.1f;
-    if (key == GLFW_KEY_LEFT || key == GLFW_KEY_A)
-        g_Game.camera->Move(Voxel::Camera::Direction::LEFT, cameraSpeed);
-    if (key == GLFW_KEY_RIGHT || key == GLFW_KEY_D)
-        g_Game.camera->Move(Voxel::Camera::Direction::RIGHT, cameraSpeed);
-    if (key == GLFW_KEY_UP || key == GLFW_KEY_W)
-        g_Game.camera->Move(Voxel::Camera::Direction::FORWARD, cameraSpeed);
-    if (key == GLFW_KEY_DOWN || key == GLFW_KEY_S)
-        g_Game.camera->Move(Voxel::Camera::Direction::BACKWARD, cameraSpeed);
-    if (key == GLFW_KEY_LEFT_SHIFT)
-        g_Game.camera->Move(Voxel::Camera::Direction::DOWN, cameraSpeed);
-    if (key == GLFW_KEY_SPACE)
-        g_Game.camera->Move(Voxel::Camera::Direction::UP, cameraSpeed);
+    g_Game->KeyCallback(w, key, scancode, action, mods);
 }
 
 void cursor_callback(GLFWwindow* w, double xPos, double yPos)
 {
-    const static float s_Sensitivity = 0.1f;
-    if (g_Game.first_mouse)
-    {
-        g_Game.last_mouse = glm::vec2(xPos, yPos);
-        g_Game.first_mouse = false;
-    }
-
-    glm::vec2 offset = glm::vec2(xPos - g_Game.last_mouse.x, g_Game.last_mouse.y - yPos); // Y is reversed. (Y goes from top to bottom)
-    g_Game.last_mouse = glm::vec2(xPos, yPos);
-
-    offset *= s_Sensitivity;
-
-    g_Game.camera->Mouse(offset);
-
-    
+    g_Game->CursorCallback(w, xPos, yPos);
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-    {
-        Voxel::Line l(g_Game.camera->GetPosition(), g_Game.camera->GetNormal());
-        Voxel::Box b(-10, -10, -10, 0, 0, 0);
-
-        if (Voxel::Collider::Collision(l, b))
-        {
-            std::cout << g_Counter++ << " ## Collision ##" << std::endl << std::endl;
-        }
-    }
+    g_Game->MouseButtonCallback(window, button, action, mods);
 }
-
 
 void scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
 {
-    g_Game.camera->Scroll(yOffset);
+    g_Game->ScrollCallback(window, xOffset, yOffset);
 }
 
 void error_callback(int error, const char* description)
 {
-    fprintf(stderr, "Error: %s\n", description);
+    g_Game->ErrorCallback(error, description);
 }

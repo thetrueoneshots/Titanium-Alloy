@@ -4,7 +4,7 @@
 * Creates a Mesh* from the '.cub' file specified.
 * Todo: Only output data in debug mode
 */
-Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const std::string& path)
+Voxel::MeshData* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const std::string& path)
 {
 	char buffer[250];
 
@@ -35,7 +35,7 @@ Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const s
 	sprintf_s(buffer, 250, "Cube size: %d, %d, %d", w, h, d);
 	std::cout << buffer << std::endl;
 
-	Mesh* m = new Mesh(w, h, d);
+	MeshData* m = new MeshData(w, h, d);
 
 	int counter = 0;
 	for (int i = 0; i < h; i++)
@@ -61,7 +61,7 @@ Voxel::Mesh* Voxel::CubLoader::LoadMeshFromFile(const std::string& file, const s
 
 				glm::vec4 color = glm::vec4(r, g, b, 255.0f) / 255.0f;
 				glm::ivec3 pos = glm::ivec3(k, i, j);
-				m->GetMeshData()->AddCube(pos, color);
+				m->AddCube(pos, color);
 			}
 		}
 	}

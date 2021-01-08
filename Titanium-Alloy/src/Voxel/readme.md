@@ -11,65 +11,123 @@ This framwork contains the following functionalities:
 - It _will_ contain frustum culling and depth culling
 
 ## Tutorial
-To start rendering a voxel, you will have to have setup a window and OpenGL already.
-Once that is done you can start creating a renderer to render the world and a camera to view the world.
+To start rendering voxels, you will have to have use the following setup for your code.
 
-### The setup
-You first have to create you renderer and camera.
+### The main file
+In the main file, all the important initalizations are done and the GLFW callbacks are registered. The only times you want to change this file is when you are adding a new and unsupported GLFW callback type to the game or when you want to assign a new game to render.
 ```c++
-struct RendererObject
+// Framework include
+#include "Voxel/Voxel.h"
+
+// Game class include
+#include "Game/GameName.h"
+
+// Constants for the screensize
+const int g_Width = 1280;
+const int g_Height = 720;
+const char* g_Title = "Engine window";
+
+Voxel::Game* g_Game;
+
+// Callback function definitions
+void error_callback(int error, const char* description);
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void cursor_callback(GLFWwindow* window, double xPos, double yPos);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+void scroll_callback(GLFWwindow* window, double xOffset, double yOffset);
+
+int main(void)
 {
-  Voxel::Camera* camera;
-  Voxel::Renderer* renderer;
+    // Initialization
+    g_Game = new GameName(g_Width, g_Height, g_Title);
+    g_Game->SetCallback(Voxel::Window::CallbackType::ERROR, error_callback);
+    g_Game->SetCallback(Voxel::Window::CallbackType::KEY, key_callback);
+    g_Game->SetCallback(Voxel::Window::CallbackType::SCROLL, scroll_callback);
+    g_Game->SetCallback(Voxel::Window::CallbackType::CURSOR, cursor_callback);
+    g_Game->SetCallback(Voxel::Window::CallbackType::MOUSE_BUTTON, mouse_button_callback);
+
+    // Game loop
+    while (!g_Game->ShouldClose())
+    {
+        g_Game->Render();
+    }
+
+    // Cleanup
+    g_Game->Cleanup();
+    delete g_Game;
+    exit(EXIT_SUCCESS);
 }
 
-RendererObject SetupRenderer(glm::ivec2* screenSize, float renderDistance)
+void key_callback(GLFWwindow* w, int key, int scancode, int action, int mods)
 {
-  Voxel::Camera* camera = new Camera(screenSize, renderDistance);
+    g_Game->KeyCallback(w, key, scancode, action, mods);
+}
 
-  Voxel::Renderer* renderer = new Renderer(camera);
-  renderer->Init();
-  
-  return { camera, renderer };
+void cursor_callback(GLFWwindow* w, double xPos, double yPos)
+{
+    g_Game->CursorCallback(w, xPos, yPos);
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    g_Game->MouseButtonCallback(window, button, action, mods);
+}
+
+void scroll_callback(GLFWwindow* window, double xOffset, double yOffset)
+{
+    g_Game->ScrollCallback(window, xOffset, yOffset);
+}
+
+void error_callback(int error, const char* description)
+{
+    g_Game->ErrorCallback(error, description);
 }
 ```
 
-At the end, do not forget to clean up your allocated memory.
+### Your game class
+Then, the definition of your game class. Your game class will publicly extend the Voxel::Game class, such that all functions needed to run a game are 
+already defined. You can overwrite the functions in your own class and implement them to your liking.
 ```c++
-void DeleteRenderer(RendererObject obj)
+#pragma once
+
+// Including the framework. Path may differ depending on where your framework and your own game class is.
+#include "../Voxel/Voxel.h"
+
+class GameName : public Voxel::Game
 {
-  if (obj.camera)
-  {
-    delete obj.camera;
-  }
+public:
+	GameName(unsigned int width, unsigned int height, const std::string& title) : Voxel::Game(width, height, title) { Init(); }
+
+  // Framework defined functions
+	void Init();
+	void Cleanup();
+	void Update();
+
+	void ErrorCallback(int error, const char* description);
+	void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+	void CursorCallback(GLFWwindow* window, double xPos, double yPos);
+	void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+	void ScrollCallback(GLFWwindow* window, double xOffset, double yOffset);
+
+private:
+	// All user defined variables and functions
   
-  if (obj.renderer)
-  {
-    delete obj.renderer;
-  }
-}
+};
 ```
 
 ### Rendering your first mesh
-Once you have your renderer setup, you can start rendering a mesh.
+Once you have your main and game class set up, you can start thinking about rendering.
+In the update function of your game class, you can create a mesh and render it.
 
 ```c++
-...
-
-glm::ivec2 screenSize = glm::ivec2(600, 400);
-RendererObject rendererObject = SetupRenderer(&screenSize, 500.0f);
-
-Voxel::Mesh* m = new Voxel::Mesh(10, 10, 10);
-m->AddCube(glm::vec3(0, 0, 0), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-
-while(shouldRun)
+void GameName::Update()
 {
-  rendererObject.renderer->Clear();
-  rendererObject.renderer->Update();
-  
-  rendererObject.renderer->Render(m, Voxel::RendeType::VOXEL);
+  Voxel::Mesh mesh(1, 1, 1);
+  mesh.GetMeshData()->AddCube(glm::ivec3(0, 0, 0), glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+  m_Renderer->Render(&mesh);
 }
-
-DeleteRenderer();
-...
 ```
+### Tips
+Here are some times that I found nice while using the framework
+
+- Creating an enum for mesh types and storing all the meshdata for all meshes in a map, at the index of the value of the enum type.

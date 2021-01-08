@@ -19,9 +19,16 @@ void Voxel::Animation::InsertFrame(const AnimationFrame& frame)
 	for (int i = 0; i < m_Frames.size(); i++)
 	{
 		const auto& currentFrame = m_Frames.at(i);
+
 		if (currentFrame.time > frame.time)
 		{
 			m_Frames.insert(m_Frames.begin() + i, frame);
+			return;
+		}
+
+		if (currentFrame.time == frame.time)
+		{
+			m_Frames.at(i) = frame;
 			return;
 		}
 	}
