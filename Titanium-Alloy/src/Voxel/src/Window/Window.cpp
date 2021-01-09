@@ -98,19 +98,14 @@ void Voxel::Window::Init(int width, int height, const std::string& name)
         exit(EXIT_FAILURE);
     }
 
-    
-    /*glfwSetErrorCallback(error_callback);
-    glfwSetKeyCallback(window, key_callback);
-    glfwSetCursorPosCallback(window, cursor_callback);
-    //glfwSetCursorPosCallBack(window, cursor_callback);
-    glfwSetScrollCallback(window, scroll_callback);*/
-
     // Maybe GLFW_CURSOR_HIDDEN?
     glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glfwMakeContextCurrent(m_Window);
     gladLoadGL(glfwGetProcAddress);
-    glfwSwapInterval(1);
+
+    // Todo: Create function for this and set in game init.
+    //glfwSwapInterval(1);
 
     glClearColor(s_ClearColor.r, s_ClearColor.g, s_ClearColor.b, s_ClearColor.a);
 }
