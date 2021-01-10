@@ -59,15 +59,19 @@ void TicTacToe::Update()
             break;
         }
 
-        Voxel::Transform t;
-        t.Translate(glm::vec3(-1, 2, 0));
-        t.Rotate(glm::vec3(glm::radians(90.0f), 0, 0));
-        Voxel::Mesh m(data, &t);
-        m.ScaleToSize(1.0f);
-        
-        m_Renderer->Render(&m);
+        if (winner != -1)
+        {
+            Voxel::Transform t;
+            t.Translate(glm::vec3(-1, 2, 0));
+            t.Rotate(glm::vec3(glm::radians(90.0f), 0, 0));
+            Voxel::Mesh m(data, &t);
+            m.ScaleToSize(1.0f);
 
-        Voxel::Mesh winner(m_Models.at((int)ModelType::WINNER));
+            m_Renderer->Render(&m);
+        }
+        
+
+        Voxel::Mesh winner(m_Models.at((int)(winner == -1 ? ModelType::LOSER : ModelType::WINNER)));
         winner.GetTransForm()->Rotate(glm::vec3(glm::radians(90.0f), glm::radians(180.0f) , 0));
         winner.ScaleToSize(5.0f);
         winner.GetTransForm()->Translate(glm::vec3(2, 2, 0));
@@ -96,18 +100,16 @@ void TicTacToe::Update()
                 Voxel::Mesh* m;
                 Voxel::Transform t;
 
-                t.Translate(glm::vec3(i, j, 0));
+                t.Translate(glm::vec3(i, j, 0.1f));
                 t.Rotate(glm::vec3(glm::radians(90.0f), 0, 0));
 
                 switch (m_Grid[i][j])
                 {
                 case 1:
                     m = new Voxel::Mesh(m_Models.at((int)ModelType::CIRCLE), &t);
-                    m->ScaleToSize(1.0f);
                     break;
                 case 2:
                     m = new Voxel::Mesh(m_Models.at((int)ModelType::CROSS), &t);
-                    m->ScaleToSize(1.0f);
                     break;
                 default:
                     m = nullptr;
@@ -118,6 +120,8 @@ void TicTacToe::Update()
                 {
                     continue;
                 }
+
+                m->ScaleToSize(0.9f);
 
                 m_Renderer->Render(m);
                 delete m;
