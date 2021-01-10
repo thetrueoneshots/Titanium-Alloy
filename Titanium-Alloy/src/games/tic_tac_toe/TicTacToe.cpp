@@ -1,5 +1,7 @@
 #include "TicTacToe.h"
 
+#include "stb/stb_image.h"
+
 static int CheckWinner(char board[3][3]);
 
 void TicTacToe::Init()
@@ -24,6 +26,17 @@ void TicTacToe::Init()
     m_Models.insert_or_assign((int)ModelType::WINNER, Voxel::CubLoader::LoadMeshFromFile("tic_tac_toe/win.cub"));
     m_Models.insert_or_assign((int)ModelType::BOARD, Voxel::CubLoader::LoadMeshFromFile("tic_tac_toe/board.cub"));
     m_Models.insert_or_assign((int)ModelType::SELECTOR, Voxel::CubLoader::LoadMeshFromFile("tic_tac_toe/selector.cub"));
+
+    GLFWimage images[1];
+    images[0].pixels = stbi_load("res/icons/app.png", &images[0].width, &images[0].height, 0, 4); //rgba channels 
+
+    if (!images[0].pixels)
+    {
+        std::cout << "Error loading app icon!\n";
+    }
+
+    glfwSetWindowIcon(m_Window->GetGlfwWindow(), 1, images);
+    stbi_image_free(images[0].pixels);
 }
 
 void TicTacToe::Cleanup()
@@ -226,6 +239,7 @@ void TicTacToe::ResetGrid()
     m_Camera->SetYaw(-90.0f);
     m_Camera->SetPitch(0.0f);
     m_Camera->Mouse(glm::vec2(0));
+    m_Camera->SetPosition(glm::vec3(1, 1, 7));
 }
 
 static int CheckWinner(char board[3][3])
