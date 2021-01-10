@@ -3,6 +3,7 @@
 
 // Game class include
 #include "games/test/Test.h"
+#include "games/tic_tac_toe/TicTacToe.h"
 
 // Constants for the screensize
 const int g_Width = 1280;
@@ -21,7 +22,7 @@ void scroll_callback(GLFWwindow* window, double xOffset, double yOffset);
 int main(void)
 {
     // Initialization
-    g_Game = new Test(g_Width, g_Height, g_Title);
+    g_Game = new TicTacToe(g_Width, g_Height, g_Title);
     g_Game->SetCallback(Voxel::Window::CallbackType::ERROR, error_callback);
     g_Game->SetCallback(Voxel::Window::CallbackType::KEY, key_callback);
     g_Game->SetCallback(Voxel::Window::CallbackType::SCROLL, scroll_callback);

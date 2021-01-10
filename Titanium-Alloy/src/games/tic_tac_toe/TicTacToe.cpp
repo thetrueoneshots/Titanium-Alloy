@@ -15,36 +15,15 @@ void TicTacToe::Init()
 
     // Setup camera position
     m_Camera->SetPosition(glm::vec3(1, 1, 7));
-
+    m_Window->SetBackgroundColor(glm::vec3(160 / 255.0f, 124 / 255.0f, 94 / 255.0f));
 
     // Insert all models
     m_Models.insert_or_assign((int)ModelType::CROSS, Voxel::CubLoader::LoadMeshFromFile("tic_tac_toe/cross.cub"));
     m_Models.insert_or_assign((int)ModelType::CIRCLE, Voxel::CubLoader::LoadMeshFromFile("tic_tac_toe/circle.cub"));
     m_Models.insert_or_assign((int)ModelType::LOSER, Voxel::CubLoader::LoadMeshFromFile("tic_tac_toe/lose.cub"));
     m_Models.insert_or_assign((int)ModelType::WINNER, Voxel::CubLoader::LoadMeshFromFile("tic_tac_toe/win.cub"));
-
-    Voxel::MeshData* selector = new Voxel::MeshData(1, 1, 1);
-    selector->AddCube(glm::vec3(0, 0, 0), glm::vec4(1, 1, 0, 1));
-    m_Models.insert_or_assign((int)ModelType::SELECTOR, selector);
-
-    // Create board
-    glm::ivec3 boardSize(5, 5, 2);
-    m_Board = new Voxel::Mesh(boardSize);
-    for (int i = 0; i < boardSize.x; i++)
-    {
-        for (int j = 0; j < boardSize.y; j++)
-        {
-            if (i == 0 || i == boardSize.x - 1 || j == 0 || j == boardSize.y - 1)
-            {
-                m_Board->GetMeshData()->AddCube(glm::vec3(i, j, 1), glm::vec4(0.5f, 0.5f, 0.5f, 1));
-            }
-            else
-            {
-                m_Board->GetMeshData()->AddCube(glm::vec3(i, j, 0), glm::vec4(0.2f, 0.2f, 0.2f, 1));
-            }
-        }
-    }
-    m_Board->GetTransForm()->Translate(glm::vec3(-1, -1, -1));
+    m_Models.insert_or_assign((int)ModelType::BOARD, Voxel::CubLoader::LoadMeshFromFile("tic_tac_toe/board.cub"));
+    m_Models.insert_or_assign((int)ModelType::SELECTOR, Voxel::CubLoader::LoadMeshFromFile("tic_tac_toe/selector.cub"));
 }
 
 void TicTacToe::Cleanup()
@@ -59,6 +38,10 @@ void TicTacToe::Cleanup()
 
 void TicTacToe::Update()
 {
+    static char buffer[250];
+    sprintf_s(buffer, 250, "%s, fps: %d", m_Title.c_str(), m_FPS);
+    m_Window->SetTitle(buffer);
+
     int winner = CheckWinner(m_Grid);
     if (winner != 0)
     {
@@ -66,24 +49,45 @@ void TicTacToe::Update()
         switch(winner)
         {
         case 1:
-            data = m_Models.at((int)ModelType::WINNER);
+            data = m_Models.at((int)ModelType::CIRCLE);
             break;
         case 2:
-            data = m_Models.at((int)ModelType::LOSER);
+            data = m_Models.at((int)ModelType::CROSS);
             break;
         default:
-            data = m_Models.at((int)ModelType::LOSER);
+            data = m_Models.at((int)ModelType::CIRCLE);
             break;
         }
+
+        Voxel::Transform t;
+        t.Translate(glm::vec3(-1, 2, 0));
+        t.Rotate(glm::vec3(glm::radians(90.0f), 0, 0));
+        Voxel::Mesh m(data, &t);
+        m.ScaleToSize(1.0f);
         
-        Voxel::Mesh m(data);
-        m.GetTransForm()->Rotate(glm::vec3(glm::radians(90.0f), 0 , glm::radians(180.0f)));
-        m.GetTransForm()->Translate(glm::vec3(12, 12, -10));
         m_Renderer->Render(&m);
+
+        Voxel::Mesh winner(m_Models.at((int)ModelType::WINNER));
+        winner.GetTransForm()->Rotate(glm::vec3(glm::radians(90.0f), glm::radians(180.0f) , 0));
+        winner.ScaleToSize(5.0f);
+        winner.GetTransForm()->Translate(glm::vec3(2, 2, 0));
+        m_Renderer->Render(&winner);
     }
     else
     {
-        m_Renderer->Render(m_Board);
+        Voxel::Transform boardTransform;
+        boardTransform.Rotate(glm::vec3(glm::radians(90.0f), 0, 0));
+        boardTransform.Scale(0.125f);
+        boardTransform.Translate(glm::vec3(1, 1, 0));
+        Voxel::Mesh board(m_Models.at((int)ModelType::BOARD), &boardTransform);
+        m_Renderer->Render(&board);
+
+        Voxel::Mesh selector(m_Models.at((int)ModelType::SELECTOR));
+        selector.ScaleToSize(0.9f);
+        selector.ScaleYToSize(1.0f / 16);
+        selector.GetTransForm()->Translate(glm::vec3(m_Selector, 0));
+        selector.GetTransForm()->Rotate(glm::vec3(glm::radians(90.0f), 0, 0));
+        m_Renderer->Render(&selector);
 
         for (int i = 0; i < 3; i++)
         {
@@ -91,8 +95,10 @@ void TicTacToe::Update()
             {
                 Voxel::Mesh* m;
                 Voxel::Transform t;
-                t.Translate(glm::vec3(i, j + 1, 0));
+
+                t.Translate(glm::vec3(i, j, 0));
                 t.Rotate(glm::vec3(glm::radians(90.0f), 0, 0));
+
                 switch (m_Grid[i][j])
                 {
                 case 1:
@@ -102,14 +108,6 @@ void TicTacToe::Update()
                 case 2:
                     m = new Voxel::Mesh(m_Models.at((int)ModelType::CROSS), &t);
                     m->ScaleToSize(1.0f);
-                    break;
-                case 3:
-                    m = new Voxel::Mesh(m_Models.at((int)ModelType::SELECTOR), &t);
-                    m->ScaleToSize(1.0f);
-                    m->ScaleYToSize(1.0f / 16);
-                    break;
-                case 0:
-                    m = nullptr;
                     break;
                 default:
                     m = nullptr;
@@ -160,6 +158,7 @@ void TicTacToe::KeyCallback(GLFWwindow* window, int key, int scancode, int actio
 
 void TicTacToe::CursorCallback(GLFWwindow* window, double xPos, double yPos)
 {
+    // Mouse movement
     const static float s_Sensitivity = 0.1f;
     if (m_FirstMouse)
     {
@@ -174,6 +173,8 @@ void TicTacToe::CursorCallback(GLFWwindow* window, double xPos, double yPos)
 
     m_Camera->Mouse(offset);
 
+
+    // Selector updating
     Voxel::Line l(m_Camera->GetPosition(), m_Camera->GetNormal());
 
     for (int i = 0; i < 3; i++)
@@ -184,14 +185,7 @@ void TicTacToe::CursorCallback(GLFWwindow* window, double xPos, double yPos)
 
             if (Voxel::Collider::Collision(l, b))
             {
-                if (m_Grid[i][j] == 0)
-                {
-                    m_Grid[i][j] = 3;
-                }
-            }
-            else if (m_Grid[i][j] == 3)
-            {
-                m_Grid[i][j] = 0;
+                m_Selector = glm::vec2(i, j);
             }
         }
     }
@@ -199,39 +193,14 @@ void TicTacToe::CursorCallback(GLFWwindow* window, double xPos, double yPos)
 
 void TicTacToe::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 {
+    // Left click player placement
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
     {
-        Voxel::Line l(m_Camera->GetPosition(), m_Camera->GetNormal());
-
-        for (int i = 0; i < 3; i++)
+        if (!m_Grid[m_Selector.x][m_Selector.y])
         {
-            for (int j = 0; j < 3; j++)
-            {
-                Voxel::Box b(glm::vec3(i, j, 0), glm::vec3(i + 1, j + 1, 0));
-
-                if (Voxel::Collider::Collision(l, b))
-                {
-                    if (m_Grid[i][j] == 1 || m_Grid[i][j] == 2)
-                    {
-                        continue;
-                    }
-
-                    if (m_Player1)
-                    {
-                        m_Grid[i][j] = 1;
-                    }
-                    else
-                    {
-                        m_Grid[i][j] = 2;
-                    }
-
-                    m_Player1 = !m_Player1;
-
-                    return;
-                }
-            }
+            m_Grid[m_Selector.x][m_Selector.y] = m_Player1 ? 1 : 2;
+            m_Player1 = !m_Player1;
         }
-
     }
 }
 
@@ -249,6 +218,10 @@ void TicTacToe::ResetGrid()
             m_Grid[i][j] = 0;
         }
     }
+
+    m_Camera->SetYaw(-90.0f);
+    m_Camera->SetPitch(0.0f);
+    m_Camera->Mouse(glm::vec2(0));
 }
 
 static int CheckWinner(char board[3][3])

@@ -38,6 +38,11 @@ void Voxel::Window::SetTitle(const std::string& title)
     glfwSetWindowTitle(m_Window, title.c_str());
 }
 
+void Voxel::Window::SetBackgroundColor(const glm::vec3& color)
+{
+    glClearColor(color.r, color.g, color.b, 1.0f);
+}
+
 double Voxel::Window::GetTime()
 {
 	return glfwGetTime();

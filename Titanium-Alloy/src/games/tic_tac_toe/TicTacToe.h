@@ -29,16 +29,18 @@ private:
 		WINNER,
 		LOSER,
 		SELECTOR,
+		BOARD,
 	};
 
 	std::map<int, Voxel::MeshData*> m_Models;
+
 	bool m_FirstMouse;
 	double m_LastTime = 0.0f;
 	glm::vec2 m_LastMouse = glm::vec2(0, 0);
 	char m_Grid[3][3];
 	bool m_Player1 = true;
 
-	Voxel::Mesh* m_Board;
+	glm::ivec2 m_Selector;
 
 	void ResetGrid();
 };
