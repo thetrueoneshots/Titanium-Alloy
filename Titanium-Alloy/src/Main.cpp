@@ -1,21 +1,18 @@
 // Framework include
 #include "Voxel/Voxel.h"
 
+// Game class include
 #include "games/test/Test.h"
-
-// GLM include for vectors and matrices
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+#include "games/tic_tac_toe/TicTacToe.h"
 
 // Constants for the screensize
 const int g_Width = 1280;
 const int g_Height = 720;
-const char* g_Title = "Engine window";
+const char* g_Title = "Tic Tac Toe";
 
 Voxel::Game* g_Game;
 
-// Callback function definitions (needed, because otherwise we would not be able to assign them
-// with window->SetCallback )
+// Callback function definitions
 void error_callback(int error, const char* description);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void cursor_callback(GLFWwindow* window, double xPos, double yPos);
@@ -24,7 +21,8 @@ void scroll_callback(GLFWwindow* window, double xOffset, double yOffset);
 
 int main(void)
 {
-    g_Game = new Test(g_Width, g_Height, g_Title);
+    // Initialization
+    g_Game = new TicTacToe(g_Width, g_Height, g_Title);
     g_Game->SetCallback(Voxel::Window::CallbackType::ERROR, error_callback);
     g_Game->SetCallback(Voxel::Window::CallbackType::KEY, key_callback);
     g_Game->SetCallback(Voxel::Window::CallbackType::SCROLL, scroll_callback);
@@ -34,34 +32,10 @@ int main(void)
     // Game loop
     while (!g_Game->ShouldClose())
     {
-        /*
-        // Frametime and fps calculation
-        static int count = 0;
-        static double time = 0.0f;
-
-        double curr_time = g_Game.window->GetTime();
-        double frametime = curr_time - g_Game.last_time;
-        g_Game.last_time = curr_time;
-
-        time += frametime;
-        count++;
-
-        if (time > 1.0f)
-        {
-            // Showing fps on the screen
-            char buffer[250];
-            sprintf_s(buffer, 250, "%s, Fps: %d", g_Title, count);
-            g_Game.window->SetTitle(buffer);
-
-            time = 0.0f;
-            count = 0;
-        }
-        */
-
-        g_Game->Update();
         g_Game->Render();
     }
 
+    // Cleanup
     g_Game->Cleanup();
     delete g_Game;
     exit(EXIT_SUCCESS);

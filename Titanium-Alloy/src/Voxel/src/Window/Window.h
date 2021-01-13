@@ -3,6 +3,8 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
+#include "glm/glm.hpp"
+
 #include <string>
 
 namespace Voxel
@@ -31,6 +33,7 @@ namespace Voxel
 		void Close();
 
 		void SetTitle(const std::string& title);
+		void SetBackgroundColor(const glm::vec3& color);
 
 		double GetTime();
 

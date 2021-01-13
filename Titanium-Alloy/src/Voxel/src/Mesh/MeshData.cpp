@@ -70,6 +70,8 @@ Voxel::RenderData* Voxel::MeshData::CalculateRenderData()
 		return m_Cache;
 	}
 
+	glm::ivec3 center = glm::ivec3(m_Width, m_Height, m_Depth) / 2;
+
 	std::vector<Quad> quads;
 
 	for (int i = 0; i < m_Width; i++)
@@ -94,7 +96,7 @@ Voxel::RenderData* Voxel::MeshData::CalculateRenderData()
 
 				glm::vec4 cubeCol = glm::vec4(color.r, color.g, color.b, color.a);
 
-				Cube c = Cube(cubePos, cubeCol, flags);
+				Cube c = Cube(cubePos - center, cubeCol, flags);
 
 				auto cubeQuads = c.GetQuads();
 				quads.insert(quads.end(), cubeQuads.begin(), cubeQuads.end());

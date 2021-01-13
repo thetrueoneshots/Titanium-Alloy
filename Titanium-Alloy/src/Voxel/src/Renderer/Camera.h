@@ -42,6 +42,7 @@ namespace Voxel
         */
 
         inline void SetPitch(float pitch) { m_Pitch = pitch; }
+        inline void SetYaw(float yaw) { m_Yaw = yaw; }
         // Todo: Rename to [ SetTranslation(const glm::vec3& translation) ]
         void SetPosition(glm::vec3 position);
         // Todo: Rename to [ Translate(Direction direction, float speed) ]

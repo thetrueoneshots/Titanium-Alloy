@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Titanium-Alloy", "Titanium-Alloy\Titanium-Alloy.vcxproj", "{E6CEC019-C236-4F96-A83D-9945DD263051}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Game Installer", "Game Installer\Game Installer.vdproj", "{C5E4B72B-ABBB-4D1B-AE9B-D966B2801658}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,11 @@ Global
 		{E6CEC019-C236-4F96-A83D-9945DD263051}.Release|x64.Build.0 = Release|x64
 		{E6CEC019-C236-4F96-A83D-9945DD263051}.Release|x86.ActiveCfg = Release|Win32
 		{E6CEC019-C236-4F96-A83D-9945DD263051}.Release|x86.Build.0 = Release|Win32
+		{C5E4B72B-ABBB-4D1B-AE9B-D966B2801658}.Debug|x64.ActiveCfg = Debug
+		{C5E4B72B-ABBB-4D1B-AE9B-D966B2801658}.Debug|x86.ActiveCfg = Debug
+		{C5E4B72B-ABBB-4D1B-AE9B-D966B2801658}.Release|x64.ActiveCfg = Release
+		{C5E4B72B-ABBB-4D1B-AE9B-D966B2801658}.Release|x86.ActiveCfg = Release
+		{C5E4B72B-ABBB-4D1B-AE9B-D966B2801658}.Release|x86.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

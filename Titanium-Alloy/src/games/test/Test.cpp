@@ -6,7 +6,6 @@ void Test::Init()
 
     // Init variables
     m_FirstMouse = true;
-    m_LastTime = 0.0f;
     m_LastMouse = glm::vec2(0, 0);
 
     // Setup camera position
@@ -27,7 +26,7 @@ void Test::Init()
     animation = new Voxel::Animation(5.0f);
     
     Voxel::Transform t;
-    t.Rotate(glm::vec3(glm::radians(360.0f)));
+    t.Rotate(glm::vec3(0, 0, glm::radians(360.0f)));
 
     Voxel::AnimationFrame f = { 5.0f, t };
     animation->InsertFrame(f);

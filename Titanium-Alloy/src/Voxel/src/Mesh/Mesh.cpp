@@ -78,12 +78,12 @@ Voxel::Mesh::~Mesh()
 
 void Voxel::Mesh::ScaleToSize(float scale, bool keepRatio)
 {
-	ScaleToSize(glm::ivec3(scale), keepRatio);
+	ScaleToSize(glm::vec3(scale), keepRatio);
 }
 
 void Voxel::Mesh::ScaleToSize(const glm::vec3& scale, bool keepRatio)
 {
-	if (scale.x <= 0 || scale.y <= 0 || scale.z <= 0)
+	if (scale.x <= 0.0f || scale.y <= 0.0f || scale.z <= 0.0f)
 	{
 		return;
 	}

@@ -38,6 +38,11 @@ void Voxel::Window::SetTitle(const std::string& title)
     glfwSetWindowTitle(m_Window, title.c_str());
 }
 
+void Voxel::Window::SetBackgroundColor(const glm::vec3& color)
+{
+    glClearColor(color.r, color.g, color.b, 1.0f);
+}
+
 double Voxel::Window::GetTime()
 {
 	return glfwGetTime();
@@ -56,11 +61,6 @@ void Voxel::Window::Update()
 
 void Voxel::Window::SetCallback(CallbackType t, void* callback)
 {
-    /*glfwSetErrorCallback(error_callback);
-    glfwSetKeyCallback(window, key_callback);
-    glfwSetCursorPosCallback(window, cursor_callback);
-    //glfwSetCursorPosCallBack(window, cursor_callback);
-    glfwSetScrollCallback(window, scroll_callback);*/
     switch (t) {
     case CallbackType::ERROR:
         glfwSetErrorCallback((GLFWerrorfun)callback);
@@ -98,18 +98,13 @@ void Voxel::Window::Init(int width, int height, const std::string& name)
         exit(EXIT_FAILURE);
     }
 
-    
-    /*glfwSetErrorCallback(error_callback);
-    glfwSetKeyCallback(window, key_callback);
-    glfwSetCursorPosCallback(window, cursor_callback);
-    //glfwSetCursorPosCallBack(window, cursor_callback);
-    glfwSetScrollCallback(window, scroll_callback);*/
-
     // Maybe GLFW_CURSOR_HIDDEN?
     glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glfwMakeContextCurrent(m_Window);
     gladLoadGL(glfwGetProcAddress);
+
+    // Todo: Create function for this and set in game init.
     glfwSwapInterval(1);
 
     glClearColor(s_ClearColor.r, s_ClearColor.g, s_ClearColor.b, s_ClearColor.a);

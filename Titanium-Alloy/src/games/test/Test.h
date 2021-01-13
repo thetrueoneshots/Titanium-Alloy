@@ -33,7 +33,6 @@ private:
 
 	std::map<int, Voxel::MeshData*> m_Models;
 	bool m_FirstMouse;
-	double m_LastTime = 0.0f;
 	glm::vec2 m_LastMouse = glm::vec2(0, 0);
 
 	Voxel::Animation* animation;
