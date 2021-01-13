@@ -8,7 +8,7 @@
 // Constants for the screensize
 const int g_Width = 1280;
 const int g_Height = 720;
-const char* g_Title = "Engine window";
+const char* g_Title = "Tic Tac Toe";
 
 Voxel::Game* g_Game;
 

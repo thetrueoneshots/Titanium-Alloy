@@ -61,11 +61,6 @@ void Voxel::Window::Update()
 
 void Voxel::Window::SetCallback(CallbackType t, void* callback)
 {
-    /*glfwSetErrorCallback(error_callback);
-    glfwSetKeyCallback(window, key_callback);
-    glfwSetCursorPosCallback(window, cursor_callback);
-    //glfwSetCursorPosCallBack(window, cursor_callback);
-    glfwSetScrollCallback(window, scroll_callback);*/
     switch (t) {
     case CallbackType::ERROR:
         glfwSetErrorCallback((GLFWerrorfun)callback);
@@ -110,7 +105,7 @@ void Voxel::Window::Init(int width, int height, const std::string& name)
     gladLoadGL(glfwGetProcAddress);
 
     // Todo: Create function for this and set in game init.
-    //glfwSwapInterval(1);
+    glfwSwapInterval(1);
 
     glClearColor(s_ClearColor.r, s_ClearColor.g, s_ClearColor.b, s_ClearColor.a);
 }
